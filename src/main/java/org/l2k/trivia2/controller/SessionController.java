@@ -13,8 +13,16 @@ public class SessionController {
 	}
 
 	public ResponseEntity<Session> registerSession(Session session) {
-		sessionService.registerSession(session);
-		return new ResponseEntity<Session>((Session)null, HttpStatus.FORBIDDEN);
+		Session registeredSession = sessionService.registerSession(session);
+		
+		ResponseEntity<Session> sessionResponse;
+		if (registeredSession != null) {
+			sessionResponse = new ResponseEntity<Session>(registeredSession, HttpStatus.OK);
+		} else {
+			sessionResponse = new ResponseEntity<Session>((Session)null, HttpStatus.FORBIDDEN);						
+		}
+		
+		return sessionResponse;
 	}
 
 }

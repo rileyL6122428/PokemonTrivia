@@ -1,6 +1,7 @@
 package org.l2k.trivia2.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -38,6 +39,13 @@ class SessionControllerTest {
 		verify(sessionService).registerSession(session);
 	}
 	
+	@Test
+	void returns200WithSessionWhenSessionServiceCanRegisterSession() {
+		when(sessionService.registerSession(any(Session.class))).thenReturn(session);
+		ResponseEntity<Session> response = sessionController.registerSession(session);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertNotNull(response.getBody());
+	}
 	
 	@Test
 	void returns403WhenSessionServiceCantRegisterASession() {
