@@ -17,10 +17,14 @@ public class P2PSessionRepository {
 	}
 
 	public Session createSession(Session session) {
+		removeExpiredSessions();
+		return null;
+	}
+
+	private void removeExpiredSessions() {
 		activeSessions = activeSessions.stream()
 			.filter((activeSession) -> !expirationArbiter.isExpired(activeSession))
 			.collect(Collectors.toCollection(HashSet::new));
-		return null;
 	}
 
 	public Set<Session> getActiveSessions() {

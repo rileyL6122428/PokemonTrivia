@@ -1,6 +1,7 @@
 package org.l2k.trivia2.repository;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
@@ -26,13 +27,14 @@ class P2PSessionRepositoryTest {
 	@Mock private SessionExpirationArbiter expirationArbiter;
 	@Mock private Session preExistingSession1;
 	@Mock private Session preExistingSession2;
+	@Mock private NameRepository nameRepository;
 	
 	@BeforeEach
 	void setup() {
 		sessionRepository = new P2PSessionRepository(expirationArbiter, new HashSet<Session>() {{
 			add(preExistingSession1);
 			add(preExistingSession2);
-		}}) ;
+		}});
 	}
 	
 	@Nested
@@ -52,10 +54,11 @@ class P2PSessionRepositoryTest {
 			assertTrue(activeSessions.contains(preExistingSession2));
 		}
 		
-		@Disabled
 		@Test
 		void returnsNullIfNameRepositoryEmpty() {
-			fail("Not yet implemented");
+			when(nameRepository.takeName()).thenReturn(null);
+			Session createdSession = sessionRepository.createSession(newSession);
+			assertNull(createdSession);
 		}
 		
 		@Disabled
