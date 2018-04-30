@@ -46,4 +46,14 @@ public class P2PSessionRepository {
 		return activeSessions.contains(session);
 	}
 
+	public Session syncSession(Session session) {
+		if(activeSessions.contains(session)) {
+			session.setStatus(SessionStatus.SYNCED);
+			activeSessions.add(session);
+			return session;
+		} else {
+			return null;			
+		}
+	}
+
 }

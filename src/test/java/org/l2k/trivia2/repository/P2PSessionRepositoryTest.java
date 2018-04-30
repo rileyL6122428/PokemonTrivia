@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import java.util.HashSet;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +21,11 @@ import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class P2PSessionRepositoryTest {
+	
+	/* TODO
+	 * USE SYSTEM.identityHashCode to ensure session are copied into sessionRepository
+	 * Add nested blocks for HappyPath to reduce boilerplate 
+	 * */
 
 	private P2PSessionRepository sessionRepository;
 	
@@ -89,6 +95,41 @@ class P2PSessionRepositoryTest {
 			when(nameRepository.takeName()).thenReturn("EXAMPLE_NAME");
 			Session storedSession = sessionRepository.createSession(newSession);
 			assertTrue(sessionRepository.contains(storedSession));
+		}
+	}
+	
+	@Nested
+	class SyncSession {
+		
+		@Disabled
+		@Test
+		void returnsNullIfSessionNotActive() {
+			
+		}
+		
+		
+		
+		@Test
+		void returnsSessionWithSyncedStatusIfSessionActive() {
+			when(nameRepository.takeName()).thenReturn("EXAMPLE_NAME");
+			Session newSession = new Session();
+			Session syncableSession = sessionRepository.createSession(newSession);
+			
+			Session syncedSession = sessionRepository.syncSession(syncableSession);
+			
+			assertNotNull(syncedSession);
+			assertEquals(SessionStatus.SYNCED, syncedSession.getStatus());
+		}
+		
+		@Test
+		void storesSyncedSessionIfSessionActive() {
+			when(nameRepository.takeName()).thenReturn("EXAMPLE_NAME");
+			Session newSession = new Session();
+			Session syncableSession = sessionRepository.createSession(newSession);
+			
+			Session syncedSession = sessionRepository.syncSession(syncableSession);
+			
+			assertTrue(sessionRepository.contains(syncedSession));
 		}
 	}
 
