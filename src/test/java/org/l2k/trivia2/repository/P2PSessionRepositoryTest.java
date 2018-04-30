@@ -1,16 +1,15 @@
 package org.l2k.trivia2.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +30,7 @@ class P2PSessionRepositoryTest {
 	
 	@BeforeEach
 	void setup() {
-		sessionRepository = new P2PSessionRepository(expirationArbiter, new HashSet<Session>() {{
+		sessionRepository = new P2PSessionRepository(expirationArbiter, nameRepository, new HashSet<Session>() {{
 			add(preExistingSession1);
 			add(preExistingSession2);
 		}});
@@ -40,7 +39,12 @@ class P2PSessionRepositoryTest {
 	@Nested
 	class CreateSession {
 		
-		@Mock private Session newSession; 
+		private Session newSession;
+		
+		@BeforeEach
+		public void setup() {
+			newSession = new Session();
+		}
 		
 		@Test
 		void clearsUnSyncedSessions() {
@@ -49,37 +53,43 @@ class P2PSessionRepositoryTest {
 			
 			sessionRepository.createSession(newSession);
 			
-			Set<Session> activeSessions = sessionRepository.getActiveSessions();
-			assertFalse(activeSessions.contains(preExistingSession1));
-			assertTrue(activeSessions.contains(preExistingSession2));
+			assertFalse(sessionRepository.contains(preExistingSession1));
+			assertTrue(sessionRepository.contains(preExistingSession2));
 		}
 		
 		@Test
 		void returnsNullIfNameRepositoryEmpty() {
 			when(nameRepository.takeName()).thenReturn(null);
-			Session createdSession = sessionRepository.createSession(newSession);
-			assertNull(createdSession);
+			Session storedSession = sessionRepository.createSession(newSession);
+			assertNull(storedSession);
 		}
 		
-		@Disabled
 		@Test
-		void returnsSessionIfNameRepositoryHasVacantNames() {
-			fail("Not yet implemented");
+		void returnsSessionWithNameIfNameRepositoryHasVacantNames() {
+			when(nameRepository.takeName()).thenReturn("EXAMPLE_NAME");
+			
+			Session storedSession = sessionRepository.createSession(newSession);
+			
+			assertNotNull(storedSession);
+			assertEquals("EXAMPLE_NAME", storedSession.getName());
 		}
 		
-		@Disabled
 		@Test
-		void storesSessionAsReadyToBeSynced() {
-			fail("Not yet implemented");
+		void returnsSessionAsReadyToBeSyncedIfNameRepoHasVacantNames() {
+			when(nameRepository.takeName()).thenReturn("EXAMPLE_NAME");
+			
+			Session storedSession = sessionRepository.createSession(newSession);
+			
+			assertNotNull(storedSession);
+			assertEquals(SessionStatus.READY_TO_SYNC, storedSession.getStatus());
 		}
-	}
-
-	public P2PSessionRepository getSessionRepository() {
-		return sessionRepository;
-	}
-
-	public void setSessionRepository(P2PSessionRepository sessionRepository) {
-		this.sessionRepository = sessionRepository;
+	
+		@Test
+		void storesSessionIfNameRepoHasVacantNames() {
+			when(nameRepository.takeName()).thenReturn("EXAMPLE_NAME");
+			Session storedSession = sessionRepository.createSession(newSession);
+			assertTrue(sessionRepository.contains(storedSession));
+		}
 	}
 
 }
