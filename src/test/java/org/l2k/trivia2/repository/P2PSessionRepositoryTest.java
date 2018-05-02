@@ -1,136 +1,104 @@
 package org.l2k.trivia2.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.HashSet;
+import java.util.Date;
+import java.util.function.Predicate;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.l2k.trivia2.domain.Session;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class P2PSessionRepositoryTest {
-	
-	/* TODO
-	 * USE SYSTEM.identityHashCode to ensure session are copied into sessionRepository
-	 * Add nested blocks for HappyPath to reduce boilerplate 
-	 * */
 
 	private P2PSessionRepository sessionRepository;
 	
 	@Mock private SessionExpirationArbiter expirationArbiter;
-	@Mock private Session preExistingSession1;
-	@Mock private Session preExistingSession2;
 	@Mock private NameRepository nameRepository;
+	@Mock private SessionTable sessionTable;
 	
 	@BeforeEach
 	void setup() {
-		sessionRepository = new P2PSessionRepository(expirationArbiter, nameRepository, new HashSet<Session>() {{
-			add(preExistingSession1);
-			add(preExistingSession2);
-		}});
+		sessionRepository = new P2PSessionRepository(
+			expirationArbiter,  
+			sessionTable, 
+			nameRepository
+		);
 	}
 	
 	@Nested
 	class CreateSession {
 		
-		private Session newSession;
+		private Session session;
 		
 		@BeforeEach
 		public void setup() {
-			newSession = new Session();
+			session = new Session.Builder()
+				.setId("EXAMPLE_ID")
+				.setLastUpdated(new Date())
+				.build();
 		}
-		
+				
 		@Test
 		void clearsUnSyncedSessions() {
-			when(expirationArbiter.isExpired(preExistingSession1)).thenReturn(true);
-			when(expirationArbiter.isExpired(preExistingSession2)).thenReturn(false);
+			/*
+			 * Indirectly tests that the predicate passed to the sessionTable.clearRecords
+			 * call is expirationAribiter::isExpired. This indirect verification was 
+			 * implemented because a direct equality check on lamdas does not work.
+			 * */
 			
-			sessionRepository.createSession(newSession);
+			ArgumentCaptor<Predicate<Session>> clearRecordsPredicateCaptor = ArgumentCaptor.forClass(Predicate.class);
+			doNothing().when(sessionTable).clearRecords(clearRecordsPredicateCaptor.capture());
 			
-			assertFalse(sessionRepository.contains(preExistingSession1));
-			assertTrue(sessionRepository.contains(preExistingSession2));
+			sessionRepository.createSession(session);
+			
+			Predicate<Session> clearRecordsPredicate = clearRecordsPredicateCaptor.getValue(); 
+			Session verifyPredicateSession = new Session.Builder().build();
+			clearRecordsPredicate.test(verifyPredicateSession);
+			verify(expirationArbiter, times(1)).isExpired(verifyPredicateSession);
 		}
 		
 		@Test
 		void returnsNullIfNameRepositoryEmpty() {
 			when(nameRepository.takeName()).thenReturn(null);
-			Session storedSession = sessionRepository.createSession(newSession);
+			Session storedSession = sessionRepository.createSession(session);
 			assertNull(storedSession);
 		}
 		
-		@Test
-		void returnsSessionWithNameIfNameRepositoryHasVacantNames() {
-			when(nameRepository.takeName()).thenReturn("EXAMPLE_NAME");
+		@Nested
+		class HappyPath {
 			
-			Session storedSession = sessionRepository.createSession(newSession);
+			@BeforeEach
+			public void setup() {
+				when(nameRepository.takeName()).thenReturn("EXAMPLE_NAME");
+			}
 			
-			assertNotNull(storedSession);
-			assertEquals("EXAMPLE_NAME", storedSession.getName());
-		}
-		
-		@Test
-		void returnsSessionAsReadyToBeSyncedIfNameRepoHasVacantNames() {
-			when(nameRepository.takeName()).thenReturn("EXAMPLE_NAME");
+			@Test
+			void returnsSessionUpdatedWithNameProvidedByNameRepositoryAndStatusOfReadyToSync() {
+				Session returnedSession = sessionRepository.createSession(session);
+				assertEquals("EXAMPLE_ID", returnedSession.getId());
+				assertEquals(session.getLastUpdated(), returnedSession.getLastUpdated());
+				assertEquals("EXAMPLE_NAME", returnedSession.getName());
+				assertEquals(SessionStatus.READY_TO_SYNC, returnedSession.getStatus());
+			}
 			
-			Session storedSession = sessionRepository.createSession(newSession);
-			
-			assertNotNull(storedSession);
-			assertEquals(SessionStatus.READY_TO_SYNC, storedSession.getStatus());
-		}
-	
-		@Test
-		void storesSessionIfNameRepoHasVacantNames() {
-			when(nameRepository.takeName()).thenReturn("EXAMPLE_NAME");
-			Session storedSession = sessionRepository.createSession(newSession);
-			assertTrue(sessionRepository.contains(storedSession));
+			@Test
+			void storesSession() {
+				Session returnedSession = sessionRepository.createSession(session);
+				verify(sessionTable, times(1)).saveRecord(returnedSession);
+			}
 		}
 	}
-	
-	@Nested
-	class SyncSession {
-		
-		@Disabled
-		@Test
-		void returnsNullIfSessionNotActive() {
-			
-		}
-		
-		
-		
-		@Test
-		void returnsSessionWithSyncedStatusIfSessionActive() {
-			when(nameRepository.takeName()).thenReturn("EXAMPLE_NAME");
-			Session newSession = new Session();
-			Session syncableSession = sessionRepository.createSession(newSession);
-			
-			Session syncedSession = sessionRepository.syncSession(syncableSession);
-			
-			assertNotNull(syncedSession);
-			assertEquals(SessionStatus.SYNCED, syncedSession.getStatus());
-		}
-		
-		@Test
-		void storesSyncedSessionIfSessionActive() {
-			when(nameRepository.takeName()).thenReturn("EXAMPLE_NAME");
-			Session newSession = new Session();
-			Session syncableSession = sessionRepository.createSession(newSession);
-			
-			Session syncedSession = sessionRepository.syncSession(syncableSession);
-			
-			assertTrue(sessionRepository.contains(syncedSession));
-		}
-	}
-
 }

@@ -1,59 +1,37 @@
 package org.l2k.trivia2.repository;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.BooleanSupplier;
-import java.util.stream.Collectors;
-
 import org.l2k.trivia2.domain.Session;
 
 public class P2PSessionRepository {
 
 	private SessionExpirationArbiter expirationArbiter;
 	private NameRepository nameRepository;
-	private Set<Session> activeSessions;
+	private SessionTable sessionTable;
 
-	public P2PSessionRepository(SessionExpirationArbiter expirationArbiter, NameRepository nameRepository, Set<Session> activeSessions) {
+	public P2PSessionRepository(SessionExpirationArbiter expirationArbiter, SessionTable sessionTable, NameRepository nameRepository) {
 		this.expirationArbiter = expirationArbiter;
 		this.nameRepository = nameRepository;
-		this.activeSessions = activeSessions;
+		this.sessionTable = sessionTable;
 	}
 
 	public Session createSession(Session session) {
-		removeExpiredSessions();
+		sessionTable.clearRecords(expirationArbiter::isExpired);
 		String userName = nameRepository.takeName();
-		return createSession(session, userName);
-	}
-
-	private void removeExpiredSessions() {
-		activeSessions = activeSessions.stream()
-			.filter((activeSession) -> !expirationArbiter.isExpired(activeSession))
-			.collect(Collectors.toCollection(HashSet::new));
+		
+		if(userName != null) {
+			Session saveCopy = getSaveCopy(session, userName);
+			sessionTable.saveRecord(saveCopy);
+			return saveCopy;
+		} else {
+			return null;
+		}
 	}
 	
-	private Session createSession(Session session, String userName) {
-		if(userName != null) {
-			session.setName(userName);
-			session.setStatus(SessionStatus.READY_TO_SYNC);
-			activeSessions.add(session);
-			return session;
-		} else {
-			return null;	
-		}
-	}
-
-	public boolean contains(Session session) {
-		return activeSessions.contains(session);
-	}
-
-	public Session syncSession(Session session) {
-		if(activeSessions.contains(session)) {
-			session.setStatus(SessionStatus.SYNCED);
-			activeSessions.add(session);
-			return session;
-		} else {
-			return null;			
-		}
+	private Session getSaveCopy(Session session, String userName) {
+		return new Session.Builder(session)
+		.setName(userName)
+		.setSessionStatus(SessionStatus.READY_TO_SYNC)
+		.build();
 	}
 
 }

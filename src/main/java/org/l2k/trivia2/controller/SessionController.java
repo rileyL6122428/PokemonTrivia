@@ -2,6 +2,7 @@ package org.l2k.trivia2.controller;
 
 import static org.l2k.trivia2.constants.ControllerConstants.Paths;
 import org.l2k.trivia2.domain.Session;
+import org.l2k.trivia2.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
