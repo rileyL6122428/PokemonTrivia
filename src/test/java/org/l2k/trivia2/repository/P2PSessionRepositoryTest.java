@@ -80,12 +80,22 @@ class P2PSessionRepositoryTest {
 			}
 			
 			@Test
-			void returnsSessionUpdatedWithNameProvidedByNameRepositoryAndStatusOfReadyToSync() {
+			void returnsSessionUpdatedWithNameFromNameRepository() {
 				Session returnedSession = sessionRepository.createSession(session);
-				assertEquals("EXAMPLE_ID", returnedSession.getId());
-				assertEquals(session.getLastUpdated(), returnedSession.getLastUpdated());
 				assertEquals("EXAMPLE_NAME", returnedSession.getName());
+			}
+			
+			@Test
+			void returnsSessionUpdatedWithStatusOfReadyToSync() {
+				Session returnedSession = sessionRepository.createSession(session);
 				assertEquals(SessionStatus.READY_TO_SYNC, returnedSession.getStatus());
+			}
+			
+			@Test
+			void returnsSessionWithValuesMatchingTheSubmittedSession() {
+				Session returnedSession = sessionRepository.createSession(session);
+				assertEquals(session.getLastUpdated(), returnedSession.getLastUpdated());
+				assertEquals("EXAMPLE_ID", returnedSession.getId());
 			}
 			
 			@Test

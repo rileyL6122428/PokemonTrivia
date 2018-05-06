@@ -17,21 +17,17 @@ public class P2PSessionRepository {
 	public Session createSession(Session session) {
 		sessionTable.clearRecords(expirationArbiter::isExpired);
 		String userName = nameRepository.takeName();
-		
-		if(userName != null) {
-			Session saveCopy = getSaveCopy(session, userName);
-			sessionTable.saveRecord(saveCopy);
-			return saveCopy;
-		} else {
-			return null;
-		}
+		return userName != null ? postSession(session, userName) : null;
 	}
 	
-	private Session getSaveCopy(Session session, String userName) {
-		return new Session.Builder(session)
-		.setName(userName)
-		.setSessionStatus(SessionStatus.READY_TO_SYNC)
-		.build();
+	private Session postSession(Session session, String userName) {
+		Session postedSession = new Session.Builder(session)
+			.setName(userName)
+			.setSessionStatus(SessionStatus.READY_TO_SYNC)
+			.build();
+		
+		sessionTable.saveRecord(postedSession);
+		return postedSession;
 	}
 
 }
