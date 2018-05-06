@@ -53,12 +53,6 @@ class P2PSessionRepositoryTest {
 				
 		@Test
 		void clearsUnSyncedSessions() {
-			/*
-			 * Indirectly tests that the predicate passed to the sessionTable.clearRecords
-			 * call is expirationAribiter::isExpired. This indirect verification was 
-			 * implemented because a direct equality check on lamdas does not work.
-			 * */
-			
 			ArgumentCaptor<Predicate<Session>> clearRecordsPredicateCaptor = ArgumentCaptor.forClass(Predicate.class);
 			doNothing().when(sessionTable).clearRecords(clearRecordsPredicateCaptor.capture());
 			
