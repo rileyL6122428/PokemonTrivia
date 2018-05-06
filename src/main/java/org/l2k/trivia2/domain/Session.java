@@ -6,10 +6,10 @@ import org.l2k.trivia2.repository.SessionStatus;
 
 public class Session {
 
-	private String name;
-	private SessionStatus status;
-	private Date lastUpdated;
-	private String id;
+	private final String name;
+	private final SessionStatus status;
+	private final Date lastUpdated;
+	private final String id;
 	
 	public Session(String name, SessionStatus status, Date lastUpdated, String id) {
 		this.name = name;
