@@ -35,7 +35,7 @@ class SessionExpirationArbiterTest {
 	class IsExpired {	
 		
 		@Test
-		void returnsTrueWhenReadyToSyncAndDateOfLastUpdateIsLessThanCurrentDateMinusSyncThreshold() {
+		void returnsTrueWhenReadyToSyncAndDateOfLastUpdatePlusSyncThresholdIsLessThanCurrentDate() {
 			Session session = new Session.Builder()
 				.setSessionStatus(SessionStatus.READY_TO_SYNC)
 				.setLastUpdated(BASELINE_DATE)
@@ -51,6 +51,18 @@ class SessionExpirationArbiterTest {
 			Session session = new Session.Builder()
 				.setSessionStatus(SessionStatus.SYNCED)
 				.build();
+			
+			assertFalse(expirationArbiter.isExpired(session));
+		}
+		
+		@Test
+		void returnsFalseWhenReadyToSyncAndDateOfLastUpdatePlusSyncThresholdIsNotLessThanCurrentDate() {
+			Session session = new Session.Builder()
+				.setSessionStatus(SessionStatus.READY_TO_SYNC)
+				.setLastUpdated(BASELINE_DATE)
+				.build();
+			
+			when(dateService.getCurrentDate()).thenReturn(BASELINE_DATE);
 			
 			assertFalse(expirationArbiter.isExpired(session));
 		}
