@@ -10,9 +10,5 @@ public class DateService {
 	public Date getCurrentDate() {
 		return new Date();
 	}
-	
-	public Date addTimeTo(Date date, long milliseconds) {
-		return new Date(date.getTime() + milliseconds);
-	}
 
 }
