@@ -20,8 +20,8 @@ import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 class SessionExpirationArbiterTest {
 
 	private static final long SYNC_THRESHOLD = 20000;
-	private static final Date BASELINE_DATE = new Date(0);
-	private static final Date EXCEED_SYNC_THRESHOLD_DATE = new Date(SYNC_THRESHOLD + 1);
+	private static final Date BASELINE = new Date(0);
+	private static final Date AFTER_SYNC_THRESHOLD = new Date(SYNC_THRESHOLD + 1);
 	
 	private SessionExpirationArbiter expirationArbiter;
 	@Mock private DateService dateService;
@@ -38,10 +38,10 @@ class SessionExpirationArbiterTest {
 		void returnsTrueWhenReadyToSyncAndDateOfLastUpdatePlusSyncThresholdIsLessThanCurrentDate() {
 			Session session = new Session.Builder()
 				.setSessionStatus(SessionStatus.READY_TO_SYNC)
-				.setLastUpdated(BASELINE_DATE)
+				.setLastUpdated(BASELINE)
 				.build();
 			
-			when(dateService.getCurrentDate()).thenReturn(EXCEED_SYNC_THRESHOLD_DATE);
+			when(dateService.getCurrentDate()).thenReturn(AFTER_SYNC_THRESHOLD);
 			
 			assertTrue(expirationArbiter.isExpired(session));
 		}
@@ -59,10 +59,10 @@ class SessionExpirationArbiterTest {
 		void returnsFalseWhenReadyToSyncAndDateOfLastUpdatePlusSyncThresholdIsNotLessThanCurrentDate() {
 			Session session = new Session.Builder()
 				.setSessionStatus(SessionStatus.READY_TO_SYNC)
-				.setLastUpdated(BASELINE_DATE)
+				.setLastUpdated(BASELINE)
 				.build();
 			
-			when(dateService.getCurrentDate()).thenReturn(BASELINE_DATE);
+			when(dateService.getCurrentDate()).thenReturn(BASELINE);
 			
 			assertFalse(expirationArbiter.isExpired(session));
 		}
