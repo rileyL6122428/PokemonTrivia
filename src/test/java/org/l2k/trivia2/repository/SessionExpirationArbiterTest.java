@@ -47,7 +47,7 @@ class SessionExpirationArbiterTest {
 		}
 		
 		@Test
-		void returnsFalseWhenNotReadyToSync() {
+		void returnsFalseWhenStatusIsNotReadyToSync() {
 			Session session = new Session.Builder()
 				.setSessionStatus(SessionStatus.SYNCED)
 				.build();
