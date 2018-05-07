@@ -1,18 +1,18 @@
 package org.l2k.trivia2.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.l2k.trivia2.domain.Session;
 import org.l2k.trivia2.service.DateService;
 import org.mockito.Mock;
-import static org.mockito.Mockito.*;
 
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 
