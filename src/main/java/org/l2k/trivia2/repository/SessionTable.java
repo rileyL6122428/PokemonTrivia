@@ -8,12 +8,17 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.l2k.trivia2.domain.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SessionTable {
 
 	private Map<String, Session> sessions;
-
-	public SessionTable(HashMap<String, Session> sessions) {
+	
+	@Autowired
+	public SessionTable(@Qualifier("SESSIONS") HashMap<String, Session> sessions) {
 		this.sessions = sessions;
 	}
 
