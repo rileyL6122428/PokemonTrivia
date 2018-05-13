@@ -41,7 +41,7 @@ class P2PSessionRepositoryTest {
 	}
 	
 	@Nested
-	class CreateSession {
+	class PostSession {
 		
 		private P2PSession session;
 		
@@ -58,7 +58,7 @@ class P2PSessionRepositoryTest {
 			ArgumentCaptor<Predicate<P2PSession>> clearRecordsPredicateCaptor = ArgumentCaptor.forClass(Predicate.class);
 			when(sessionTable.clearRecords(clearRecordsPredicateCaptor.capture())).thenReturn(new ArrayList<>());
 			
-			sessionRepository.createSession(session);
+			sessionRepository.postSession(session);
 			
 			Predicate<P2PSession> clearRecordsPredicate = clearRecordsPredicateCaptor.getValue(); 
 			P2PSession verifyPredicateSession = new P2PSession.Builder().build();
@@ -73,7 +73,7 @@ class P2PSessionRepositoryTest {
 				add(new P2PSession.Builder().setName("EXAMPLE_NAME_2").build());
 			}});
 			
-			sessionRepository.createSession(session);
+			sessionRepository.postSession(session);
 			
 			verify(nameRepository).insertName("EXAMPLE_NAME_1");
 			verify(nameRepository).insertName("EXAMPLE_NAME_2");
@@ -82,7 +82,7 @@ class P2PSessionRepositoryTest {
 		@Test
 		void returnsNullIfNameRepositoryEmpty() {
 			when(nameRepository.takeName()).thenReturn(null);
-			P2PSession storedSession = sessionRepository.createSession(session);
+			P2PSession storedSession = sessionRepository.postSession(session);
 			assertNull(storedSession);
 		}
 		
@@ -96,26 +96,26 @@ class P2PSessionRepositoryTest {
 			
 			@Test
 			void returnsSessionUpdatedWithNameFromNameRepository() {
-				P2PSession returnedSession = sessionRepository.createSession(session);
+				P2PSession returnedSession = sessionRepository.postSession(session);
 				assertEquals("EXAMPLE_NAME", returnedSession.getName());
 			}
 			
 			@Test
 			void returnsSessionUpdatedWithStatusOfReadyToSync() {
-				P2PSession returnedSession = sessionRepository.createSession(session);
+				P2PSession returnedSession = sessionRepository.postSession(session);
 				assertEquals(SessionStatus.READY_TO_SYNC, returnedSession.getStatus());
 			}
 			
 			@Test
 			void returnsSessionWithValuesMatchingTheSubmittedSession() {
-				P2PSession returnedSession = sessionRepository.createSession(session);
+				P2PSession returnedSession = sessionRepository.postSession(session);
 				assertEquals(session.getLastUpdated(), returnedSession.getLastUpdated());
 				assertEquals("EXAMPLE_ID", returnedSession.getId());
 			}
 			
 			@Test
 			void storesSession() {
-				P2PSession returnedSession = sessionRepository.createSession(session);
+				P2PSession returnedSession = sessionRepository.postSession(session);
 				verify(sessionTable, times(1)).saveRecord(returnedSession);
 			}
 		}

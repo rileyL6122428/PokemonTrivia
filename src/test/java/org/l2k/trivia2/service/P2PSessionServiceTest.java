@@ -37,7 +37,7 @@ class P2PSessionServiceTest {
 		@Test
 		void wrapsHttpSessionIdInP2PSessionAndDelegatesCreationToSessionRepository() {
 			ArgumentCaptor<P2PSession> p2pSessionCaptor = ArgumentCaptor.forClass(P2PSession.class);
-			when(sessionRepository.createSession(p2pSessionCaptor.capture())).thenReturn(p2pSession);
+			when(sessionRepository.postSession(p2pSessionCaptor.capture())).thenReturn(p2pSession);
 			
 			sessionService.registerHttpSession(EXAMPLE_HTTP_SESSION_ID);
 			
@@ -47,13 +47,13 @@ class P2PSessionServiceTest {
 		
 		@Test
 		void returnsNullWhenSessionRepositoryReturnsNull() {
-			when(sessionRepository.createSession(any(P2PSession.class))).thenReturn(null);
+			when(sessionRepository.postSession(any(P2PSession.class))).thenReturn(null);
 			assertNull(sessionService.registerHttpSession(EXAMPLE_HTTP_SESSION_ID));
 		}
 		
 		@Test
 		void returnsSessionCreatedBySessionRepository() {
-			when(sessionRepository.createSession(any(P2PSession.class))).thenReturn(p2pSession);
+			when(sessionRepository.postSession(any(P2PSession.class))).thenReturn(p2pSession);
 			assertEquals(p2pSession, sessionService.registerHttpSession(EXAMPLE_HTTP_SESSION_ID));
 		}
 	}

@@ -17,7 +17,7 @@ public class P2PSessionService {
 
 	public P2PSession registerHttpSession(String httpSessionId) {
 		P2PSession p2pSession = new P2PSession.Builder().setId(httpSessionId).build();
-		return sessionRepository.createSession(p2pSession);
+		return sessionRepository.postSession(p2pSession);
 	}
 
 }

@@ -18,7 +18,7 @@ public class P2PSessionRepository {
 		this.sessionTable = sessionTable;
 	}
 
-	public P2PSession createSession(P2PSession session) {
+	public P2PSession postSession(P2PSession session) {
 		sessionTable.clearRecords(expirationArbiter::isExpired)
 		.forEach((removedSession) -> nameRepository.insertName(removedSession.getName()));
 		String userName = nameRepository.takeName();
