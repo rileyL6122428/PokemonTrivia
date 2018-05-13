@@ -1,6 +1,6 @@
 package org.l2k.trivia2.repository;
 
-import org.l2k.trivia2.domain.P2PSession;
+import org.l2k.trivia2.domain.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +18,15 @@ public class P2PSessionRepository {
 		this.sessionTable = sessionTable;
 	}
 
-	public P2PSession createSession(P2PSession session) {
+	public Session createSession(Session session) {
 		sessionTable.clearRecords(expirationArbiter::isExpired)
 		.forEach((removedSession) -> nameRepository.insertName(removedSession.getName()));
 		String userName = nameRepository.takeName();
 		return userName != null ? postSession(session, userName) : null;
 	}
 	
-	private P2PSession postSession(P2PSession session, String userName) {
-		P2PSession postedSession = new P2PSession.Builder(session)
+	private Session postSession(Session session, String userName) {
+		Session postedSession = new Session.Builder(session)
 			.setName(userName)
 			.setSessionStatus(SessionStatus.READY_TO_SYNC)
 			.build();

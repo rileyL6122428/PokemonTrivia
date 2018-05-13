@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.l2k.trivia2.domain.P2PSession;
+import org.l2k.trivia2.domain.Session;
 import org.l2k.trivia2.service.DateService;
 import org.mockito.Mock;
 
@@ -36,7 +36,7 @@ class SessionExpirationArbiterTest {
 		
 		@Test
 		void returnsTrueWhenReadyToSyncAndDateOfLastUpdatePlusSyncThresholdIsLessThanCurrentDate() {
-			P2PSession session = new P2PSession.Builder()
+			Session session = new Session.Builder()
 				.setSessionStatus(SessionStatus.READY_TO_SYNC)
 				.setLastUpdated(BASELINE)
 				.build();
@@ -48,7 +48,7 @@ class SessionExpirationArbiterTest {
 		
 		@Test
 		void returnsFalseWhenStatusIsNotReadyToSync() {
-			P2PSession session = new P2PSession.Builder()
+			Session session = new Session.Builder()
 				.setSessionStatus(SessionStatus.SYNCED)
 				.build();
 			
@@ -57,7 +57,7 @@ class SessionExpirationArbiterTest {
 		
 		@Test
 		void returnsFalseWhenReadyToSyncAndDateOfLastUpdatePlusSyncThresholdIsNotLessThanCurrentDate() {
-			P2PSession session = new P2PSession.Builder()
+			Session session = new Session.Builder()
 				.setSessionStatus(SessionStatus.READY_TO_SYNC)
 				.setLastUpdated(BASELINE)
 				.build();

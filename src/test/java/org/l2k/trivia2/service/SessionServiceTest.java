@@ -1,17 +1,21 @@
 package org.l2k.trivia2.service;
 
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+
+import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.l2k.trivia2.domain.P2PSession;
+import org.l2k.trivia2.domain.Session;
 import org.l2k.trivia2.repository.P2PSessionRepository;
-import org.mockito.ArgumentCaptor;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
@@ -19,42 +23,35 @@ import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class SessionServiceTest {
 	
-	public static final String EXAMPLE_HTTP_SESSION_ID = "EXAMPLE_HTTP_SESSION_ID";
-	
-	private P2PSessionService sessionService;
+	private SessionService sessionService;
 	
 	@Mock private P2PSessionRepository sessionRepository;
-	@Mock private P2PSession p2pSession;
+	@Mock private Session session;
 	
 	@BeforeEach
 	void setup() {
-		sessionService = new P2PSessionService(sessionRepository);
+		sessionService = new SessionService(sessionRepository);
 	}
 	
 	@Nested
-	class RegisterHttpSession {
+	class RegisterSession {
 		
 		@Test
-		void wrapsHttpSessionIdInP2PSessionAndDelegatesCreationToSessionRepository() {
-			ArgumentCaptor<P2PSession> p2pSessionCaptor = ArgumentCaptor.forClass(P2PSession.class);
-			when(sessionRepository.createSession(p2pSessionCaptor.capture())).thenReturn(p2pSession);
-			
-			sessionService.registerHttpSession(EXAMPLE_HTTP_SESSION_ID);
-			
-			P2PSession submittedSession = p2pSessionCaptor.getValue();
-			assertEquals(EXAMPLE_HTTP_SESSION_ID, submittedSession.getId());
+		void delegatesSessionCreationToSessionRepository() {
+			sessionService.registerSession(session);
+			verify(sessionRepository).createSession(session);
 		}
 		
 		@Test
 		void returnsNullWhenSessionRepositoryReturnsNull() {
-			when(sessionRepository.createSession(any(P2PSession.class))).thenReturn(null);
-			assertNull(sessionService.registerHttpSession(EXAMPLE_HTTP_SESSION_ID));
+			when(sessionRepository.createSession(session)).thenReturn(null);
+			assertNull(sessionService.registerSession(session));
 		}
 		
 		@Test
 		void returnsASessionWhenTheSessionRepositoryReturnsASession() {
-			when(sessionRepository.createSession(any(P2PSession.class))).thenReturn(p2pSession);
-			assertEquals(p2pSession, sessionService.registerHttpSession(EXAMPLE_HTTP_SESSION_ID));
+			when(sessionRepository.createSession(session)).thenReturn(session);
+			assertEquals(session, sessionService.registerSession(session));
 		}
 	}
 

@@ -4,14 +4,14 @@ import java.util.Date;
 
 import org.l2k.trivia2.repository.SessionStatus;
 
-public class P2PSession {
+public class Session {
 
 	private final String name;
 	private final SessionStatus status;
 	private final Date lastUpdated;
 	private final String id;
 	
-	public P2PSession(String name, SessionStatus status, Date lastUpdated, String id) {
+	public Session(String name, SessionStatus status, Date lastUpdated, String id) {
 		this.name = name;
 		this.status = status;
 		this.lastUpdated = lastUpdated;
@@ -44,7 +44,7 @@ public class P2PSession {
 		
 		public Builder() {}
 		
-		public Builder(P2PSession session) {
+		public Builder(Session session) {
 			this.name = session.name;
 			this.status = session.status;
 			this.lastUpdated = session.lastUpdated;
@@ -67,8 +67,8 @@ public class P2PSession {
 			this.id = id; return this;
 		}
 		
-		public P2PSession build() {
-			return new P2PSession(
+		public Session build() {
+			return new Session(
 				name,
 				status,
 				lastUpdated,
