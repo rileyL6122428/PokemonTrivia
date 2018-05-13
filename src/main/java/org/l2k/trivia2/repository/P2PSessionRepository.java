@@ -19,7 +19,8 @@ public class P2PSessionRepository {
 	}
 
 	public Session createSession(Session session) {
-		sessionTable.clearRecords(expirationArbiter::isExpired);
+		sessionTable.clearRecords(expirationArbiter::isExpired)
+		.forEach((removedSession) -> nameRepository.insertName(removedSession.getName()));
 		String userName = nameRepository.takeName();
 		return userName != null ? postSession(session, userName) : null;
 	}

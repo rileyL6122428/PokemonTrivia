@@ -2,11 +2,13 @@ package org.l2k.trivia2.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.function.Predicate;
 
@@ -54,7 +56,7 @@ class P2PSessionRepositoryTest {
 		@Test
 		void clearsUnSyncedSessions() {
 			ArgumentCaptor<Predicate<Session>> clearRecordsPredicateCaptor = ArgumentCaptor.forClass(Predicate.class);
-			doNothing().when(sessionTable).clearRecords(clearRecordsPredicateCaptor.capture());
+			when(sessionTable.clearRecords(clearRecordsPredicateCaptor.capture())).thenReturn(new ArrayList<>());
 			
 			sessionRepository.createSession(session);
 			
@@ -62,6 +64,19 @@ class P2PSessionRepositoryTest {
 			Session verifyPredicateSession = new Session.Builder().build();
 			clearRecordsPredicate.test(verifyPredicateSession);
 			verify(expirationArbiter, times(1)).isExpired(verifyPredicateSession);
+		}
+		
+		@Test
+		void putsClearedSessionNamesBackIntoNameRepository() {
+			when(sessionTable.clearRecords(any(Predicate.class))).thenReturn(new ArrayList<Session>() {{
+				add(new Session.Builder().setName("EXAMPLE_NAME_1").build());
+				add(new Session.Builder().setName("EXAMPLE_NAME_2").build());
+			}});
+			
+			sessionRepository.createSession(session);
+			
+			verify(nameRepository).insertName("EXAMPLE_NAME_1");
+			verify(nameRepository).insertName("EXAMPLE_NAME_2");
 		}
 		
 		@Test
