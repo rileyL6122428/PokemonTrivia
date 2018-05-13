@@ -17,7 +17,7 @@ import org.mockito.Mock;
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class SessionServiceTest {
+class P2PSessionServiceTest {
 	
 	public static final String EXAMPLE_HTTP_SESSION_ID = "EXAMPLE_HTTP_SESSION_ID";
 	
@@ -52,7 +52,7 @@ class SessionServiceTest {
 		}
 		
 		@Test
-		void returnsASessionWhenTheSessionRepositoryReturnsASession() {
+		void returnsSessionCreatedBySessionRepository() {
 			when(sessionRepository.createSession(any(P2PSession.class))).thenReturn(p2pSession);
 			assertEquals(p2pSession, sessionService.registerHttpSession(EXAMPLE_HTTP_SESSION_ID));
 		}
