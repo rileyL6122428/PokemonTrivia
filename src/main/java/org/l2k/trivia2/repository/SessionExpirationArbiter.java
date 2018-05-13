@@ -2,7 +2,7 @@ package org.l2k.trivia2.repository;
 
 import java.util.Date;
 
-import org.l2k.trivia2.domain.Session;
+import org.l2k.trivia2.domain.P2PSession;
 import org.l2k.trivia2.service.DateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,12 +20,12 @@ public class SessionExpirationArbiter {
 		this.dateService = dateService;
 	}
 
-	public boolean isExpired(Session session) {
+	public boolean isExpired(P2PSession session) {
 		return session.getStatus() == SessionStatus.READY_TO_SYNC &&
 				dateService.getCurrentDate().after(lastUpdatePlusSyncThreshold(session));
 	}
 	
-	private Date lastUpdatePlusSyncThreshold(Session session) {
+	private Date lastUpdatePlusSyncThreshold(P2PSession session) {
 		return new Date(session.getLastUpdated().getTime() + syncThreshold);
 	}
 

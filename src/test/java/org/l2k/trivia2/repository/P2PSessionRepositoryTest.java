@@ -16,7 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.l2k.trivia2.domain.Session;
+import org.l2k.trivia2.domain.P2PSession;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
@@ -43,11 +43,11 @@ class P2PSessionRepositoryTest {
 	@Nested
 	class CreateSession {
 		
-		private Session session;
+		private P2PSession session;
 		
 		@BeforeEach
 		public void setup() {
-			session = new Session.Builder()
+			session = new P2PSession.Builder()
 				.setId("EXAMPLE_ID")
 				.setLastUpdated(new Date())
 				.build();
@@ -55,22 +55,22 @@ class P2PSessionRepositoryTest {
 				
 		@Test
 		void clearsUnSyncedSessions() {
-			ArgumentCaptor<Predicate<Session>> clearRecordsPredicateCaptor = ArgumentCaptor.forClass(Predicate.class);
+			ArgumentCaptor<Predicate<P2PSession>> clearRecordsPredicateCaptor = ArgumentCaptor.forClass(Predicate.class);
 			when(sessionTable.clearRecords(clearRecordsPredicateCaptor.capture())).thenReturn(new ArrayList<>());
 			
 			sessionRepository.createSession(session);
 			
-			Predicate<Session> clearRecordsPredicate = clearRecordsPredicateCaptor.getValue(); 
-			Session verifyPredicateSession = new Session.Builder().build();
+			Predicate<P2PSession> clearRecordsPredicate = clearRecordsPredicateCaptor.getValue(); 
+			P2PSession verifyPredicateSession = new P2PSession.Builder().build();
 			clearRecordsPredicate.test(verifyPredicateSession);
 			verify(expirationArbiter, times(1)).isExpired(verifyPredicateSession);
 		}
 		
 		@Test
 		void putsClearedSessionNamesBackIntoNameRepository() {
-			when(sessionTable.clearRecords(any(Predicate.class))).thenReturn(new ArrayList<Session>() {{
-				add(new Session.Builder().setName("EXAMPLE_NAME_1").build());
-				add(new Session.Builder().setName("EXAMPLE_NAME_2").build());
+			when(sessionTable.clearRecords(any(Predicate.class))).thenReturn(new ArrayList<P2PSession>() {{
+				add(new P2PSession.Builder().setName("EXAMPLE_NAME_1").build());
+				add(new P2PSession.Builder().setName("EXAMPLE_NAME_2").build());
 			}});
 			
 			sessionRepository.createSession(session);
@@ -82,7 +82,7 @@ class P2PSessionRepositoryTest {
 		@Test
 		void returnsNullIfNameRepositoryEmpty() {
 			when(nameRepository.takeName()).thenReturn(null);
-			Session storedSession = sessionRepository.createSession(session);
+			P2PSession storedSession = sessionRepository.createSession(session);
 			assertNull(storedSession);
 		}
 		
@@ -96,26 +96,26 @@ class P2PSessionRepositoryTest {
 			
 			@Test
 			void returnsSessionUpdatedWithNameFromNameRepository() {
-				Session returnedSession = sessionRepository.createSession(session);
+				P2PSession returnedSession = sessionRepository.createSession(session);
 				assertEquals("EXAMPLE_NAME", returnedSession.getName());
 			}
 			
 			@Test
 			void returnsSessionUpdatedWithStatusOfReadyToSync() {
-				Session returnedSession = sessionRepository.createSession(session);
+				P2PSession returnedSession = sessionRepository.createSession(session);
 				assertEquals(SessionStatus.READY_TO_SYNC, returnedSession.getStatus());
 			}
 			
 			@Test
 			void returnsSessionWithValuesMatchingTheSubmittedSession() {
-				Session returnedSession = sessionRepository.createSession(session);
+				P2PSession returnedSession = sessionRepository.createSession(session);
 				assertEquals(session.getLastUpdated(), returnedSession.getLastUpdated());
 				assertEquals("EXAMPLE_ID", returnedSession.getId());
 			}
 			
 			@Test
 			void storesSession() {
-				Session returnedSession = sessionRepository.createSession(session);
+				P2PSession returnedSession = sessionRepository.createSession(session);
 				verify(sessionTable, times(1)).saveRecord(returnedSession);
 			}
 		}
