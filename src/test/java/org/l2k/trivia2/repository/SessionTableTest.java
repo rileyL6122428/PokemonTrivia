@@ -10,22 +10,22 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.l2k.trivia2.domain.Session;
+import org.l2k.trivia2.domain.P2PSession;
 
 class SessionTableTest {
 
 	private SessionTable sessionTable;
-	private Session session1;
-	private Session session2;
-	private Session session3;
+	private P2PSession session1;
+	private P2PSession session2;
+	private P2PSession session3;
 	
 	@BeforeEach
 	void setup() {
-		sessionTable = new SessionTable(new HashMap<String, Session>());
+		sessionTable = new SessionTable(new HashMap<String, P2PSession>());
 		
-		session1 = new Session.Builder().setId("EXAMPLE_ID_1").build();
-		session2 = new Session.Builder().setId("EXAMPLE_ID_2").build();
-		session3 = new Session.Builder().setId("EXAMPLE_ID_3").build();
+		session1 = new P2PSession.Builder().setId("EXAMPLE_ID_1").build();
+		session2 = new P2PSession.Builder().setId("EXAMPLE_ID_2").build();
+		session3 = new P2PSession.Builder().setId("EXAMPLE_ID_3").build();
 	}
 	
 	@Nested
@@ -64,7 +64,7 @@ class SessionTableTest {
 		
 		@Test
 		void returnsListOfRemovedSessions() {
-			List<Session> removedSessions = sessionTable.clearRecords((session) -> session.getId().equals("EXAMPLE_ID_1"));
+			List<P2PSession> removedSessions = sessionTable.clearRecords((session) -> session.getId().equals("EXAMPLE_ID_1"));
 			assertEquals(1, removedSessions.size());
 			assertTrue(removedSessions.contains(session1));
 		}
