@@ -23,9 +23,8 @@ public class NameRepository {
 		return nextName;			
 	}
 
-	public void insertName(String string) {
-		// TODO Auto-generated method stub
-		
+	public void insertName(String name) {
+		names.addLast(name);
 	}
 
 }
