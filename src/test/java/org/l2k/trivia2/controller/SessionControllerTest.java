@@ -41,11 +41,11 @@ class SessionControllerTest {
 	}
 	
 	@Test
-	void returns200WithP2PSessionWhenSessionServiceCanHttpRegisterSession() {
+	void returns200WithP2PSessionWhenSessionServiceCanRegisterHttpSession() {
 		when(sessionService.registerHttpSession(any(String.class))).thenReturn(p2pSession);
 		ResponseEntity<P2PSession> response = sessionController.registerSession(httpSession);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertNotNull(response.getBody());
+		assertEquals(p2pSession, response.getBody());
 	}
 	
 	@Test
