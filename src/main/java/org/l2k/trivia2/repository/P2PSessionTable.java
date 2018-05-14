@@ -41,8 +41,7 @@ public class P2PSessionTable {
 	}
 
 	public P2PSession get(String sessionId) {
-		// TODO Auto-generated method stub
-		return null;
+		return sessions.get(sessionId);
 	}
 
 }
