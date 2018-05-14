@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,26 +26,48 @@ class P2PSessionServiceTest {
 	private P2PSessionService sessionService;
 	
 	@Mock private P2PSessionRepository sessionRepository;
+	@Mock private DateService dateService;
 	@Mock private P2PSession p2pSession;
 	
 	@BeforeEach
 	void setup() {
-		sessionService = new P2PSessionService(sessionRepository);
+		sessionService = new P2PSessionService(sessionRepository, dateService);
 	}
 	
 	@Nested
 	class RegisterHttpSession {
 		
-		@Test
-		void wrapsHttpSessionIdInP2PSessionAndDelegatesCreationToSessionRepository() {
-			ArgumentCaptor<P2PSession> p2pSessionCaptor = ArgumentCaptor.forClass(P2PSession.class);
-			when(sessionRepository.postSession(p2pSessionCaptor.capture())).thenReturn(p2pSession);
+		@Nested
+		class WrappedSession {
 			
-			sessionService.registerHttpSession(EXAMPLE_HTTP_SESSION_ID);
+			private ArgumentCaptor<P2PSession> p2pSessionCaptor;
+
+			@BeforeEach
+			void setup() {
+				p2pSessionCaptor = ArgumentCaptor.forClass(P2PSession.class);
+				when(sessionRepository.postSession(p2pSessionCaptor.capture())).thenReturn(p2pSession);				
+			}
 			
-			P2PSession submittedSession = p2pSessionCaptor.getValue();
-			assertEquals(EXAMPLE_HTTP_SESSION_ID, submittedSession.getId());
+			@Test
+			void wrapsHttpSessionIdInP2PSessionAndDelegatesCreationToSessionRepository() {
+				sessionService.registerHttpSession(EXAMPLE_HTTP_SESSION_ID);
+				
+				P2PSession submittedSession = p2pSessionCaptor.getValue();
+				assertEquals(EXAMPLE_HTTP_SESSION_ID, submittedSession.getId());
+			}
+			
+			@Test
+			void attachesDateToWrappedHttpSession() {
+				Date currentDate = new Date();
+				when(dateService.getCurrentDate()).thenReturn(currentDate);
+				
+				sessionService.registerHttpSession(EXAMPLE_HTTP_SESSION_ID);
+				
+				P2PSession submittedSession = p2pSessionCaptor.getValue();
+				assertEquals(currentDate, submittedSession.getLastUpdated());
+			}
 		}
+		
 		
 		@Test
 		void returnsNullWhenSessionRepositoryReturnsNull() {
