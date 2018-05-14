@@ -26,12 +26,11 @@ class P2PSessionServiceTest {
 	private P2PSessionService sessionService;
 	
 	@Mock private P2PSessionRepository sessionRepository;
-	@Mock private DateService dateService;
 	@Mock private P2PSession p2pSession;
 	
 	@BeforeEach
 	void setup() {
-		sessionService = new P2PSessionService(sessionRepository, dateService);
+		sessionService = new P2PSessionService(sessionRepository);
 	}
 	
 	@Nested
@@ -54,17 +53,6 @@ class P2PSessionServiceTest {
 				
 				P2PSession submittedSession = p2pSessionCaptor.getValue();
 				assertEquals(EXAMPLE_HTTP_SESSION_ID, submittedSession.getId());
-			}
-			
-			@Test
-			void attachesDateToWrappedHttpSession() {
-				Date currentDate = new Date();
-				when(dateService.getCurrentDate()).thenReturn(currentDate);
-				
-				sessionService.registerHttpSession(EXAMPLE_HTTP_SESSION_ID);
-				
-				P2PSession submittedSession = p2pSessionCaptor.getValue();
-				assertEquals(currentDate, submittedSession.getLastUpdated());
 			}
 		}
 		

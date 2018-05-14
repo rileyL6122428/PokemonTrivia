@@ -13,10 +13,12 @@ import java.util.Date;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.l2k.trivia2.domain.P2PSession;
+import org.l2k.trivia2.service.DateService;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
@@ -30,13 +32,15 @@ class P2PSessionRepositoryTest {
 	@Mock private SessionExpirationArbiter expirationArbiter;
 	@Mock private NameRepository nameRepository;
 	@Mock private P2PSessionTable sessionTable;
+	@Mock private DateService dateService;
 	
 	@BeforeEach
 	void setup() {
 		sessionRepository = new P2PSessionRepository(
 			expirationArbiter,  
 			sessionTable, 
-			nameRepository
+			nameRepository,
+			dateService
 		);
 	}
 	
@@ -49,7 +53,6 @@ class P2PSessionRepositoryTest {
 		public void setup() {
 			session = new P2PSession.Builder()
 				.setId("EXAMPLE_ID")
-				.setLastUpdated(new Date())
 				.build();
 		}
 				
@@ -107,16 +110,46 @@ class P2PSessionRepositoryTest {
 			}
 			
 			@Test
-			void returnsSessionWithValuesMatchingTheSubmittedSession() {
+			void returnsSessionWithLastUpdatedSetToCurrentDate() {
+				Date currentDate = new Date();
+				when(dateService.getCurrentDate()).thenReturn(currentDate);
+				
 				P2PSession returnedSession = sessionRepository.postSession(session);
-				assertEquals(session.getLastUpdated(), returnedSession.getLastUpdated());
-				assertEquals("EXAMPLE_ID", returnedSession.getId());
+				
+				assertEquals(currentDate, returnedSession.getLastUpdated());
 			}
 			
+			@Test
+			void returnsSessionWithValuesMatchingTheSubmittedSession() {
+				P2PSession returnedSession = sessionRepository.postSession(session);
+				assertEquals("EXAMPLE_ID", returnedSession.getId());
+			}
+		
 			@Test
 			void storesSession() {
 				P2PSession returnedSession = sessionRepository.postSession(session);
 				verify(sessionTable, times(1)).saveRecord(returnedSession);
+			}
+			
+			@Nested
+			class SessionAlreadyExists {
+				
+				private P2PSession repeatedSession;
+
+				@BeforeEach
+				void setup() {
+					P2PSession returnedSession = sessionRepository.postSession(session);
+					repeatedSession = new P2PSession.Builder().setId(session.getId()).build();
+					when(sessionTable.contains(repeatedSession)).thenReturn(true);
+					when(sessionTable.get(repeatedSession.getId())).thenReturn(returnedSession);
+					when(nameRepository.takeName()).thenReturn("DIFFERNT_EXAMPLE_NAME");					
+				}
+				
+				@Test
+				void savesSessionWithPreviouslyGivenNameIfTableAlreadyContainsSession() {
+					P2PSession sessionReturnedAfterRepeat = sessionRepository.postSession(repeatedSession);
+					assertEquals("EXAMPLE_NAME", sessionReturnedAfterRepeat.getName());
+				}
 			}
 		}
 	}
