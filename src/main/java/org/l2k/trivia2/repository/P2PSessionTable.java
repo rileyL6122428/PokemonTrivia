@@ -36,8 +36,12 @@ public class P2PSessionTable {
 		}
 	}
 
-	public boolean contains(P2PSession session1) {
-		return sessions.containsKey(session1.getId());
+	public boolean contains(P2PSession session) {
+		return sessions.containsKey(session.getId());
+	}
+
+	public P2PSession get(String sessionId) {
+		return sessions.get(sessionId);
 	}
 
 }

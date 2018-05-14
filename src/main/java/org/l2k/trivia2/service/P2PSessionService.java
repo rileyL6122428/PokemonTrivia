@@ -9,19 +9,14 @@ import org.springframework.stereotype.Service;
 public class P2PSessionService {
 
 	private P2PSessionRepository sessionRepository;
-	private DateService dateService;
 	
 	@Autowired
-	public P2PSessionService(P2PSessionRepository sessionRepository, DateService dateService) {
+	public P2PSessionService(P2PSessionRepository sessionRepository) {
 		this.sessionRepository = sessionRepository;
-		this.dateService = dateService;
 	}
 
 	public P2PSession registerHttpSession(String httpSessionId) {
-		P2PSession p2pSession = new P2PSession.Builder()
-				.setId(httpSessionId)
-				.setLastUpdated(dateService.getCurrentDate())
-				.build();
+		P2PSession p2pSession = new P2PSession.Builder().setId(httpSessionId).build();
 		return sessionRepository.postSession(p2pSession);
 	}
 
