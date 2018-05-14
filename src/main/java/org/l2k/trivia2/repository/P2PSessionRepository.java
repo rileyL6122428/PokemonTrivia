@@ -9,10 +9,10 @@ public class P2PSessionRepository {
 
 	private SessionExpirationArbiter expirationArbiter;
 	private NameRepository nameRepository;
-	private SessionTable sessionTable;
+	private P2PSessionTable sessionTable;
 
 	@Autowired
-	public P2PSessionRepository(SessionExpirationArbiter expirationArbiter, SessionTable sessionTable, NameRepository nameRepository) {
+	public P2PSessionRepository(SessionExpirationArbiter expirationArbiter, P2PSessionTable sessionTable, NameRepository nameRepository) {
 		this.expirationArbiter = expirationArbiter;
 		this.nameRepository = nameRepository;
 		this.sessionTable = sessionTable;

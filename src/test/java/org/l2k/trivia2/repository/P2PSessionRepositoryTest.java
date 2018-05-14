@@ -29,7 +29,7 @@ class P2PSessionRepositoryTest {
 	
 	@Mock private SessionExpirationArbiter expirationArbiter;
 	@Mock private NameRepository nameRepository;
-	@Mock private SessionTable sessionTable;
+	@Mock private P2PSessionTable sessionTable;
 	
 	@BeforeEach
 	void setup() {

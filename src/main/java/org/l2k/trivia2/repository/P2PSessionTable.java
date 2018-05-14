@@ -13,12 +13,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SessionTable {
+public class P2PSessionTable {
 
 	private Map<String, P2PSession> sessions;
 	
 	@Autowired
-	public SessionTable(@Qualifier("SESSIONS") HashMap<String, P2PSession> sessions) {
+	public P2PSessionTable(@Qualifier("SESSIONS") HashMap<String, P2PSession> sessions) {
 		this.sessions = sessions;
 	}
 
