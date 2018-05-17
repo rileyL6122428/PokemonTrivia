@@ -4,6 +4,7 @@ import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@an
 import { SessionService } from './session.service';
 import { SessionServiceConfig } from './session.service.config';
 import { HttpClientModule } from '@angular/common/http';
+import { Session } from './session.model';
 
 const config: SessionServiceConfig = {
   registerSessionEndpoint: '/REGISTER_SESSION_ENDPOINT'
@@ -44,8 +45,15 @@ describe('SessionService', () => {
       });
     });
 
-    xit('returns a session observable');
-    xit('caches the fetched session');
+    it('returns observable passing the response body', () => {
+      sessionService.registerSession()
+        .subscribe((responseBody: any) => {
+          expect(responseBody).toBe('EXAMPLE_RESPONSE_BODY');
+        });
+
+      httpMock.expectOne(config.registerSessionEndpoint)
+        .flush({ body: 'EXAMPLE_RESPONSE_BODY' });
+    });
   });
 
   afterEach(() => httpMock.verify());
