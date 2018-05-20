@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SessionServiceConfig } from './session.service.config';
 import { HttpClient } from '@angular/common/http';
-import { Observable, pipe } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class SessionService {
@@ -13,7 +12,7 @@ export class SessionService {
   ) { }
 
   registerSession(): Observable<any> {
-    return this.http.post(this.config.registerSessionEndpoint, {})
+    return this.http.post(this.config.registerSessionEndpoint, {});
   }
 
 }
