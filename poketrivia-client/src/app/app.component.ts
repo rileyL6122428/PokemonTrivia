@@ -9,6 +9,7 @@ import { SessionService } from './session/session.service';
 export class AppComponent {
 
   constructor(sessionService: SessionService) {
-    sessionService.openConnections().subscribe();
+    sessionService.openConnections()
+      .subscribe(sessionRegistered => console.log(`Connections opened: ${sessionRegistered}`));
   }
 }
