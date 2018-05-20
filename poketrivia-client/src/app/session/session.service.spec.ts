@@ -4,7 +4,6 @@ import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@an
 import { SessionService } from './session.service';
 import { SessionServiceConfig } from './session.service.config';
 import { HttpClientModule } from '@angular/common/http';
-import { Session } from './session.model';
 
 const config: SessionServiceConfig = {
   registerSessionEndpoint: '/REGISTER_SESSION_ENDPOINT'
