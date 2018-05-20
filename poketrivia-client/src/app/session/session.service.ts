@@ -13,8 +13,7 @@ export class SessionService {
   ) { }
 
   registerSession(): Observable<any> {
-    return this.http.get(this.config.registerSessionEndpoint)
-      .pipe(map((response: any) => response.body));
+    return this.http.post(this.config.registerSessionEndpoint, {})
   }
 
 }

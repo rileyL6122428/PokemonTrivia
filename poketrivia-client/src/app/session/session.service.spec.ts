@@ -36,23 +36,23 @@ describe('SessionService', () => {
   });
 
   describe('#registerSession', () => {
-    it('makes a GET request to the configured endpoint', () => {
+    it('makes a POST request to the configured endpoint', () => {
       sessionService.registerSession().subscribe();
 
       httpMock.expectOne({
-        method: 'GET',
+        method: 'POST',
         url: config.registerSessionEndpoint
       });
     });
 
-    it('returns observable passing the response body', () => {
+    it('returns observable passing the response', () => {
       sessionService.registerSession()
         .subscribe((responseBody: any) => {
-          expect(responseBody).toBe('EXAMPLE_RESPONSE_BODY');
+          expect(responseBody).toEqual({ 'EXAMPLE_PROPERTY': 'EXAMPLE_VALUE'});
         });
 
       httpMock.expectOne(config.registerSessionEndpoint)
-        .flush({ body: 'EXAMPLE_RESPONSE_BODY' });
+        .flush({ 'EXAMPLE_PROPERTY': 'EXAMPLE_VALUE' });
     });
   });
 
