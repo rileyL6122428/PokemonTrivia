@@ -10,6 +10,8 @@ export class AppComponent {
 
   constructor(sessionService: SessionService) {
     sessionService.openConnections()
-      .subscribe(sessionRegistered => console.log(`Connections opened: ${sessionRegistered}`));
+      .subscribe(sessionRegistered => {
+        console.log(`Session Registered: ${sessionRegistered}`);
+      });
   }
 }
