@@ -69,7 +69,7 @@ describe('SessionService', () => {
       registerSessionObserver.next(unmappedSession);
     }));
 
-    it('initializes stomp connection with mapped session id', async(() => {
+    it('initializes stomp connection with the mapped session id', async(() => {
       sessionService.openConnections()
         .subscribe(() => {
           expect(sessionStomp.initializeConnection).toHaveBeenCalledWith(mappedSession.id);
