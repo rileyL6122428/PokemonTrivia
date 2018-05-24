@@ -44,7 +44,7 @@ describe('SessionHttp', () => {
       });
     });
 
-    it('returns observable passing the response', () => {
+    it('returns an observable that emits the server response', () => {
       sessionService.registerSession()
         .subscribe((responseBody: any) => {
           expect(responseBody).toEqual({ 'EXAMPLE_PROPERTY': 'EXAMPLE_VALUE'});
