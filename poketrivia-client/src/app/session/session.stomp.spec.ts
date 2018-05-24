@@ -53,7 +53,7 @@ describe('SessionStomp', () => {
       expect(stompService.initAndConnect).toHaveBeenCalled();
     });
 
-    it('connects after setting config', () => {
+    it('connects after setting config on the stompService', () => {
       let configSnapshot = null;
       stompService.initAndConnect = () => {
         configSnapshot = stompService.config;
