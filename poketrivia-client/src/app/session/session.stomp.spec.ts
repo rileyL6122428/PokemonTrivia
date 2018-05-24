@@ -48,7 +48,7 @@ describe('SessionStomp', () => {
       });
     });
 
-    it('delegates setting up stomp connection to the stompService', () => {
+    it('delegates setting up a web sockets connection to the stompService', () => {
       sessionStomp.initializeConnection('EXAMPLE_SESSION_ID');
       expect(stompService.initAndConnect).toHaveBeenCalled();
     });
