@@ -18,21 +18,22 @@ const config: SessionConfig =  {
 describe('SessionStomp', () => {
 
   let sessionStomp: SessionStomp;
-  let stompServiceMock: any;
+  let stompService: any;
 
   beforeEach(() => {
-    stompServiceMock = jasmine.createSpyObj('stompService', ['initAndConnect']);
-
     TestBed.configureTestingModule({
       providers: [
         SessionStomp,
-        { provide: StompRService, useValue: stompServiceMock },
-        { provide: SessionConfig, useValue: config }
+        { provide: SessionConfig, useValue: config },
+        {
+          provide: StompRService,
+          useValue: jasmine.createSpyObj('stompService', ['initAndConnect'])
+        },
       ]
     });
 
     sessionStomp = TestBed.get(SessionStomp);
-    stompServiceMock = TestBed.get(StompRService);
+    stompService = TestBed.get(StompRService);
   });
 
   it('should be created', () => {
@@ -42,20 +43,20 @@ describe('SessionStomp', () => {
   describe('#initializeConnection', () => {
     it('sets stompService\'s config property', () => {
       sessionStomp.initializeConnection('EXAMPLE_SESSION_ID');
-      expect(stompServiceMock.config).toEqual({
+      expect(stompService.config).toEqual({
         ...config.stomp, headers: { sessionId: 'EXAMPLE_SESSION_ID' }
       });
     });
 
     it('delegates setting up stomp connection to the stompService', () => {
       sessionStomp.initializeConnection('EXAMPLE_SESSION_ID');
-      expect(stompServiceMock.initAndConnect).toHaveBeenCalled();
+      expect(stompService.initAndConnect).toHaveBeenCalled();
     });
 
     it('connects after setting config', () => {
       let configSnapshot = null;
-      stompServiceMock.initAndConnect = () => {
-        configSnapshot = stompServiceMock.config;
+      stompService.initAndConnect = () => {
+        configSnapshot = stompService.config;
       };
 
       sessionStomp.initializeConnection('EXAMPLE_SESSION_ID');
