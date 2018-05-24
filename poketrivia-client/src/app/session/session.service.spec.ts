@@ -9,9 +9,9 @@ import { Observer } from 'rxjs/Observer';
 describe('SessionService', () => {
 
   let sessionService: SessionService;
-  let sessionHttpMock;
-  let sessionAdapterMock;
-  let sessionStompMock;
+  let sessionHttp: any;
+  let sessionAdapter: any;
+  let sessionStomp: any;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -31,16 +31,16 @@ describe('SessionService', () => {
         }
       ]
     });
-    // debugger
+
     sessionService = TestBed.get(SessionService),
-    sessionHttpMock = TestBed.get(SessionHttp),
-    sessionAdapterMock = TestBed.get(SessionServiceAdapter),
-    sessionStompMock = TestBed.get(SessionStomp);
+    sessionHttp = TestBed.get(SessionHttp),
+    sessionAdapter = TestBed.get(SessionServiceAdapter),
+    sessionStomp = TestBed.get(SessionStomp);
   });
 
-  it('should be created', () => expect(sessionService).toBeTruthy());
+  it('creates', () => expect(sessionService).toBeTruthy());
 
-  fdescribe('#openConnections', () => {
+  describe('#openConnections', () => {
 
     let registerSessionObserver: Observer<any>;
     let unmappedSession: any;
@@ -51,17 +51,53 @@ describe('SessionService', () => {
       _stubMapPOJO();
     });
 
-    it('calls SessionHttp#registerSession', async(() => {
+    it('registers the session', async(() => {
       sessionService.openConnections()
-        .subscribe((successful) => {
-          expect(sessionHttpMock.registerSession).toHaveBeenCalled();
+        .subscribe(() => {
+          expect(sessionHttp.registerSession).toHaveBeenCalled();
         });
 
       registerSessionObserver.next(unmappedSession);
     }));
 
+    it('maps registerSession payload', async(() => {
+      sessionService.openConnections()
+        .subscribe(() => {
+          expect(sessionAdapter.mapFromPOJO).toHaveBeenCalledWith(unmappedSession);
+        });
+
+      registerSessionObserver.next(unmappedSession);
+    }));
+
+    it('initializes stomp connection with mapped session id', async(() => {
+      sessionService.openConnections()
+        .subscribe(() => {
+          expect(sessionStomp.initializeConnection).toHaveBeenCalledWith(mappedSession.id);
+        });
+
+      registerSessionObserver.next(unmappedSession);
+    }));
+
+    it('emits \'true\' when observable pipe line is successful', async(() => {
+      sessionService.openConnections()
+        .subscribe((successful) => {
+          expect(successful).toBe(true);
+        });
+
+      registerSessionObserver.next(unmappedSession);
+    }));
+
+    it('emits \'false\' when observable pipe line throws an error', async(() => {
+      sessionService.openConnections()
+        .subscribe((successful) => {
+          expect(successful).toBe(false);
+        });
+
+      registerSessionObserver.error('ERROR OCCURRED');
+    }));
+
     function _stubRegisterSession() {
-      sessionHttpMock.registerSession.and.returnValue(
+      sessionHttp.registerSession.and.returnValue(
         new Observable<any>((observer) => registerSessionObserver = observer)
       );
       unmappedSession = { id: 'EXAMPLE_ID_FOR_UNMAPPED_SESSION' };
@@ -69,7 +105,7 @@ describe('SessionService', () => {
 
     function _stubMapPOJO() {
       mappedSession = { id: 'EXAMPLE_ID_FOR_MAPPED_SESSION' };
-      sessionAdapterMock.mapFromPOJO.and.returnValue(mappedSession);
+      sessionAdapter.mapFromPOJO.and.returnValue(mappedSession);
     }
   });
 });
