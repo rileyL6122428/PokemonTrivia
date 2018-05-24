@@ -1,13 +1,11 @@
 package org.l2k.trivia2.controller;
 
-import static org.l2k.trivia2.constants.ControllerConstants.Paths;
-
 import javax.servlet.http.HttpSession;
 
+import org.l2k.trivia2.constants.ControllerConstants.Paths;
 import org.l2k.trivia2.domain.P2PSession;
 import org.l2k.trivia2.service.P2PSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
