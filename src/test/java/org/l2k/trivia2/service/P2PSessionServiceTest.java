@@ -40,14 +40,10 @@ class P2PSessionServiceTest {
 		@Nested
 		class WrappedSession {
 			
-
-			@BeforeEach
-			void setup() {
-				when(sessionRepository.postSession(p2pSessionCaptor.capture())).thenReturn(p2pSession);				
-			}
-			
 			@Test
 			void wrapsHttpSessionIdInP2PSessionAndDelegatesCreationToSessionRepository() {
+				when(sessionRepository.postSession(p2pSessionCaptor.capture())).thenReturn(p2pSession);
+				
 				sessionService.registerHttpSession(EXAMPLE_SESSION_ID);
 				
 				P2PSession submittedSession = p2pSessionCaptor.getValue();
@@ -72,20 +68,14 @@ class P2PSessionServiceTest {
 	@Nested
 	class SyncWebSocketSession {
 		
-		private ArgumentCaptor<P2PSession> p2pSessionCaptor;
-
-		@BeforeEach
-		void setup() {
-			when(sessionRepository.syncSession(p2pSessionCaptor.capture())).thenReturn(p2pSession);				
-		}
-		
 		@Test
 		void wrapsWSSessionIdInP2PSessionAndDelegatesSyncToSessionRepository() {
+			when(sessionRepository.syncSession(p2pSessionCaptor.capture())).thenReturn(p2pSession);
+			
 			sessionService.syncWebSocketSession(EXAMPLE_SESSION_ID);
 			
 			P2PSession submittedSession = p2pSessionCaptor.getValue();
 			assertEquals(EXAMPLE_SESSION_ID, submittedSession.getId());
 		}
-		
 	}
 }
