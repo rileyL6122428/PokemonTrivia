@@ -58,4 +58,9 @@ public class P2PSessionRepository {
 		return postedSession;
 	}
 
+	public P2PSession syncSession(P2PSession capture) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
