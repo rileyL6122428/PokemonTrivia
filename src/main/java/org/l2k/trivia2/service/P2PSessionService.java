@@ -20,4 +20,9 @@ public class P2PSessionService {
 		return sessionRepository.postSession(p2pSession);
 	}
 
+	public void syncWebSocketSession(String sessionId) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
