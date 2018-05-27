@@ -10,7 +10,7 @@ import org.springframework.web.socket.messaging.SessionConnectEvent;
 @Component
 public class StompConnectListener implements ApplicationListener<SessionConnectEvent>{
 
-	P2PSessionService sessionService;
+	private P2PSessionService sessionService;
 	
 	@Autowired
 	public StompConnectListener(P2PSessionService sessionService) {
