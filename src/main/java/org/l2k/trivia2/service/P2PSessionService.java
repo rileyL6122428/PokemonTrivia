@@ -31,7 +31,13 @@ public class P2PSessionService {
 	public P2PSession postSession(String sessionId) {
 		clearExpiredSessions();
 		String userName = getUserNameFor(sessionId);
-		return userName != null ? postSession(sessionId, userName) : null;
+		if (userName != null) {
+			P2PSession session = buildPostableSession(sessionId, userName);
+			sessionRepository.saveRecord(session);
+			return session;
+		} else {
+			return null;
+		}
 	}
 
 	private String getUserNameFor(String sessionId) {
@@ -49,16 +55,13 @@ public class P2PSessionService {
 		.forEach((removedSession) -> nameRepository.insertName(removedSession.getName()));
 	}
 	
-	private P2PSession postSession(String sessionId, String userName) {
-		P2PSession postedSession = new P2PSession.Builder()
-			.setName(userName)
-			.setId(sessionId)
+	private P2PSession buildPostableSession(String id, String name) {
+		return new P2PSession.Builder()
+			.setName(name)
+			.setId(id)
 			.setLastUpdated(dateService.getCurrentDate())
 			.setSessionStatus(SessionStatus.READY_TO_SYNC)
 			.build();
-		
-		sessionRepository.saveRecord(postedSession);
-		return postedSession;
 	}
 
 	public P2PSession syncSession(String sessionId) {
