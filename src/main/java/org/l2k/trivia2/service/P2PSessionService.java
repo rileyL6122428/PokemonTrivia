@@ -21,8 +21,7 @@ public class P2PSessionService {
 	}
 
 	public void syncWebSocketSession(String sessionId) {
-		P2PSession p2pSession = new P2PSession.Builder().setId(sessionId).build();
-		sessionRepository.syncSession(p2pSession);
+		sessionRepository.syncSession(sessionId);
 	}
 
 }

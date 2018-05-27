@@ -151,4 +151,50 @@ class P2PSessionRepositoryTest {
 			}
 		}
 	}
+	
+	@Nested
+	class SyncSession {
+		
+		@Test
+		void returnsNullWhenProvidedSessionIdNotInTable() {
+			when(sessionTable.get(any(String.class))).thenReturn(null);
+			assertNull(sessionRepository.syncSession("EXAMPLE_SESSION_ID"));
+		}
+		
+		@Nested
+		class HappyPath {
+			
+			private P2PSession syncableSession;
+			
+			@BeforeEach
+			void setup() {
+				syncableSession = new P2PSession.Builder()
+					.setName("EXAMPLE_SESSION_ID")
+					.setName("EXAMPLE_SESSION_NAME")
+					.build();
+				
+				when(sessionTable.get(syncableSession.getId())).thenReturn(syncableSession);
+			}
+			
+			@Test
+			void returnsSyncedSessionWithAppropriateAttributes() {
+				Date currentDate = new Date();
+				when(dateService.getCurrentDate()).thenReturn(currentDate);
+				
+				P2PSession syncedSession = sessionRepository.syncSession(syncableSession.getId());
+				
+				assertEquals(syncableSession.getId(), syncedSession.getId());
+				assertEquals(SessionStatus.SYNCED, syncedSession.getStatus());
+				assertEquals(currentDate, syncedSession.getLastUpdated());
+				assertEquals(syncableSession.getName(), syncedSession.getName());
+			}
+			
+			@Test
+			void copiesSyncedSessionIntoSessionTable() {
+				P2PSession syncedSession = sessionRepository.syncSession(syncableSession.getId());
+				verify(sessionTable, times(1)).saveRecord(syncedSession);
+			}
+			
+		}
+	}
 }
