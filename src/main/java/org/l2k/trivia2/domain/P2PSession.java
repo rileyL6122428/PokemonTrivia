@@ -2,8 +2,6 @@ package org.l2k.trivia2.domain;
 
 import java.util.Date;
 
-import org.l2k.trivia2.repository.SessionStatus;
-
 public class P2PSession {
 
 	private final String name;

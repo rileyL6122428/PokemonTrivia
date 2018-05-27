@@ -1,80 +1,51 @@
 package org.l2k.trivia2.repository;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import org.l2k.trivia2.domain.P2PSession;
-import org.l2k.trivia2.service.DateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
 public class P2PSessionRepository {
 
-	private SessionExpirationArbiter expirationArbiter;
-	private NameRepository nameRepository;
-	private P2PSessionTable sessionTable;
-	private DateService dateService;
-
+	private Map<String, P2PSession> sessions;
+	
 	@Autowired
-	public P2PSessionRepository(
-		SessionExpirationArbiter expirationArbiter, 
-		P2PSessionTable sessionTable, 
-		NameRepository nameRepository, 
-		DateService dateService
-	) {
-		this.expirationArbiter = expirationArbiter;
-		this.nameRepository = nameRepository;
-		this.sessionTable = sessionTable;
-		this.dateService = dateService;
+	public P2PSessionRepository(@Qualifier("SESSIONS") HashMap<String, P2PSession> sessions) {
+		this.sessions = sessions;
 	}
 
-	public P2PSession postSession(P2PSession session) {
-		clearExpiredSessions();
-		String userName = getUserNameFor(session);
-		return userName != null ? postSession(session, userName) : null;
+	public List<P2PSession> clearRecords(Predicate<P2PSession> predicate) {
+		return new ArrayList<P2PSession>(sessions.values())
+			.stream()
+			.filter(predicate)
+			.map((session) -> sessions.remove(session.getId()))
+			.collect(Collectors.toCollection(ArrayList::new));
 	}
 
-	private String getUserNameFor(P2PSession session) {
-		String userName;
-		if (sessionTable.contains(session)) {
-			userName = sessionTable.get(session.getId()).getName();
-		} else {
-			userName = nameRepository.takeName();
-		}
-		return userName;
-	}
-
-	private void clearExpiredSessions() {
-		sessionTable.clearRecords(expirationArbiter::isExpired)
-		.forEach((removedSession) -> nameRepository.insertName(removedSession.getName()));
-	}
-	
-	private P2PSession postSession(P2PSession session, String userName) {
-		P2PSession postedSession = new P2PSession.Builder(session)
-			.setName(userName)
-			.setLastUpdated(dateService.getCurrentDate())
-			.setSessionStatus(SessionStatus.READY_TO_SYNC)
-			.build();
-		
-		sessionTable.saveRecord(postedSession);
-		return postedSession;
-	}
-
-	public P2PSession syncSession(String sessionId) {
-		P2PSession session = sessionTable.get(sessionId);
-		
-		if (session != null) {
-			P2PSession syncedSession = sync(session);
-			sessionTable.saveRecord(syncedSession);
-			return syncedSession;
-		} else {
-			return null;
+	public void saveRecord(P2PSession session) {
+		if(session != null) { 
+			sessions.put(session.getId(), session);
 		}
 	}
+
+	public boolean contains(String sessionId) {
+		return sessions.containsKey(sessionId);
+	}
 	
-	private P2PSession sync(P2PSession session) {
-		return new P2PSession.Builder(session)
-				.setLastUpdated(dateService.getCurrentDate())
-				.setSessionStatus(SessionStatus.SYNCED)
-				.build();
+	public boolean contains(P2PSession session) {
+		return sessions.containsKey(session.getId());
+	}
+
+	public P2PSession get(String sessionId) {
+		return sessions.get(sessionId);
 	}
 
 }

@@ -23,7 +23,7 @@ public class SessionController {
 
 	@PostMapping(Paths.SESSION)
 	public ResponseEntity<P2PSession> registerSession(HttpSession httpSession) {
-		P2PSession p2pSession = sessionService.registerHttpSession(httpSession.getId());
+		P2PSession p2pSession = sessionService.postSession(httpSession.getId());
 		
 		ResponseEntity<P2PSession> sessionResponse;
 		if (p2pSession != null) {
