@@ -58,4 +58,23 @@ public class P2PSessionRepository {
 		return postedSession;
 	}
 
+	public P2PSession syncSession(String sessionId) {
+		P2PSession session = sessionTable.get(sessionId);
+		
+		if (session != null) {
+			P2PSession syncedSession = sync(session);
+			sessionTable.saveRecord(syncedSession);
+			return syncedSession;
+		} else {
+			return null;
+		}
+	}
+	
+	private P2PSession sync(P2PSession session) {
+		return new P2PSession.Builder(session)
+				.setLastUpdated(dateService.getCurrentDate())
+				.setSessionStatus(SessionStatus.SYNCED)
+				.build();
+	}
+
 }
