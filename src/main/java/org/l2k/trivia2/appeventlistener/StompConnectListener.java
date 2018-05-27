@@ -21,7 +21,7 @@ public class StompConnectListener implements ApplicationListener<SessionConnectE
 	public void onApplicationEvent(SessionConnectEvent event) {
 		StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
 		String sessionId = headerAccessor.getFirstNativeHeader("sessionId");
-		sessionService.syncWebSocketSession(sessionId);
+		sessionService.syncSession(sessionId);
 	}
 
 }

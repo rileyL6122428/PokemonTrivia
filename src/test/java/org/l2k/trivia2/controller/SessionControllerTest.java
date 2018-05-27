@@ -37,12 +37,12 @@ class SessionControllerTest {
 	@Test
 	void delegatesSessionManagementToSessionService() {
 		sessionController.registerSession(httpSession);
-		verify(sessionService).registerHttpSession("EXAMPLE_ID");
+		verify(sessionService).postSession("EXAMPLE_ID");
 	}
 	
 	@Test
 	void returns200WithP2PSessionWhenSessionServiceCanRegisterHttpSession() {
-		when(sessionService.registerHttpSession(any(String.class))).thenReturn(p2pSession);
+		when(sessionService.postSession(any(String.class))).thenReturn(p2pSession);
 		ResponseEntity<P2PSession> response = sessionController.registerSession(httpSession);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(p2pSession, response.getBody());
@@ -50,7 +50,7 @@ class SessionControllerTest {
 	
 	@Test
 	void returns403WhenSessionServiceCantRegisterTheHttpSession() {
-		when(sessionService.registerHttpSession(any(String.class))).thenReturn(null);
+		when(sessionService.postSession(any(String.class))).thenReturn(null);
 		ResponseEntity<P2PSession> response = sessionController.registerSession(httpSession);
 		assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 	}

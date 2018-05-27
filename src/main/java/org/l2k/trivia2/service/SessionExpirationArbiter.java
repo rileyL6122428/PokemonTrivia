@@ -1,9 +1,9 @@
-package org.l2k.trivia2.repository;
+package org.l2k.trivia2.service;
 
 import java.util.Date;
 
 import org.l2k.trivia2.domain.P2PSession;
-import org.l2k.trivia2.service.DateService;
+import org.l2k.trivia2.domain.SessionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

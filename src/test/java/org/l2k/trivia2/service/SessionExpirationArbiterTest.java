@@ -1,4 +1,4 @@
-package org.l2k.trivia2.repository;
+package org.l2k.trivia2.service;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -11,7 +11,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.l2k.trivia2.domain.P2PSession;
+import org.l2k.trivia2.domain.SessionStatus;
 import org.l2k.trivia2.service.DateService;
+import org.l2k.trivia2.service.SessionExpirationArbiter;
 import org.mockito.Mock;
 
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
