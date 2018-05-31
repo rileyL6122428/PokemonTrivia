@@ -8,13 +8,14 @@ import org.springframework.http.ResponseEntity;
 
 public class RoomController {
 
+	private RoomService roomService;
+
 	public RoomController(RoomService roomService) {
-		// TODO Auto-generated constructor stub
+		this.roomService = roomService;
 	}
 
 	public ResponseEntity<List<Room>> getRooms() {
-		// TODO Auto-generated method stub
-		return null;
+		return ResponseEntity.ok(roomService.getRooms());
 	}
 
 }

@@ -1,22 +1,20 @@
 package org.l2k.trivia2.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import static java.util.Arrays.asList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.l2k.trivia2.domain.Room;
 import org.l2k.trivia2.service.RoomService;
 import org.mockito.Mock;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import static org.mockito.Mockito.*;
 
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 
@@ -55,7 +53,7 @@ class RoomControllerTest {
 		@Test
 		void returns200Response() {
 			ResponseEntity<List<Room>> response = roomController.getRooms();
-			assertEquals(Response.SC_OK, response.getStatusCode());
+			assertEquals(HttpStatus.OK, response.getStatusCode());
 		}
 	}
 
