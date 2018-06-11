@@ -5,6 +5,7 @@ public class ControllerConstants {
 	public static class Paths {
 		public static final String ROOT = "/";
 		public static final String SESSION = "/session";
+		public static final String ROOMS = "/rooms";
 	}
 	
 	public static class Clients {
