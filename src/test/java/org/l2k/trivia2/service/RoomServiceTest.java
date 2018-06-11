@@ -36,8 +36,8 @@ class RoomServiceTest {
 		@BeforeEach
 		void setup() {
 			rooms = new ArrayList<Room>() {{
-				add(new Room());
-				add(new Room());
+				add(new Room.Builder().build());
+				add(new Room.Builder().build());
 			}};
 		}
 		
