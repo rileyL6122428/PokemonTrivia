@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.l2k.trivia2.constants.PokemonConstants;
 import org.l2k.trivia2.domain.P2PSession;
 import org.l2k.trivia2.domain.Room;
 import org.springframework.context.annotation.Bean;
@@ -35,17 +37,17 @@ public class DataStructureProviders {
 	}
 	
 	private List<Room> roomsAsList() {
-		return new ArrayList<Room>() {{
-			add(new Room.Builder().setName("ROOM_1").build());
-			add(new Room.Builder().setName("ROOM_2").build());
-		}};
+		return PokemonConstants.ROOM_MASCOTS
+				.stream()
+				.map(pokemon -> new Room.Builder().setMascot(pokemon).build())
+				.collect(Collectors.toList());
 	}
 	
 	@Bean("rooms")
 	public Map<String, Room> rooms() {
 		return new HashMap<String, Room>() {{
 			for(Room room : roomsAsList()) {
-				put(room.getName(), room);
+				put(room.getMascotName(), room);
 			}
 		}};
 	}

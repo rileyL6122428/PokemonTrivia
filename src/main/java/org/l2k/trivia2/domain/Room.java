@@ -2,25 +2,25 @@ package org.l2k.trivia2.domain;
 
 public class Room {
 	
-	private String name;
+	private String mascotName;
 	
-	private Room(String name) {
-		this.name = name;
+	private Room(Pokemon mascot) {
+		this.mascotName = mascot.getName();
 	}
 
-	public String getName() {
-		return name;
+	public String getMascotName() {
+		return mascotName;
 	}
 	
 	static public class Builder {
-		private String name;
+		private Pokemon mascot;
 		
-		public Builder setName(String name) {
-			this.name = name; return this;
+		public Builder setMascot(Pokemon mascot) {
+			this.mascot = mascot; return this;
 		}
 		
 		public Room build() {
-			return new Room(name);
+			return new Room(mascot);
 		}
 	}
 
