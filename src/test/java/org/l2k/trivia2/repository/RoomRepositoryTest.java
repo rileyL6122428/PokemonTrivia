@@ -23,8 +23,8 @@ class RoomRepositoryTest {
 		Room room1 = new Room.Builder().setName("ROOM1").build();
 		Room room2 = new Room.Builder().setName("ROOM2").build();
 		rooms = new HashMap<String, Room>() {{ 
-			put(room1.getName(), room1); 
-			put(room2.getName(), room2); 
+			put(room1.getMascotName(), room1); 
+			put(room2.getMascotName(), room2); 
 		}};
 		
 		roomRepository = new RoomRepository(rooms);
