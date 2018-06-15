@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.l2k.trivia2.constants.PokemonConstants;
 import org.l2k.trivia2.domain.P2PSession;
+import org.l2k.trivia2.domain.Pokemon;
 import org.l2k.trivia2.domain.Room;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,5 +51,10 @@ public class DataStructureProviders {
 				put(room.getMascotName(), room);
 			}
 		}};
+	}
+	
+	@Bean("pokemon")
+	public List<Pokemon> pokemon() {
+		return PokemonConstants.ROOM_MASCOTS;
 	}
 }
