@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.l2k.trivia2.domain.Pokemon;
 import org.l2k.trivia2.domain.Room;
 
 class RoomRepositoryTest {
@@ -20,8 +21,8 @@ class RoomRepositoryTest {
 	
 	@BeforeEach
 	void setup() {
-		Room room1 = new Room.Builder().setName("ROOM1").build();
-		Room room2 = new Room.Builder().setName("ROOM2").build();
+		Room room1 = new Room.Builder().setMascot(new Pokemon.Builder().setName("PIKACHU").build()).build();
+		Room room2 = new Room.Builder().setMascot(new Pokemon.Builder().setName("EEVEE").build()).build();
 		rooms = new HashMap<String, Room>() {{ 
 			put(room1.getMascotName(), room1); 
 			put(room2.getMascotName(), room2); 
@@ -38,8 +39,8 @@ class RoomRepositoryTest {
 			List<Room> returnedRooms = roomRepository.getAll();
 			
 			assertEquals(rooms.size(), returnedRooms.size());
-			assertTrue(returnedRooms.contains(rooms.get("ROOM1")));
-			assertTrue(returnedRooms.contains(rooms.get("ROOM2")));
+			assertTrue(returnedRooms.contains(rooms.get("PIKACHU")));
+			assertTrue(returnedRooms.contains(rooms.get("EEVEE")));
 		}
 		
 	}

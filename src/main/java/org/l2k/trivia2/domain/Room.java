@@ -4,8 +4,8 @@ public class Room {
 	
 	private String mascotName;
 	
-	private Room(Pokemon mascot) {
-		this.mascotName = mascot.getName();
+	private Room(String mascotName) {
+		this.mascotName = mascotName;
 	}
 
 	public String getMascotName() {
@@ -19,8 +19,12 @@ public class Room {
 			this.mascot = mascot; return this;
 		}
 		
+		private String getMascotName() {
+			return mascot != null ? mascot.getName() : null;
+		}
+		
 		public Room build() {
-			return new Room(mascot);
+			return new Room(getMascotName());
 		}
 	}
 
