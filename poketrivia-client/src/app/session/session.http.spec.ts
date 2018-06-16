@@ -11,7 +11,7 @@ const config = {
 
 describe('SessionHttp', () => {
 
-  let sessionService: SessionHttp;
+  let sessionHttp: SessionHttp;
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
@@ -26,17 +26,17 @@ describe('SessionHttp', () => {
       ]
     });
 
-    sessionService = TestBed.get(SessionHttp);
+    sessionHttp = TestBed.get(SessionHttp);
     httpMock = TestBed.get(HttpTestingController);
   });
 
   it('should be created', () => {
-    expect(sessionService).toBeTruthy();
+    expect(sessionHttp).toBeTruthy();
   });
 
   describe('#registerSession', () => {
     it('makes a POST request to the configured endpoint', () => {
-      sessionService.registerSession().subscribe();
+      sessionHttp.registerSession().subscribe();
 
       httpMock.expectOne({
         method: 'POST',
@@ -45,7 +45,7 @@ describe('SessionHttp', () => {
     });
 
     it('returns an observable that emits the server response', () => {
-      sessionService.registerSession()
+      sessionHttp.registerSession()
         .subscribe((responseBody: any) => {
           expect(responseBody).toEqual({ 'EXAMPLE_PROPERTY': 'EXAMPLE_VALUE'});
         });

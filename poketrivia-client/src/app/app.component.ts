@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { SessionService } from './session/session.service';
+import { PokemonHttp } from './pokemon/pokemon.http';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,9 @@ import { SessionService } from './session/session.service';
 })
 export class AppComponent {
 
-  constructor(sessionService: SessionService) {
+  constructor(
+    sessionService: SessionService
+  ) {
     sessionService.openConnections()
       .subscribe(sessionRegistered => {
         console.log(`Session Registered: ${sessionRegistered}`);
