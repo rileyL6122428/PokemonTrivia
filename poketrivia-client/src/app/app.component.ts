@@ -10,16 +10,11 @@ import { PokemonHttp } from './pokemon/pokemon.http';
 export class AppComponent {
 
   constructor(
-    sessionService: SessionService,
-    pokemonHttp: PokemonHttp
+    sessionService: SessionService
   ) {
     sessionService.openConnections()
       .subscribe(sessionRegistered => {
         console.log(`Session Registered: ${sessionRegistered}`);
-      });
-
-      pokemonHttp.fetchAll().subscribe((response) => {
-        console.log(response);
       });
   }
 }
