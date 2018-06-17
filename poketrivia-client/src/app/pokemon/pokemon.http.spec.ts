@@ -1,4 +1,4 @@
-import { PokemonHttp } from './pokemon.http';
+import { PokemonHttp, UnmappedPokemon } from './pokemon.http';
 import { TestBed } from '@angular/core/testing';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
@@ -39,16 +39,21 @@ describe('PokemonHttp', () => {
       });
     });
 
-    it('returns an observable passing the server response', () => {
+    it('returns an observable passing UnmappedPokemon', () => {
+      const unmappedPokemon: Array<UnmappedPokemon> = [
+        { name: 'PIKACHU', iconFindersSVG: '', defaultSVG: '' },
+        { name: 'EEVEE', iconFindersSVG: '', defaultSVG: '' }
+      ];
+
       pokemonHttp
         .fetchAll()
         .subscribe((response) => {
-          expect(response).toEqual([{ name: 'PIKACHU' }, { name: 'EEVEE' }]);
+          expect(response).toEqual(unmappedPokemon);
         });
 
       httpMock
         .expectOne(pokemonTestConfig.http.GET_ALL)
-        .flush([{ name: 'PIKACHU' }, { name: 'EEVEE' }]);
+        .flush(unmappedPokemon);
     });
   });
 
