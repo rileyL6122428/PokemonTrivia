@@ -16,7 +16,7 @@ export class PokemonHttp {
     return this.http
       .get(this.config.http.GET_ALL)
       .pipe(
-        map((pokemon) => pokemon as Array<UnmappedPokemon>)
+        map(response => response as Array<UnmappedPokemon>)
       );
   }
 
