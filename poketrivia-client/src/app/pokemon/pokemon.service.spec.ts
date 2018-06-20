@@ -94,12 +94,12 @@ describe('PokemonService', () => {
     }
 
     function _stubMapPokemons() {
-      pokemonAdapterMock.mapPokemons.and.returnValue(mappedPokemon);
-
       mappedPokemon = [
         new Pokemon('Eevee', '', ''),
         new Pokemon('Pikachu', '', '')
       ];
+
+      pokemonAdapterMock.mapPokemons.and.returnValue(mappedPokemon);
     }
   });
 
