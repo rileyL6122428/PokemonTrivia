@@ -91,7 +91,6 @@ describe('PokemonService', () => {
         { name: 'Eevee', iconFindersSVG: '', defaultSVG: '' },
         { name: 'Pikachu', iconFindersSVG: '', defaultSVG: '' }
       ] as Array<UnmappedPokemon>;
-
     }
 
     function _stubMapPokemons() {
