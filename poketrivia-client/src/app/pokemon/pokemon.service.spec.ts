@@ -52,20 +52,35 @@ describe('PokemonService', () => {
     });
 
     it('delegates pokemon retrieval to pokemonHttp', async(() => {
-      pokemonService.fetchPokemon();
+      pokemonService.fetchPokemon().subscribe();
       expect(pokemonHttpMock.fetchAll).toHaveBeenCalled();
     }));
 
     it('passes retrieved payload to pokemonAdapter', async(() => {
-      pokemonService.fetchPokemon();
+      pokemonService.fetchPokemon().subscribe();
       fetchPokemonObserver.next(fetchedPokemon);
       expect(pokemonAdapterMock.mapPokemons).toHaveBeenCalledWith(fetchedPokemon);
     }));
 
     it('deposits mapped pokemon into pokemonStore', async(() => {
-      pokemonService.fetchPokemon();
+      pokemonService.fetchPokemon().subscribe();
       fetchPokemonObserver.next(fetchedPokemon);
       expect(pokemonStoreMock.depositList).toHaveBeenCalledWith(mappedPokemon);
+    }));
+
+    it('emits true when process completes without errors', async(() => {
+      pokemonService
+        .fetchPokemon()
+        .subscribe(successful => expect(successful).toBe(true));
+      fetchPokemonObserver.next(fetchedPokemon);
+    }));
+
+    it('emits false when processes throw errors', async(() => {
+      pokemonService
+        .fetchPokemon()
+        .subscribe(successful => expect(successful).toBe(false));
+      // fetchPokemonObserver.next(fetchedPokemon);
+      fetchPokemonObserver.error('EXAMPLE ERROR MESSAGE');
     }));
 
     function _stubFetchAllPokemon() {
