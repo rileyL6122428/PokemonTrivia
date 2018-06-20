@@ -79,7 +79,6 @@ describe('PokemonService', () => {
       pokemonService
         .fetchPokemon()
         .subscribe(successful => expect(successful).toBe(false));
-      // fetchPokemonObserver.next(fetchedPokemon);
       fetchPokemonObserver.error('EXAMPLE ERROR MESSAGE');
     }));
 
