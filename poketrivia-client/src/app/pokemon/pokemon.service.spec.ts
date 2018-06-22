@@ -28,7 +28,7 @@ describe('PokemonService', () => {
         },
         {
           provide: PokemonStore,
-          useValue: jasmine.createSpyObj('pokemonStore', ['depositList'])
+          useValue: jasmine.createSpyObj('pokemonStore', ['depositList', 'getByName'])
         }
       ]
     });
@@ -101,6 +101,18 @@ describe('PokemonService', () => {
 
       pokemonAdapterMock.mapPokemons.and.returnValue(mappedPokemon);
     }
+  });
+
+  describe('#getByName', () => {
+    it('delegates to PokemonStore', () => {
+      const eevee: Pokemon = new Pokemon('Eevee', '', '');
+      pokemonStoreMock.getByName.and.returnValue(eevee);
+
+      const retrievedEevee = pokemonService.getByName(eevee.name);
+
+      expect(pokemonStoreMock.getByName).toHaveBeenCalledWith(eevee.name);
+      expect(retrievedEevee).toBe(eevee);
+    });
   });
 
 });
