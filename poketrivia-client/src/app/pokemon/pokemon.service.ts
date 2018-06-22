@@ -31,8 +31,8 @@ export class PokemonService {
       .pipe(catchError((() => of(false))));
   }
 
-  getPokemonByName(name: string): Pokemon {
-    return null;
+  getByName(name: string): Pokemon {
+    return this.store.getByName(name);
   }
 
 }
