@@ -48,16 +48,21 @@ describe('PokemonAdapter', () => {
 
   describe('#mapPokemons', () => {
     let unmappedPokemons: Array<UnmappedPokemon>;
+    let mappedPokemons: Array<Pokemon>;
 
     beforeEach(() => {
       unmappedPokemons = [ unmappedPikachu, unmappedEevee ];
-      spyOn(pokemonAdapter, 'mapPokemon').and.returnValues(
-         { name: unmappedPikachu.name }, { name: unmappedEevee.name }
-      );
+
+      mappedPokemons = unmappedPokemons.map(unmapped => {
+        return new Pokemon(unmapped.name, '', '');
+      });
+
+      spyOn(pokemonAdapter, 'mapPokemon').and.returnValues(...mappedPokemons);
     });
 
     it('delegates mapping to #mapPokemon', () => {
       pokemonAdapter.mapPokemons(unmappedPokemons);
+
       expect(pokemonAdapter.mapPokemon).toHaveBeenCalledTimes(unmappedPokemons.length);
       unmappedPokemons.forEach((unmapped) => {
         expect(pokemonAdapter.mapPokemon).toHaveBeenCalledWith(unmapped);
@@ -65,11 +70,11 @@ describe('PokemonAdapter', () => {
     });
 
     it('returns list of pokemon returned from #mapPokemon', () => {
-      const mappedPokemons = pokemonAdapter.mapPokemons(unmappedPokemons);
-      expect(mappedPokemons.length).toEqual(unmappedPokemons.length);
-      unmappedPokemons.forEach(unmapped => {
-        expect(mappedPokemons.find(mapped => mapped.name === unmapped.name))
-          .toBeTruthy();
+      const pokemons = pokemonAdapter.mapPokemons(unmappedPokemons);
+
+      expect(pokemons.length).toEqual(unmappedPokemons.length);
+      pokemons.forEach((pokemon: Pokemon, index: number) => {
+        expect(pokemon.name).toEqual(unmappedPokemons[index].name);
       });
     });
   });
