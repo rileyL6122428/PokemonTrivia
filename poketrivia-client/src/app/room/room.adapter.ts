@@ -17,4 +17,10 @@ export class RoomAdapter {
     );
   }
 
+  mapRooms(unmappedRooms: Array<UnmappedRoom>): Array<Room> {
+    return unmappedRooms.map((unmappedRoom: UnmappedRoom) => {
+      return this.mapRoom(unmappedRoom);
+    });
+  }
+
 }
