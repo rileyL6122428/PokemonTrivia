@@ -14,8 +14,8 @@ export class RoomStore {
     this.contents.set(room.name, room);
   }
 
-  depositList(rooms: Room): void {
-
+  depositList(rooms: Array<Room>): void {
+    rooms.forEach(room => this.deposit(room));
   }
 
   retrieveByName(name: string): Room {
@@ -23,7 +23,7 @@ export class RoomStore {
   }
 
   retrieveAll(): Array<Room> {
-    return null;
+    return Array.from(this.contents.values());
   }
 
 }
