@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { RoomStore } from './room.store';
 import { Room } from './room.model';
 
-fdescribe('RoomStore', () => {
+describe('RoomStore', () => {
 
   let roomStore: RoomStore;
 
