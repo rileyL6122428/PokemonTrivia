@@ -28,7 +28,7 @@ describe('RoomService', () => {
         },
         {
           provide: RoomStore,
-          useValue: jasmine.createSpyObj('roomStore', ['depositList'])
+          useValue: jasmine.createSpyObj('roomStore', ['depositList', 'retrieveAll'])
         }
       ]
     });
@@ -113,5 +113,20 @@ describe('RoomService', () => {
 
       roomAdapterMock.mapRooms.and.returnValue(mappedRooms);
     }
+  });
+
+  describe('#allRooms', () => {
+    it('delegates room retrieval to roomStore', () => {
+      const storedRooms = [
+        new Room('Pikachu', null),
+        new Room('Eevee', null)
+      ];
+      roomStoreMock.retrieveAll.and.returnValue(storedRooms);
+
+      const rooms = roomService.allRooms();
+
+      expect(roomStoreMock.retrieveAll).toHaveBeenCalled();
+      expect(rooms).toBe(storedRooms);
+    });
   });
 });

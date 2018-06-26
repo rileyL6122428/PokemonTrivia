@@ -36,7 +36,7 @@ export class RoomService {
   }
 
   allRooms(): Array<Room> {
-    return null;
+    return this.store.retrieveAll();
   }
 
 }
