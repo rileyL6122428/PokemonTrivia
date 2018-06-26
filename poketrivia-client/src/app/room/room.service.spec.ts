@@ -96,16 +96,16 @@ describe('RoomService', () => {
 
     function _stubRoomHttp() {
       roomHttpMock.getAll.and.returnValue(
-        new Observable(observer => fetchAllObserver = observer
-      ));
-    }
+        new Observable(observer => fetchAllObserver = observer)
+      );
 
-    function _stubRoomAdapter() {
       unmappedRooms = [
         { mascotName: 'Pikachu' },
         { mascotName: 'Eevee' },
       ];
+    }
 
+    function _stubRoomAdapter() {
       mappedRooms = [
         new Room('Pikachu', null),
         new Room('Eevee', null)
