@@ -40,7 +40,7 @@ describe('AppLoadComponent', () => {
   });
 
   describe('#ngOnInit', () => {
-    it('makes a call to retrieve information needed on app load', () => {
+    it('retrieves information needed on app load', () => {
       expect(appLoadServiceMock.fetchAllResources).toHaveBeenCalled();
     });
 
