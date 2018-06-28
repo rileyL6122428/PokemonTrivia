@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppLoadService } from './app-load.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-app-load',
@@ -9,11 +10,16 @@ import { AppLoadService } from './app-load.service';
 export class AppLoadComponent implements OnInit {
 
   constructor(
-    private appLoadService: AppLoadService
+    private appLoadService: AppLoadService,
+    private router: Router
   ) { }
 
   ngOnInit() {
-    this.appLoadService.fetchAllResources();
+    this.appLoadService
+      .fetchAllResources()
+      .subscribe((successful) => {
+        if (successful) { this.router.navigateByUrl('/rooms'); }
+      });
   }
 
 }
