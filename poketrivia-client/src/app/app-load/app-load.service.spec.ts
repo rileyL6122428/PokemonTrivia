@@ -75,7 +75,7 @@ describe('AppLoadService', () => {
         });
     }));
 
-    it('emits false when all observers false', async(() => {
+    it('emits false when all observers emit false', async(() => {
       appLoadService
         .fetchAllResources()
         .subscribe((successful) => {
@@ -93,7 +93,7 @@ describe('AppLoadService', () => {
         });
     }));
 
-    it('emits false when some observers are false', async(() => {
+    it('emits false when some observers emit false', async(() => {
       appLoadService
         .fetchAllResources()
         .subscribe((successful) => {
