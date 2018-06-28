@@ -17,8 +17,9 @@ export class AppLoadComponent implements OnInit {
   ngOnInit() {
     this.appLoadService
       .fetchAllResources()
-      .subscribe((successful) => {
-        if (successful) { this.router.navigateByUrl('/rooms'); }
+      .subscribe((fetchWasSuccessful) => {
+        const redirectUrl = fetchWasSuccessful ? '/rooms' : '/error';
+        this.router.navigateByUrl(redirectUrl);
       });
   }
 

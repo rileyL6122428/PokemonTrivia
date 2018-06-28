@@ -49,7 +49,10 @@ describe('AppLoadComponent', () => {
       expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/rooms');
     }));
 
-    xit('routes to error component if service calls fail');
+    it('routes to error component if service calls fail', () => {
+      fetchAllResourcesObserver.next(false);
+      expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/error');
+    });
   });
 
   function _stubAppLoadService() {
