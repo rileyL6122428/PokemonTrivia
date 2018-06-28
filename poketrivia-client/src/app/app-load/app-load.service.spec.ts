@@ -95,10 +95,10 @@ describe('AppLoadService', () => {
 
     it('emits false when some observers are false', async(() => {
       appLoadService
-      .fetchAllResources()
-      .subscribe((successful) => {
-        expect(successful).toBe(false);
-      });
+        .fetchAllResources()
+        .subscribe((successful) => {
+          expect(successful).toBe(false);
+        });
 
       fetchRoomsObserver.next(false);
       fetchRoomsObserver.complete();
