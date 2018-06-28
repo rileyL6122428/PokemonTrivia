@@ -38,7 +38,7 @@ describe('AppLoadService', () => {
     sessionServiceMock = TestBed.get(SessionService);
   });
 
-  fdescribe('#fetchAllResources', () => {
+  describe('#fetchAllResources', () => {
 
     let fetchRoomsObserver: Observer<boolean>;
     let fetchPokemonObserver: Observer<boolean>;
