@@ -7,7 +7,6 @@ import { StompRService } from '@stomp/ng2-stompjs';
 import { PokemonModule } from './pokemon/pokemon.module';
 import { RoomModule } from './room/room.module';
 import { SafeHtmlPipe } from './html-interpolation/safe.pipe';
-import { AppLoadComponent } from './app-load/app-load.component';
 import { MatchmakingComponent } from './matchmaking/matchmaking.component';
 import { ErrorComponent } from './error/error.component';
 import { AppRoutingModule } from './app-routing.module';
