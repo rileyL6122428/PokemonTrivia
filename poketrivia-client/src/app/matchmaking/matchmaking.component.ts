@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Room } from '../room/room.model';
+import { MatchmakingService } from './matchmaking.service';
 
 @Component({
   selector: 'app-matchmaking',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MatchmakingComponent implements OnInit {
 
-  constructor() { }
+  rooms: Array<Room>;
+
+  constructor(
+    private matchmakingService: MatchmakingService
+  ) { }
 
   ngOnInit() {
+    this.rooms = this.matchmakingService.allRooms();
   }
 
 }
