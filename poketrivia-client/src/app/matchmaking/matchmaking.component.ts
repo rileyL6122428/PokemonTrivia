@@ -16,7 +16,6 @@ export class MatchmakingComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    debugger
     this.rooms = this.matchmakingService.allRooms();
   }
 
