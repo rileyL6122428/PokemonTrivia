@@ -6,7 +6,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { StompRService } from '@stomp/ng2-stompjs';
 import { PokemonModule } from './pokemon/pokemon.module';
 import { RoomModule } from './room/room.module';
-import { SafeHtmlPipe } from './html-interpolation/safe.pipe';
 import { ErrorComponent } from './error/error.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppLoadModule } from './app-load/app-load.module';
@@ -25,7 +24,6 @@ import { MatchmakingModule } from './matchmaking/matchmaking.module';
   ],
   declarations: [
     AppComponent,
-    SafeHtmlPipe,
     ErrorComponent
   ],
   bootstrap: [ AppComponent ],

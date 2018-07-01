@@ -1,7 +1,10 @@
 <ul>
   <li *ngFor="let room of rooms">
     <button id="{{room.name}}-room-button" class="room-button">
-
+      <span
+        [innerHTML]="room.mascot.roomIcon | safe"
+        class="button-image">
+      </span>
     </button>
   </li>
 </ul>
