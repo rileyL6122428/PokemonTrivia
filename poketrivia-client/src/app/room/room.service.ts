@@ -28,7 +28,7 @@ export class RoomService {
         (mappedRooms: Array<Room>) => this.store.depositList(mappedRooms)
       ))
       .pipe(map(
-        () => true
+        (mappedRooms: Array<Room>) => mappedRooms.length > 0
       ))
       .pipe(catchError(
         () => of(false)

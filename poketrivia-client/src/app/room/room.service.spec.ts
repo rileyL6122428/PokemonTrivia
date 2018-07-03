@@ -94,6 +94,18 @@ describe('RoomService', () => {
       fetchAllObserver.error('SERVER ERROR');
     }));
 
+    it('returns false when no rooms returned from server', async(() => {
+      roomAdapterMock.mapRooms.and.returnValue([]);
+
+      roomService
+        .fetchAll()
+        .subscribe((successful: boolean) => {
+          expect(successful).toBe(false);
+        });
+
+      fetchAllObserver.next([]);
+    }));
+
     function _stubRoomHttp() {
       roomHttpMock.getAll.and.returnValue(
         new Observable(observer => fetchAllObserver = observer)
