@@ -1,5 +1,4 @@
 @import 'colors';
-
 .room-buttons {
   height: 100%;
   display: flex;
@@ -22,8 +21,19 @@
   border-radius: 5px;
 }
 
+.room-button * {
+  fill: $icon-black;
+  color: $icon-black;
+}
+
 .room-button:hover {
   cursor: pointer;
+  background-color: $icon-black;
+}
+
+.room-button:hover * {
+  fill: white;
+  color: white;
 }
 
 .button-image {
