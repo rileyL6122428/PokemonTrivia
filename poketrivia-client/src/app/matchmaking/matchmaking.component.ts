@@ -25,8 +25,6 @@ export class MatchmakingComponent implements OnInit {
   }
 
   private get roomsEmpty(): boolean {
-    console.log('!this.rooms', !this.rooms);
-    console.log('!this.rooms.length', !this.rooms.length);
     return !(this.rooms && this.rooms.length);
   }
 
