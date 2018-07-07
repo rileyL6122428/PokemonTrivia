@@ -6,6 +6,7 @@ import { Room } from '../room/room.model';
 import { Router } from '@angular/router';
 import { SafeHtmlPipe } from '../html-interpolation/safe.pipe';
 import { Pokemon } from '../pokemon/pokemon.model';
+import { RoomButtonComponent } from '../reusable-ui/room-button/room-button.component';
 
 describe('MatchmakingComponent', () => {
   let matchmakingComponent: MatchmakingComponent;
@@ -17,7 +18,11 @@ describe('MatchmakingComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MatchmakingComponent, SafeHtmlPipe ],
+      declarations: [
+        MatchmakingComponent,
+        SafeHtmlPipe,
+        RoomButtonComponent
+      ],
       providers: [
         {
           provide: MatchmakingService,

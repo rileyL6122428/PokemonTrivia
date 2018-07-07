@@ -1,5 +1,3 @@
-@import 'colors';
-
 .room-buttons {
   height: 100%;
   display: flex;
@@ -10,38 +8,4 @@
 .room-buttons > li {
   height: 200px;
   width: 200px
-}
-
-.room-buttons > li > .room-button {
-  height: inherit;
-  width: inherit;
-}
-
-.room-button {
-  border: 1px solid $icon-black;
-  border-radius: 5px;
-}
-
-.room-button * {
-  fill: $icon-black;
-  color: $icon-black;
-}
-
-.room-button:hover {
-  cursor: pointer;
-  background-color: $icon-black;
-}
-
-.room-button:hover * {
-  fill: white;
-  color: white;
-}
-
-.button-image {
-  margin: auto;
-}
-
-.button-image, .button-image > svg {
-  height: 85%;
-  width: 85%;
 }

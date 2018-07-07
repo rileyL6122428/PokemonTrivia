@@ -118,20 +118,20 @@
     "directive-selector": [
       true,
       "attribute",
-      "app",
+      "pkt",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "app",
+      "pkt",
       "kebab-case"
     ],
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,
     "use-host-property-decorator": true,
-    "no-input-rename": true,
-    "no-output-rename": true,
+    "no-input-rename": false,
+    "no-output-rename": false,
     "use-life-cycle-interface": true,
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
