@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RoomButtonComponent } from './room-button.component';
+import { SafeHtmlPipe } from '../../html-interpolation/safe.pipe';
 
 describe('RoomButtonComponent', () => {
   let component: RoomButtonComponent;
@@ -8,7 +9,7 @@ describe('RoomButtonComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RoomButtonComponent ]
+      declarations: [ RoomButtonComponent, SafeHtmlPipe ]
     })
     .compileComponents();
   }));
