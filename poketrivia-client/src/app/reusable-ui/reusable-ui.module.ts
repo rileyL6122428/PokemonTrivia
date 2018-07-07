@@ -4,7 +4,7 @@ import { HtmlInterpolationModule } from '../html-interpolation/html-interpolatio
 import { CommonModule } from '@angular/common';
 
 @NgModule({
-  imports: [ HtmlInterpolationModule, CommonModule ],
+  imports: [ HtmlInterpolationModule ],
   declarations: [ RoomButtonComponent ],
   exports: [ RoomButtonComponent ]
 })
