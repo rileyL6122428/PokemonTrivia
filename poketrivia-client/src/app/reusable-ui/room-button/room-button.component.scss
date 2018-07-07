@@ -1,0 +1,36 @@
+@import 'colors';
+
+.room-button {
+  width: 100%;
+  height: 100%;
+  border: 1px solid $icon-black;
+  border-radius: 5px;
+}
+
+.room-button * {
+  fill: $icon-black;
+  color: $icon-black;
+}
+
+.room-button:hover {
+  cursor: pointer;
+  background-color: $icon-black;
+}
+
+.room-button:hover * {
+  fill: white;
+  color: white;
+}
+
+.button-image {
+  margin: auto;
+}
+
+.button-image, .button-image > svg {
+  height: 85%;
+  width: 85%;
+}
+
+.room-button > p {
+  height: 10%;
+}

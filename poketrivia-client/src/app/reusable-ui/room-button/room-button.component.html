@@ -1,3 +1,9 @@
-<p>
-  room-button works!
-</p>
+<button
+  id="{{room.name}}-room-button"
+  class="room-button"
+  (click)="click.emit(room)">
+
+  <div [innerHTML]="room.mascot.roomIcon | safe" class="button-image"></div>
+  <p>0/6</p>
+
+</button>

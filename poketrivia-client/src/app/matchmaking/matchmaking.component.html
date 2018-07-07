@@ -1,14 +1,6 @@
 <ul class="room-buttons">
   <li *ngFor="let room of rooms">
-    <button id="{{room.name}}-room-button" class="room-button">
-      <div
-        [innerHTML]="room.mascot.roomIcon | safe"
-        class="button-image">
-      </div>
-
-      <p>0/6</p>
-    </button>
+    <pkt-room-button [room]="room" (roomButtonClick)="selectRoom($event)">
+    </pkt-room-button>
   </li>
 </ul>
-
-<pkt-room-button></pkt-room-button>
