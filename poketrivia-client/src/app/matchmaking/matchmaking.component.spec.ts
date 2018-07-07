@@ -21,8 +21,7 @@ describe('MatchmakingComponent', () => {
       declarations: [
         MatchmakingComponent,
         SafeHtmlPipe,
-        RoomButtonComponent,
-        SafeHtmlPipe
+        RoomButtonComponent
       ],
       providers: [
         {
