@@ -1,6 +1,7 @@
 <button
   id="{{room.name}}-room-button"
   class="room-button"
+  [class.invert-colors]="invertColors"
   (click)="click.emit(room)">
 
   <div [innerHTML]="room.mascot.roomIcon | safe" class="button-image"></div>

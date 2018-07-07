@@ -9,6 +9,7 @@ import { Room } from '../../room/room.model';
 export class RoomButtonComponent {
 
   @Input() room: Room;
+  @Input() invertColors: boolean;
   @Output('roomButtonClick') click: EventEmitter<Room>;
 
   constructor() {
