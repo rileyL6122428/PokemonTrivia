@@ -2,6 +2,7 @@ package org.l2k.trivia2.service;
 
 import java.util.List;
 
+import org.l2k.trivia2.domain.P2PSession;
 import org.l2k.trivia2.domain.Room;
 import org.l2k.trivia2.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,11 @@ public class RoomService {
 
 	public List<Room> getRooms() {
 		return roomRepository.getAll();
+	}
+
+	public Room joinRoom(String roomName, P2PSession user) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

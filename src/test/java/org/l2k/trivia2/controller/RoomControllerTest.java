@@ -2,14 +2,17 @@ package org.l2k.trivia2.controller;
 
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.l2k.trivia2.domain.P2PSession;
 import org.l2k.trivia2.domain.Room;
 import org.l2k.trivia2.service.RoomService;
 import org.mockito.Mock;
@@ -24,8 +27,6 @@ class RoomControllerTest {
 	private RoomController roomController;
 	
 	@Mock private RoomService roomService;
-	@Mock private Room room1;
-	@Mock private Room room2;
 	
 	@BeforeEach
 	void setup() {
@@ -34,6 +35,9 @@ class RoomControllerTest {
 	
 	@Nested
 	class GetRooms {
+		
+		@Mock private Room room1;
+		@Mock private Room room2;
 		
 		@BeforeEach
 		void setup() {
@@ -56,6 +60,33 @@ class RoomControllerTest {
 			assertEquals(HttpStatus.OK, response.getStatusCode());
 		}
 	}
-
+	
+	@Nested
+	class JoinRoom {
+		
+		@Mock P2PSession user; 
+		@Mock Room room;
+		String roomName = "EXAMPLE_ROOM_NAME";
+		
+		@Test
+		void returnsRequestedRoomIfUserSuccessfullyJoins() {
+			when(roomService.joinRoom(roomName, user)).thenReturn(room);
+			
+			ResponseEntity<Room> response = roomController.joinRoom(roomName, user);
+			
+			assertEquals(HttpStatus.OK, response.getStatusCode());
+			assertEquals(room, response.getBody());
+		}
+		
+		@Test
+		void returns403WhenRoomCannotBeJoined() {
+			when(roomService.joinRoom(roomName, user)).thenReturn(null);
+			
+			ResponseEntity<Room> response = roomController.joinRoom(roomName, user);
+			
+			assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+			assertNull(response.getBody());
+		}
+	}
 
 }
