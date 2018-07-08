@@ -23,4 +23,9 @@ public class RoomRepository {
 		return new ArrayList<Room>(rooms.values());
 	}
 
+	public Room get(String roomName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

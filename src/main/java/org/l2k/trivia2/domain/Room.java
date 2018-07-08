@@ -28,4 +28,14 @@ public class Room {
 		}
 	}
 
+	public boolean hasVacancies() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void addUser(P2PSession user) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

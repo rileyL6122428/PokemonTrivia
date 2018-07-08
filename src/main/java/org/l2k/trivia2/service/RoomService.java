@@ -23,8 +23,13 @@ public class RoomService {
 	}
 
 	public Room joinRoom(String roomName, P2PSession user) {
-		// TODO Auto-generated method stub
-		return null;
+		Room room = roomRepository.get(roomName);
+		
+		if (room.hasVacancies()) {
+			room.addUser(user);
+		}
+		
+		return room;
 	}
 
 }
