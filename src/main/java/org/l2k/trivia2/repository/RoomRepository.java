@@ -20,7 +20,26 @@ public class RoomRepository {
 	}
 
 	public List<Room> getAll() {
-		return new ArrayList<Room>(rooms.values());
+		ArrayList<Room> roomCopies = new ArrayList<Room>();
+		for (String roomName : rooms.keySet()) {
+			roomCopies.add(get(roomName));
+		}
+		return roomCopies;
+	}
+
+	public Room get(String roomName) {
+		Room room = rooms.get(roomName);
+		
+		if (room != null) {
+			Room roomCopy = new Room.Builder(room).build();
+			return roomCopy;
+		} else {			
+			return null;
+		}
+	}
+
+	public void save(Room room) {
+		rooms.put(room.getMascotName(), room);
 	}
 
 }
