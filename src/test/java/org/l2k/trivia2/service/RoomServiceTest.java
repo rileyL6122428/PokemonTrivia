@@ -77,7 +77,7 @@ class RoomServiceTest {
 		}
 		
 		@Test
-		void savesTheUpdatedRoomAfterSaving() {
+		void savesTheUpdatedRoomAfterAddingUser() {
 			when(room.hasVacancies()).thenReturn(true);
 			InOrder executionOrder = inOrder(room, roomRepository);
 			
