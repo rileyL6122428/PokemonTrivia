@@ -19,8 +19,8 @@ class RoomRepositoryTest {
 	private RoomRepository roomRepository;
 	private Map<String, Room> rooms;
 	
-	private Room pikachuRoom = new Room.Builder().setMascot(new Pokemon.Builder().setName("PIKACHU").build()).build();
-	private Room eeveeRoom = new Room.Builder().setMascot(new Pokemon.Builder().setName("EEVEE").build()).build();
+	private Room pikachuRoom;
+	private Room eeveeRoom;
 	
 	@BeforeEach
 	void setup() {
