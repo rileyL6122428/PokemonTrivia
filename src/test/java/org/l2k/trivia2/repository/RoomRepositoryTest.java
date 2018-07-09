@@ -19,13 +19,17 @@ class RoomRepositoryTest {
 	private RoomRepository roomRepository;
 	private Map<String, Room> rooms;
 	
+	private Room pikachuRoom = new Room.Builder().setMascot(new Pokemon.Builder().setName("PIKACHU").build()).build();
+	private Room eeveeRoom = new Room.Builder().setMascot(new Pokemon.Builder().setName("EEVEE").build()).build();
+	
 	@BeforeEach
 	void setup() {
-		Room room1 = new Room.Builder().setMascot(new Pokemon.Builder().setName("PIKACHU").build()).build();
-		Room room2 = new Room.Builder().setMascot(new Pokemon.Builder().setName("EEVEE").build()).build();
+		pikachuRoom = new Room.Builder().setMascot(new Pokemon.Builder().setName("PIKACHU").build()).build();
+		eeveeRoom = new Room.Builder().setMascot(new Pokemon.Builder().setName("EEVEE").build()).build();
+		
 		rooms = new HashMap<String, Room>() {{ 
-			put(room1.getMascotName(), room1); 
-			put(room2.getMascotName(), room2); 
+			put(pikachuRoom.getMascotName(), pikachuRoom); 
+			put(eeveeRoom.getMascotName(), eeveeRoom); 
 		}};
 		
 		roomRepository = new RoomRepository(rooms);
@@ -35,13 +39,42 @@ class RoomRepositoryTest {
 	class GetAll {
 		
 		@Test
-		void returnsAllRoomInTheRepository() {
+		void returnsCopiesOfAllRoomsInTheRepository() {
 			List<Room> returnedRooms = roomRepository.getAll();
 			
 			assertEquals(rooms.size(), returnedRooms.size());
-			assertTrue(returnedRooms.contains(rooms.get("PIKACHU")));
-			assertTrue(returnedRooms.contains(rooms.get("EEVEE")));
+			for (Room roomCopy : returnedRooms) {
+				Room originalRoom = rooms.get(roomCopy.getMascotName());
+				assertEquals(originalRoom, roomCopy);
+				assertNotSame(originalRoom, roomCopy);
+			}
 		}
 		
+	}
+	
+	@Nested
+	class Get {
+		
+		@Test
+		void returnsACloneOfRoomWithProvidedName() {
+			Room pikachuRoomCopy = roomRepository.get(pikachuRoom.getMascotName());
+			assertEquals(pikachuRoom, pikachuRoomCopy);
+			assertNotSame(pikachuRoom, pikachuRoomCopy);
+		}
+	}
+	
+	@Nested
+	class Save {
+		
+		@Test
+		void savesRoomForLaterRetrieval() {
+			Pokemon bulbasaur = new Pokemon.Builder().setName("Bulbasaur").build();
+			Room bulbasaurRoom = new Room.Builder().setMascot(bulbasaur).build();
+			
+			roomRepository.save(bulbasaurRoom);
+			Room bulbasaurRoomCopy = roomRepository.get(bulbasaurRoom.getMascotName());
+			
+			assertEquals(bulbasaurRoom, bulbasaurRoomCopy);
+		}
 	}
 }
