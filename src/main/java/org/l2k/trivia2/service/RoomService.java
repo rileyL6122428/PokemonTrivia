@@ -27,6 +27,7 @@ public class RoomService {
 		
 		if (room.hasVacancies()) {
 			room.addUser(user);
+			roomRepository.save(room);
 			return room;
 		} else {
 			return null;

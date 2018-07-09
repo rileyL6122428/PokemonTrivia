@@ -28,4 +28,9 @@ public class RoomRepository {
 		return null;
 	}
 
+	public void save(Room room) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.l2k.trivia2.domain.P2PSession;
 import org.l2k.trivia2.domain.Room;
 import org.l2k.trivia2.repository.RoomRepository;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -63,33 +64,40 @@ class RoomServiceTest {
 		@Mock P2PSession user;
 		final String roomName = "EXAMPLE_ROOM_NAME";
 		
+		@BeforeEach
+		void setup() {
+			when(roomRepository.get(roomName)).thenReturn(room);			
+		}
+		
 		@Test
 		void addsSessionToRoomWhenRoomHasVacancies() {
-			when(roomRepository.get(roomName)).thenReturn(room);
 			when(room.hasVacancies()).thenReturn(true);
-			
 			roomService.joinRoom(roomName, user);
-			
 			verify(room, times(1)).addUser(user);
 		}
 		
 		@Test
-		void returnsRoomWhenUserIsAdded() {
-			when(roomRepository.get(roomName)).thenReturn(room);
+		void savesTheUpdatedRoomAfterSaving() {
 			when(room.hasVacancies()).thenReturn(true);
+			InOrder executionOrder = inOrder(room, roomRepository);
 			
+			roomService.joinRoom(roomName, user);
+			
+			executionOrder.verify(room, times(1)).addUser(user);
+			executionOrder.verify(roomRepository, times(1)).save(room);
+		}
+		
+		@Test
+		void returnsRoomWhenUserIsAdded() {
+			when(room.hasVacancies()).thenReturn(true);
 			Room returnedRoom = roomService.joinRoom(roomName, user);
-			
 			assertEquals(room, returnedRoom);
 		}
 		
 		@Test
 		void returnsNullWhenUserCannotBeAddedToTheRoom() {
-			when(roomRepository.get(roomName)).thenReturn(room);
 			when(room.hasVacancies()).thenReturn(false);
-			
 			Room returnedRoom = roomService.joinRoom(roomName, user);
-			
 			assertNull(returnedRoom);
 		}
 	}
