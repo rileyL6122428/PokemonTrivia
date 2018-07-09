@@ -79,12 +79,12 @@ class RoomServiceTest {
 		@Test
 		void savesTheUpdatedRoomAfterAddingUser() {
 			when(room.hasVacancies()).thenReturn(true);
-			InOrder executionOrder = inOrder(room, roomRepository);
+			InOrder inOrder = inOrder(room, roomRepository);
 			
 			roomService.joinRoom(roomName, user);
 			
-			executionOrder.verify(room, times(1)).addUser(user);
-			executionOrder.verify(roomRepository, times(1)).save(room);
+			inOrder.verify(room, times(1)).addUser(user);
+			inOrder.verify(roomRepository, times(1)).save(room);
 		}
 		
 		@Test
