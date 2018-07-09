@@ -40,7 +40,12 @@ public class DataStructureProviders {
 	private List<Room> roomsAsList() {
 		return PokemonConstants.ROOM_MASCOTS
 				.stream()
-				.map(pokemon -> new Room.Builder().setMascot(pokemon).build())
+				.map(pokemon -> { 
+					return new Room.Builder()
+							.setMascot(pokemon)
+							.setUsers(new HashMap<String, P2PSession>())
+							.build(); 
+				})
 				.collect(Collectors.toList());
 	}
 	
