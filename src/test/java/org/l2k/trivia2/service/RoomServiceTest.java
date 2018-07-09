@@ -1,6 +1,7 @@
 package org.l2k.trivia2.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
@@ -80,6 +81,16 @@ class RoomServiceTest {
 			Room returnedRoom = roomService.joinRoom(roomName, user);
 			
 			assertEquals(room, returnedRoom);
+		}
+		
+		@Test
+		void returnsNullWhenUserCannotBeAddedToTheRoom() {
+			when(roomRepository.get(roomName)).thenReturn(room);
+			when(room.hasVacancies()).thenReturn(false);
+			
+			Room returnedRoom = roomService.joinRoom(roomName, user);
+			
+			assertNull(returnedRoom);
 		}
 	}
 }

@@ -27,9 +27,10 @@ public class RoomService {
 		
 		if (room.hasVacancies()) {
 			room.addUser(user);
+			return room;
+		} else {
+			return null;
 		}
-		
-		return room;
 	}
 
 }
