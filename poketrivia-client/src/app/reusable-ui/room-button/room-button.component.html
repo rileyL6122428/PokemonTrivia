@@ -1,8 +1,10 @@
 <button
   id="{{room.name}}-room-button"
   class="room-button"
-  [class.invert-colors]="invertColors"
-  (click)="click.emit(room)">
+  [class.invert-colors]="colorsInverted"
+  (click)="click.emit(room)"
+  (mouseenter)="registerHover()"
+  (mouseleave)="registerMouseLeave()">
 
   <div [innerHTML]="room.mascot.roomIcon | safe" class="button-image"></div>
   <p>0/6</p>

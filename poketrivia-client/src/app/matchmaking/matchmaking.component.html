@@ -1,6 +1,8 @@
 <ul class="room-buttons">
   <li *ngFor="let room of rooms">
-    <pkt-room-button [room]="room" (roomButtonClick)="selectRoom($event)">
+    <pkt-room-button
+      [room]="room"
+      (roomButtonClick)="selectRoom($event)">
     </pkt-room-button>
   </li>
 </ul>
