@@ -70,6 +70,10 @@ describe('MatchmakingComponent', () => {
     }));
   });
 
+  xdescribe('#selectRoom', () => {
+
+  });
+
   function _affixComponent() {
     fixture = TestBed.createComponent(MatchmakingComponent);
     matchmakingComponent = fixture.componentInstance;
