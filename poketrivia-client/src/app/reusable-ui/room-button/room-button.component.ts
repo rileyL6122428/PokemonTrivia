@@ -23,12 +23,10 @@ export class RoomButtonComponent {
   }
 
   registerHover(): void {
-    console.log('hovering');
     this.isHovered = true;
   }
 
   registerMouseLeave(): void {
-    console.log('leaving');
     this.isHovered = false;
   }
 
