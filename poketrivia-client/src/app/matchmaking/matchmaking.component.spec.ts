@@ -7,8 +7,10 @@ import { Router } from '@angular/router';
 import { SafeHtmlPipe } from '../html-interpolation/safe.pipe';
 import { Pokemon } from '../pokemon/pokemon.model';
 import { RoomButtonComponent } from '../reusable-ui/room-button/room-button.component';
-import { By } from '../../../node_modules/@angular/platform-browser';
+import { By } from '@angular/platform-browser';
 import { LoadingIndicatorComponent } from '../reusable-ui/loading-indicator/loading-indicator.component';
+import { Observer } from 'rxjs/Observer';
+import { Observable } from 'rxjs/Observable';
 
 describe('MatchmakingComponent', () => {
   let matchmakingComponent: MatchmakingComponent;
@@ -77,38 +79,42 @@ describe('MatchmakingComponent', () => {
 
     let pikachuButton: RoomButtonComponent;
     let eeveeButton: RoomButtonComponent;
+    let joinRoomObserver: Observer<Room>;
 
     beforeEach(() => {
       _affixComponent();
       _setRoomButtons();
+      _stubJoinRoom();
+
+      pikachuButton.emitClick();
+      fixture.detectChanges();
     });
 
     it('sets the field "selectedRoom"', () => {
-      pikachuButton.emitClick();
-      fixture.detectChanges();
       expect(matchmakingComponent.selectedRoom).toBe(pikachuButton.room);
     });
 
     it('selected room locked until joinRoomRequest completes', () => {
-      pikachuButton.emitClick();
-      fixture.detectChanges();
       eeveeButton.emitClick();
       fixture.detectChanges();
       expect(matchmakingComponent.selectedRoom).toBe(pikachuButton.room);
     });
 
     it('loading icon renders while joinRoomRequest processes', () => {
-      pikachuButton.emitClick();
-      fixture.detectChanges();
       const loadingIndicators = domRoot.querySelectorAll('pkt-loading-indicator');
       expect(loadingIndicators.length).toBe(1);
     });
 
     it('sends a request to join the specified room', () => {
-      pikachuButton.emitClick();
-      fixture.detectChanges();
       expect(matchmakingServiceMock.joinRoom).toHaveBeenCalledWith(pikachuButton.room);
     });
+
+    xit('captures coords of selected button when joinRoomRequest successful');
+
+    it('routes to room page when joinRoomRequest successful', async(() => {
+      joinRoomObserver.next(new Room('Pikachu', () => new Pokemon('Pikachu', '', '')));
+      expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/room/pikachu');
+    }));
 
     function _setRoomButtons() {
       const roomButtons = fixture
@@ -118,6 +124,12 @@ describe('MatchmakingComponent', () => {
 
       pikachuButton = roomButtons[0];
       eeveeButton = roomButtons[1];
+    }
+
+    function _stubJoinRoom() {
+      matchmakingServiceMock.joinRoom.and.returnValue(
+        new Observable((observer) => joinRoomObserver = observer)
+      );
     }
   });
 

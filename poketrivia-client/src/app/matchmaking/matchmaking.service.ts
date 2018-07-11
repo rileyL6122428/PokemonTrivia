@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Room } from '../room/room.model';
 import { RoomService } from '../room/room.service';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class MatchmakingService {
@@ -13,7 +14,7 @@ export class MatchmakingService {
     return this.roomService.allRooms();
   }
 
-  joinRoom(room: Room): any {
+  joinRoom(room: Room): Observable<boolean> {
     throw new Error('Method not implemented.');
   }
 
