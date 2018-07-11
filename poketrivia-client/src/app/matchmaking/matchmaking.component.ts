@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 export class MatchmakingComponent implements OnInit {
 
   rooms: Array<Room>;
+  selectedRoom: Room;
 
   constructor(
     private matchmakingService: MatchmakingService,
@@ -29,7 +30,13 @@ export class MatchmakingComponent implements OnInit {
   }
 
   selectRoom(room: Room): void {
-    console.log(`selected room: ${room.name}`);
+    if (this.attemptingToJoinRoom) { return; }
+    this.selectedRoom = room;
+    this.matchmakingService.joinRoom(room);
+  }
+
+  private get attemptingToJoinRoom(): boolean {
+    return !!this.selectedRoom;
   }
 
 }

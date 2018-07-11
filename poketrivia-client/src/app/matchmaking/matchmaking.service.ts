@@ -13,4 +13,8 @@ export class MatchmakingService {
     return this.roomService.allRooms();
   }
 
+  joinRoom(room: Room): any {
+    throw new Error('Method not implemented.');
+  }
+
 }

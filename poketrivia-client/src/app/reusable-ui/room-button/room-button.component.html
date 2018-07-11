@@ -1,8 +1,7 @@
 <button
-  id="{{room.name}}-room-button"
   class="room-button"
   [class.invert-colors]="colorsInverted"
-  (click)="click.emit(room)"
+  (click)="emitClick()"
   (mouseenter)="registerHover()"
   (mouseleave)="registerMouseLeave()">
 
