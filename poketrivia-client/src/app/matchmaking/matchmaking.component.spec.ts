@@ -123,13 +123,32 @@ describe('MatchmakingComponent', () => {
 
       const captureButtonCalls = matchmakingServiceMock.captureButtonCoordinates.calls;
       const passedParams = captureButtonCalls.first().args[0];
-      expect(passedParams.top).toEqual(pikachuElementTop);
+      expect(passedParams.top).toEqual(pikachuElementTop  );
       expect(passedParams.left).toEqual(pikachuElementLeft);
+    }));
+
+    it('does not captures coords of selected button when joinRoomRequest fails', async(() => {
+      pikachuButton.emitClick();
+      joinRoomObserver.next(false);
+      expect(matchmakingServiceMock.captureButtonCoordinates).not.toHaveBeenCalled();
     }));
 
     it('routes to room page when joinRoomRequest successful', async(() => {
       joinRoomObserver.next(true);
-      expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/room/pikachu');
+      expect(routerMock.navigateByUrl).toHaveBeenCalled();
+    }));
+
+    it('does not route to room page when joinRoomRequest fails', async(() => {
+      joinRoomObserver.next(false);
+      expect(routerMock.navigateByUrl).not.toHaveBeenCalledWith('/room/pikachu');
+    }));
+
+    xit('shows error when joinRoomRequest unsuccessful');
+
+    it('nulls the selected room when joinRoomRequest unsuccessful', async(() => {
+      pikachuButton.emitClick();
+      joinRoomObserver.next(false);
+      expect(matchmakingComponent.selectedRoom).toBeNull();
     }));
 
     function _setRoomButtons() {

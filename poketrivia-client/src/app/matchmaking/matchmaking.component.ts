@@ -32,11 +32,13 @@ export class MatchmakingComponent implements OnInit {
 
   selectRoom(room: Room): void {
     if (this.attemptingToJoinRoom) { return; }
+
     this.selectedRoom = room;
+
     this.matchmakingService
       .joinRoom(room)
       .subscribe((successfullyJoined: boolean) => {
-        this.transitionTo(room);
+        successfullyJoined ? this.transitionTo(room) : this.selectedRoom = null;
       });
   }
 
