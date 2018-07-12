@@ -18,4 +18,8 @@ export class MatchmakingService {
     throw new Error('Method not implemented.');
   }
 
+  captureButtonCoordinates(roomButtonCoords: { top: number, left: number }): void {
+
+  }
+
 }

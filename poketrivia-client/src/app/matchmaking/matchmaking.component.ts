@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { Room } from '../room/room.model';
 import { MatchmakingService } from './matchmaking.service';
 import { Router } from '@angular/router';
@@ -15,7 +15,8 @@ export class MatchmakingComponent implements OnInit {
 
   constructor(
     private matchmakingService: MatchmakingService,
-    private router: Router
+    private router: Router,
+    private elementRef: ElementRef
   ) { }
 
   ngOnInit() {
@@ -35,12 +36,26 @@ export class MatchmakingComponent implements OnInit {
     this.matchmakingService
       .joinRoom(room)
       .subscribe((successfullyJoined: boolean) => {
-        this.router.navigateByUrl(`/room/${room.name}`);
+        this.transitionTo(room);
       });
   }
 
   private get attemptingToJoinRoom(): boolean {
     return !!this.selectedRoom;
+  }
+
+  private transitionTo(room: Room): void {
+    this.matchmakingService.captureButtonCoordinates(
+      this.selectedRoomElement.getBoundingClientRect()
+    );
+    this.router.navigateByUrl(`/room/${room.name}`);
+  }
+
+  private get selectedRoomElement(): Element {
+    return this
+      .elementRef
+      .nativeElement
+      .querySelector(`#${this.selectedRoom.name}-room-button`);
   }
 
 }

@@ -31,7 +31,11 @@ describe('MatchmakingComponent', () => {
       providers: [
         {
           provide: MatchmakingService,
-          useValue: jasmine.createSpyObj('matchmakingService', ['allRooms', 'joinRoom'])
+          useValue: jasmine.createSpyObj('matchmakingService', [
+            'allRooms',
+            'joinRoom',
+            'captureButtonCoordinates'
+          ])
         },
         {
           provide: Router,
@@ -79,7 +83,7 @@ describe('MatchmakingComponent', () => {
 
     let pikachuButton: RoomButtonComponent;
     let eeveeButton: RoomButtonComponent;
-    let joinRoomObserver: Observer<Room>;
+    let joinRoomObserver: Observer<boolean>;
 
     beforeEach(() => {
       _affixComponent();
@@ -109,10 +113,22 @@ describe('MatchmakingComponent', () => {
       expect(matchmakingServiceMock.joinRoom).toHaveBeenCalledWith(pikachuButton.room);
     });
 
-    xit('captures coords of selected button when joinRoomRequest successful');
+    it('captures coords of selected button when joinRoomRequest successful', async(() => {
+      const pikachuElement: Element = domRoot.querySelector('#pikachu-room-button');
+      const pikachuElementTop = pikachuElement.getBoundingClientRect().top;
+      const pikachuElementLeft = pikachuElement.getBoundingClientRect().left;
+
+      pikachuButton.emitClick();
+      joinRoomObserver.next(true);
+
+      const captureButtonCalls = matchmakingServiceMock.captureButtonCoordinates.calls;
+      const passedParams = captureButtonCalls.first().args[0];
+      expect(passedParams.top).toEqual(pikachuElementTop);
+      expect(passedParams.left).toEqual(pikachuElementLeft);
+    }));
 
     it('routes to room page when joinRoomRequest successful', async(() => {
-      joinRoomObserver.next(new Room('Pikachu', () => new Pokemon('Pikachu', '', '')));
+      joinRoomObserver.next(true);
       expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/room/pikachu');
     }));
 
