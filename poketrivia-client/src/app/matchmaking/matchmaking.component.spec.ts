@@ -11,6 +11,12 @@ import { By } from '@angular/platform-browser';
 import { LoadingIndicatorComponent } from '../reusable-ui/loading-indicator/loading-indicator.component';
 import { Observer } from 'rxjs/Observer';
 import { Observable } from 'rxjs/Observable';
+import { ErrorMessageComponent } from '../reusable-ui/error-message/error-message.component';
+import { MatchmakingConfig, matchmakingConfigToken } from './matchmaking.config';
+
+const matchmakingConfig: MatchmakingConfig = {
+  errorMessageDurationMS: 25
+};
 
 describe('MatchmakingComponent', () => {
   let matchmakingComponent: MatchmakingComponent;
@@ -26,9 +32,14 @@ describe('MatchmakingComponent', () => {
         MatchmakingComponent,
         SafeHtmlPipe,
         RoomButtonComponent,
-        LoadingIndicatorComponent
+        LoadingIndicatorComponent,
+        ErrorMessageComponent
       ],
       providers: [
+        {
+          provide: matchmakingConfigToken,
+          useValue: matchmakingConfig
+        },
         {
           provide: MatchmakingService,
           useValue: jasmine.createSpyObj('matchmakingService', [
@@ -68,8 +79,8 @@ describe('MatchmakingComponent', () => {
 
       const roomButtons: Array<Element> = Array.from(domRoot.querySelectorAll('pkt-room-button'));
       expect(roomButtons.length).toBe(2);
-      expect(roomButtons[0].id).toBe('pikachu-room-button');
-      expect(roomButtons[1].id).toBe('eevee-room-button');
+      expect(roomButtons[0].id).toBe('Pikachu-room-button');
+      expect(roomButtons[1].id).toBe('Eevee-room-button');
     });
 
     it('redirects back to app load if rooms haven\'t been fetched', async(() => {
@@ -79,7 +90,7 @@ describe('MatchmakingComponent', () => {
     }));
   });
 
-  fdescribe('Room-Button-Press', () => {
+  describe('Room-Button-Press', () => {
 
     let pikachuButton: RoomButtonComponent;
     let eeveeButton: RoomButtonComponent;
@@ -114,7 +125,7 @@ describe('MatchmakingComponent', () => {
     });
 
     it('captures coords of selected button when joinRoomRequest successful', async(() => {
-      const pikachuElement: Element = domRoot.querySelector('#pikachu-room-button');
+      const pikachuElement: Element = domRoot.querySelector('#Pikachu-room-button');
       const pikachuElementTop = pikachuElement.getBoundingClientRect().top;
       const pikachuElementLeft = pikachuElement.getBoundingClientRect().left;
 
@@ -143,7 +154,27 @@ describe('MatchmakingComponent', () => {
       expect(routerMock.navigateByUrl).not.toHaveBeenCalledWith('/room/pikachu');
     }));
 
-    xit('shows error when joinRoomRequest unsuccessful');
+    it('shows error when joinRoomRequest unsuccessful', async(() => {
+      pikachuButton.emitClick();
+      joinRoomObserver.next(false);
+      fixture.detectChanges();
+
+      const errorMessage = domRoot.querySelector('pkt-error-message');
+      expect(errorMessage).toBeTruthy();
+      expect(errorMessage.innerHTML).toContain('Unable to join Pikachu Room at this time.');
+    }));
+
+    it('removes the error message after the configured duration', async(() => {
+      pikachuButton.emitClick();
+      joinRoomObserver.next(false);
+      fixture.detectChanges();
+
+      setTimeout(() => {
+        fixture.detectChanges();
+        const errorMessage = domRoot.querySelector('pkt-error-message');
+        expect(errorMessage).toBeFalsy();
+      }, 2 * matchmakingConfig.errorMessageDurationMS);
+    }));
 
     it('nulls the selected room when joinRoomRequest unsuccessful', async(() => {
       pikachuButton.emitClick();
@@ -178,8 +209,8 @@ describe('MatchmakingComponent', () => {
   function _stubMatchmakingService() {
     matchmakingServiceMock = TestBed.get(MatchmakingService);
     rooms = [
-      new Room('pikachu', () => new Pokemon('Pikachu', '', '')),
-      new Room('eevee', () => new Pokemon('Eevee', '', '')),
+      new Room('Pikachu', () => new Pokemon('Pikachu', '', '')),
+      new Room('Eevee', () => new Pokemon('Eevee', '', '')),
     ];
     matchmakingServiceMock.allRooms.and.returnValue(rooms);
   }

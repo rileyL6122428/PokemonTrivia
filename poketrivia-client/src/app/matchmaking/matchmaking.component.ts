@@ -1,7 +1,8 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, Inject } from '@angular/core';
 import { Room } from '../room/room.model';
 import { MatchmakingService } from './matchmaking.service';
 import { Router } from '@angular/router';
+import { matchmakingConfigToken, MatchmakingConfig } from './matchmaking.config';
 
 @Component({
   selector: 'pkt-matchmaking',
@@ -12,11 +13,13 @@ export class MatchmakingComponent implements OnInit {
 
   rooms: Array<Room>;
   selectedRoom: Room;
+  errorMessage: string;
 
   constructor(
     private matchmakingService: MatchmakingService,
     private router: Router,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    @Inject(matchmakingConfigToken) private config: MatchmakingConfig
   ) { }
 
   ngOnInit() {
@@ -37,8 +40,9 @@ export class MatchmakingComponent implements OnInit {
 
     this.matchmakingService
       .joinRoom(room)
-      .subscribe((successfullyJoined: boolean) => {
-        successfullyJoined ? this.transitionTo(room) : this.selectedRoom = null;
+      .subscribe((successfullyJoinedRoom: boolean) => {
+        successfullyJoinedRoom ?
+          this.transitionTo(room) : this.handleFailedJoinRoomRequest(room);
       });
   }
 
@@ -60,4 +64,9 @@ export class MatchmakingComponent implements OnInit {
       .querySelector(`#${this.selectedRoom.name}-room-button`);
   }
 
+  private handleFailedJoinRoomRequest(room: Room): void {
+    this.selectedRoom = null;
+    this.errorMessage = `Unable to join ${room.name} Room at this time.`;
+    setTimeout(() => this.errorMessage = '', this.config.errorMessageDurationMS);
+  }
 }
