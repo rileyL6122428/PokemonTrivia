@@ -2,13 +2,15 @@ package org.l2k.trivia2.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +19,6 @@ import org.l2k.trivia2.domain.Room;
 import org.l2k.trivia2.repository.RoomRepository;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 
