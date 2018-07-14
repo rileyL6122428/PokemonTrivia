@@ -109,13 +109,13 @@ describe('MatchmakingComponent', () => {
       expect(matchmakingComponent.selectedRoom).toBe(pikachuButton.room);
     });
 
-    it('selected room locked until joinRoomRequest completes', () => {
+    it('locks the selected room until joinRoomRequest completes', () => {
       eeveeButton.emitClick();
       fixture.detectChanges();
       expect(matchmakingComponent.selectedRoom).toBe(pikachuButton.room);
     });
 
-    it('loading icon renders while joinRoomRequest processes', () => {
+    it('renders the loading icon while joinRoomRequest processes', () => {
       const loadingIndicators = domRoot.querySelectorAll('pkt-loading-indicator');
       expect(loadingIndicators.length).toBe(1);
     });
@@ -132,9 +132,9 @@ describe('MatchmakingComponent', () => {
       pikachuButton.emitClick();
       joinRoomObserver.next(true);
 
-      const captureButtonCalls = matchmakingServiceMock.captureButtonCoordinates.calls;
-      const passedParams = captureButtonCalls.first().args[0];
-      expect(passedParams.top).toEqual(pikachuElementTop  );
+      const captureButtonCoordsCalls = matchmakingServiceMock.captureButtonCoordinates.calls;
+      const passedParams = captureButtonCoordsCalls.first().args[0];
+      expect(passedParams.top).toEqual(pikachuElementTop);
       expect(passedParams.left).toEqual(pikachuElementLeft);
     }));
 
@@ -146,12 +146,12 @@ describe('MatchmakingComponent', () => {
 
     it('routes to room page when joinRoomRequest successful', async(() => {
       joinRoomObserver.next(true);
-      expect(routerMock.navigateByUrl).toHaveBeenCalled();
+      expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/room/Pikachu');
     }));
 
     it('does not route to room page when joinRoomRequest fails', async(() => {
       joinRoomObserver.next(false);
-      expect(routerMock.navigateByUrl).not.toHaveBeenCalledWith('/room/pikachu');
+      expect(routerMock.navigateByUrl).not.toHaveBeenCalled();
     }));
 
     it('shows error when joinRoomRequest unsuccessful', async(() => {
