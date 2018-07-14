@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Room } from '../room/room.model';
 import { RoomService } from '../room/room.service';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class MatchmakingService {
@@ -11,6 +12,14 @@ export class MatchmakingService {
 
   allRooms(): Array<Room> {
     return this.roomService.allRooms();
+  }
+
+  joinRoom(room: Room): Observable<boolean> {
+    throw new Error('Method not implemented.');
+  }
+
+  captureButtonCoordinates(roomButtonCoords: { top: number, left: number }): void {
+
   }
 
 }

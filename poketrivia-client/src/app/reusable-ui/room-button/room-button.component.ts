@@ -30,4 +30,8 @@ export class RoomButtonComponent {
     this.isHovered = false;
   }
 
+  emitClick(): void {
+    this.click.emit(this.room);
+  }
+
 }

@@ -7,6 +7,16 @@ import { Router } from '@angular/router';
 import { SafeHtmlPipe } from '../html-interpolation/safe.pipe';
 import { Pokemon } from '../pokemon/pokemon.model';
 import { RoomButtonComponent } from '../reusable-ui/room-button/room-button.component';
+import { By } from '@angular/platform-browser';
+import { LoadingIndicatorComponent } from '../reusable-ui/loading-indicator/loading-indicator.component';
+import { Observer } from 'rxjs/Observer';
+import { Observable } from 'rxjs/Observable';
+import { ErrorMessageComponent } from '../reusable-ui/error-message/error-message.component';
+import { MatchmakingConfig, matchmakingConfigToken } from './matchmaking.config';
+
+const matchmakingConfig: MatchmakingConfig = {
+  errorMessageDurationMS: 25
+};
 
 describe('MatchmakingComponent', () => {
   let matchmakingComponent: MatchmakingComponent;
@@ -21,12 +31,22 @@ describe('MatchmakingComponent', () => {
       declarations: [
         MatchmakingComponent,
         SafeHtmlPipe,
-        RoomButtonComponent
+        RoomButtonComponent,
+        LoadingIndicatorComponent,
+        ErrorMessageComponent
       ],
       providers: [
         {
+          provide: matchmakingConfigToken,
+          useValue: matchmakingConfig
+        },
+        {
           provide: MatchmakingService,
-          useValue: jasmine.createSpyObj('matchmakingService', ['allRooms'])
+          useValue: jasmine.createSpyObj('matchmakingService', [
+            'allRooms',
+            'joinRoom',
+            'captureButtonCoordinates'
+          ])
         },
         {
           provide: Router,
@@ -57,10 +77,10 @@ describe('MatchmakingComponent', () => {
     it('adds a room button to the view for each fetched room', () => {
       _affixComponent();
 
-      const roomButtons: Array<Element> = Array.from(domRoot.querySelectorAll('button.room-button'));
+      const roomButtons: Array<Element> = Array.from(domRoot.querySelectorAll('pkt-room-button'));
       expect(roomButtons.length).toBe(2);
-      expect(roomButtons[0].id).toBe('pikachu-room-button');
-      expect(roomButtons[1].id).toBe('eevee-room-button');
+      expect(roomButtons[0].id).toBe('Pikachu-room-button');
+      expect(roomButtons[1].id).toBe('Eevee-room-button');
     });
 
     it('redirects back to app load if rooms haven\'t been fetched', async(() => {
@@ -70,8 +90,113 @@ describe('MatchmakingComponent', () => {
     }));
   });
 
-  xdescribe('#selectRoom', () => {
+  describe('Room-Button-Press', () => {
 
+    let pikachuButton: RoomButtonComponent;
+    let eeveeButton: RoomButtonComponent;
+    let joinRoomObserver: Observer<boolean>;
+
+    beforeEach(() => {
+      _affixComponent();
+      _setRoomButtons();
+      _stubJoinRoom();
+
+      pikachuButton.emitClick();
+      fixture.detectChanges();
+    });
+
+    it('sets the field "selectedRoom"', () => {
+      expect(matchmakingComponent.selectedRoom).toBe(pikachuButton.room);
+    });
+
+    it('locks the selected room until joinRoomRequest completes', () => {
+      eeveeButton.emitClick();
+      fixture.detectChanges();
+      expect(matchmakingComponent.selectedRoom).toBe(pikachuButton.room);
+    });
+
+    it('renders the loading icon while joinRoomRequest processes', () => {
+      const loadingIndicators = domRoot.querySelectorAll('pkt-loading-indicator');
+      expect(loadingIndicators.length).toBe(1);
+    });
+
+    it('sends a request to join the specified room', () => {
+      expect(matchmakingServiceMock.joinRoom).toHaveBeenCalledWith(pikachuButton.room);
+    });
+
+    it('captures coords of selected button when joinRoomRequest successful', async(() => {
+      const pikachuElement: Element = domRoot.querySelector('#Pikachu-room-button');
+      const pikachuElementTop = pikachuElement.getBoundingClientRect().top;
+      const pikachuElementLeft = pikachuElement.getBoundingClientRect().left;
+
+      pikachuButton.emitClick();
+      joinRoomObserver.next(true);
+
+      const captureButtonCoordsCalls = matchmakingServiceMock.captureButtonCoordinates.calls;
+      const passedParams = captureButtonCoordsCalls.first().args[0];
+      expect(passedParams.top).toEqual(pikachuElementTop);
+      expect(passedParams.left).toEqual(pikachuElementLeft);
+    }));
+
+    it('does not captures coords of selected button when joinRoomRequest fails', async(() => {
+      pikachuButton.emitClick();
+      joinRoomObserver.next(false);
+      expect(matchmakingServiceMock.captureButtonCoordinates).not.toHaveBeenCalled();
+    }));
+
+    it('routes to room page when joinRoomRequest successful', async(() => {
+      joinRoomObserver.next(true);
+      expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/room/Pikachu');
+    }));
+
+    it('does not route to room page when joinRoomRequest fails', async(() => {
+      joinRoomObserver.next(false);
+      expect(routerMock.navigateByUrl).not.toHaveBeenCalled();
+    }));
+
+    it('shows error when joinRoomRequest unsuccessful', async(() => {
+      pikachuButton.emitClick();
+      joinRoomObserver.next(false);
+      fixture.detectChanges();
+
+      const errorMessage = domRoot.querySelector('pkt-error-message');
+      expect(errorMessage).toBeTruthy();
+      expect(errorMessage.innerHTML).toContain('Unable to join Pikachu Room at this time.');
+    }));
+
+    it('removes the error message after the configured duration', async(() => {
+      pikachuButton.emitClick();
+      joinRoomObserver.next(false);
+      fixture.detectChanges();
+
+      setTimeout(() => {
+        fixture.detectChanges();
+        const errorMessage = domRoot.querySelector('pkt-error-message');
+        expect(errorMessage).toBeFalsy();
+      }, 2 * matchmakingConfig.errorMessageDurationMS);
+    }));
+
+    it('nulls the selected room when joinRoomRequest unsuccessful', async(() => {
+      pikachuButton.emitClick();
+      joinRoomObserver.next(false);
+      expect(matchmakingComponent.selectedRoom).toBeNull();
+    }));
+
+    function _setRoomButtons() {
+      const roomButtons = fixture
+        .debugElement
+        .queryAll(By.directive(RoomButtonComponent))
+        .map(debugElement => debugElement.componentInstance);
+
+      pikachuButton = roomButtons[0];
+      eeveeButton = roomButtons[1];
+    }
+
+    function _stubJoinRoom() {
+      matchmakingServiceMock.joinRoom.and.returnValue(
+        new Observable((observer) => joinRoomObserver = observer)
+      );
+    }
   });
 
   function _affixComponent() {
@@ -84,8 +209,8 @@ describe('MatchmakingComponent', () => {
   function _stubMatchmakingService() {
     matchmakingServiceMock = TestBed.get(MatchmakingService);
     rooms = [
-      new Room('pikachu', () => new Pokemon('Pikachu', '', '')),
-      new Room('eevee', () => new Pokemon('Eevee', '', '')),
+      new Room('Pikachu', () => new Pokemon('Pikachu', '', '')),
+      new Room('Eevee', () => new Pokemon('Eevee', '', '')),
     ];
     matchmakingServiceMock.allRooms.and.returnValue(rooms);
   }

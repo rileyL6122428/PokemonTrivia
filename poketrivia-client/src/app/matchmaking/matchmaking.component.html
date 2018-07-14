@@ -1,8 +1,13 @@
 <ul class="room-buttons">
   <li *ngFor="let room of rooms">
     <pkt-room-button
+      id="{{room.name}}-room-button"
       [room]="room"
       (roomButtonClick)="selectRoom($event)">
     </pkt-room-button>
   </li>
 </ul>
+
+
+<pkt-loading-indicator *ngIf="attemptingToJoinRoom"></pkt-loading-indicator>
+<pkt-error-message *ngIf="errorMessage">{{errorMessage}}</pkt-error-message>
