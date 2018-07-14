@@ -7,7 +7,11 @@ import { ErrorMessageComponent } from './error-message/error-message.component';
 
 @NgModule({
   imports: [ HtmlInterpolationModule ],
-  declarations: [ RoomButtonComponent, LoadingIndicatorComponent, ErrorMessageComponent ],
+  declarations: [
+    RoomButtonComponent,
+    LoadingIndicatorComponent,
+    ErrorMessageComponent
+  ],
   exports: [ RoomButtonComponent ]
 })
 export class ReusableUIModule { }
