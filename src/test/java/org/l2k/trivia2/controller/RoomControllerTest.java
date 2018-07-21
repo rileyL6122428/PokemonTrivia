@@ -41,7 +41,7 @@ class RoomControllerTest {
 		
 		@BeforeEach
 		void setup() {
-			when(roomService.getRooms()).thenReturn(asList(room1, room2));			
+			when(roomService.getAll()).thenReturn(asList(room1, room2));			
 		}
 		
 		@Test
@@ -58,34 +58,6 @@ class RoomControllerTest {
 		void returns200Response() {
 			ResponseEntity<List<Room>> response = roomController.getRooms();
 			assertEquals(HttpStatus.OK, response.getStatusCode());
-		}
-	}
-	
-	@Nested
-	class JoinRoom {
-		
-		@Mock P2PSession user; 
-		@Mock Room room;
-		String roomName = "EXAMPLE_ROOM_NAME";
-		
-		@Test
-		void returnsRequestedRoomIfUserSuccessfullyJoins() {
-			when(roomService.joinRoom(roomName, user)).thenReturn(room);
-			
-			ResponseEntity<Room> response = roomController.joinRoom(roomName, user);
-			
-			assertEquals(HttpStatus.OK, response.getStatusCode());
-			assertEquals(room, response.getBody());
-		}
-		
-		@Test
-		void returns403WhenRoomCannotBeJoined() {
-			when(roomService.joinRoom(roomName, user)).thenReturn(null);
-			
-			ResponseEntity<Room> response = roomController.joinRoom(roomName, user);
-			
-			assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
-			assertNull(response.getBody());
 		}
 	}
 

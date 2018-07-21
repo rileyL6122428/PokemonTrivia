@@ -2,7 +2,6 @@ package org.l2k.trivia2.service;
 
 import java.util.List;
 
-import org.l2k.trivia2.domain.P2PSession;
 import org.l2k.trivia2.domain.Room;
 import org.l2k.trivia2.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +17,17 @@ public class RoomService {
 		this.roomRepository = roomRepository;
 	}
 
-	public List<Room> getRooms() {
+	public List<Room> getAll() {
 		return roomRepository.getAll();
 	}
 
-	public Room joinRoom(String roomName, P2PSession user) {
-		Room room = roomRepository.get(roomName);
-		
-		if (room.hasVacancies()) {
-			room.addUser(user);
+	public Room get(String roomName) {
+		return roomName == null ? null : roomRepository.get(roomName);
+	}
+
+	public void save(Room room) {
+		if (room != null && room.getMascotName() != null) {
 			roomRepository.save(room);
-			return room;
-		} else {
-			return null;
 		}
 	}
 

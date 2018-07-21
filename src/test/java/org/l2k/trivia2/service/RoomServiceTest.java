@@ -2,7 +2,7 @@ package org.l2k.trivia2.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,10 +14,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.l2k.trivia2.domain.P2PSession;
 import org.l2k.trivia2.domain.Room;
 import org.l2k.trivia2.repository.RoomRepository;
-import org.mockito.InOrder;
 import org.mockito.Mock;
 
 import name.falgout.jeffrey.testing.junit5.MockitoExtension;
@@ -34,7 +32,7 @@ class RoomServiceTest {
 	}
 
 	@Nested
-	class GetRooms {
+	class GetAll {
 		
 		private List<Room> rooms;
 		
@@ -50,7 +48,7 @@ class RoomServiceTest {
 		void returnsAllRoomsInTheRoomRepository() {
 			when(roomRepository.getAll()).thenReturn(rooms);
 			
-			List<Room> returnedRooms = roomService.getRooms();
+			List<Room> returnedRooms = roomService.getAll();
 			
 			assertEquals(2, returnedRooms.size());
 			assertEquals(rooms.get(0), returnedRooms.get(0));
@@ -59,47 +57,49 @@ class RoomServiceTest {
 	}
 	
 	@Nested
-	class JoinRoom {
+	class Get {
 		
 		@Mock Room room;
-		@Mock P2PSession user;
-		final String roomName = "EXAMPLE_ROOM_NAME";
 		
-		@BeforeEach
-		void setup() {
-			when(roomRepository.get(roomName)).thenReturn(room);			
+		@Test
+		void returnsNullWhenRoomNameIsNull() {
+			assertNull(roomService.get(null));
 		}
 		
 		@Test
-		void addsSessionToRoomWhenRoomHasVacancies() {
-			when(room.hasVacancies()).thenReturn(true);
-			roomService.joinRoom(roomName, user);
-			verify(room, times(1)).addUser(user);
-		}
-		
-		@Test
-		void savesTheUpdatedRoomAfterAddingUser() {
-			when(room.hasVacancies()).thenReturn(true);
-			InOrder inOrder = inOrder(room, roomRepository);
+		void delegatesRoomRetrievalToRoomRepsository() {
+			String roomName = "EXAMPLE_ROOM_NAME";
+			when(roomRepository.get(roomName)).thenReturn(room);
 			
-			roomService.joinRoom(roomName, user);
+			Room returnedRoom = roomService.get(roomName);
 			
-			inOrder.verify(room, times(1)).addUser(user);
-			inOrder.verify(roomRepository, times(1)).save(room);
-		}
-		
-		@Test
-		void returnsRoomWhenUserIsAdded() {
-			when(room.hasVacancies()).thenReturn(true);
-			Room returnedRoom = roomService.joinRoom(roomName, user);
 			assertEquals(room, returnedRoom);
 		}
+	}
+	
+	@Nested
+	class Save {
+		
+		@Mock Room room;
 		
 		@Test
-		void returnsNullWhenUserCannotBeAddedToTheRoom() {
-			when(room.hasVacancies()).thenReturn(false);
-			Room returnedRoom = roomService.joinRoom(roomName, user);
-			assertNull(returnedRoom);
+		void doesNotSaveRoomIfNull() {
+			roomService.save(null);
+			verify(roomRepository, never()).save(null);
+		}
+		
+		@Test
+		void doesNotSaveRoomIfMascotNameNull() {
+			when(room.getMascotName()).thenReturn(null);
+			roomService.save(room);
+			verify(roomRepository, never()).save(null);
+		}
+		
+		@Test
+		void savesProvidedRoom() {
+			when(room.getMascotName()).thenReturn("EXAMPLE_MASCOT_NAME");
+			roomService.save(room);
+			verify(roomRepository, times(1)).save(room);
 		}
 	}
 }
