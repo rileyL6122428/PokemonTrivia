@@ -61,7 +61,7 @@ describe('RoomHttp', () => {
     }));
   });
 
-  fdescribe('#joinRoom', () => {
+  describe('#joinRoom', () => {
 
     let targetRoom: Room;
 
