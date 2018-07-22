@@ -3,6 +3,8 @@ import { Inject, Injectable } from '@angular/core';
 import { roomConfigToken, RoomConfig } from './room.config';
 import { map } from 'rxjs/operators/map';
 import { HttpClient } from '@angular/common/http';
+import { Room } from './room.model';
+import { Session } from '../session/session.model';
 
 @Injectable()
 export class RoomHttp {
@@ -18,6 +20,13 @@ export class RoomHttp {
       .pipe(
         map(response => response as Array<UnmappedRoom>)
       );
+  }
+
+  joinRoom(room: Room): Observable<UnmappedRoom> {
+    return this
+      .http
+      .post(this.config.http.JOIN_ROOM(room.name), {})
+      .pipe(map(response => response as UnmappedRoom));
   }
 
 }
