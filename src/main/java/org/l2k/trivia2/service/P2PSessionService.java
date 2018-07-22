@@ -84,8 +84,7 @@ public class P2PSessionService {
 	}
 
 	public P2PSession get(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return sessionRepository.get(id);
 	}
 
 }

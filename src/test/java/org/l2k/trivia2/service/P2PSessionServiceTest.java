@@ -19,9 +19,6 @@ import org.l2k.trivia2.domain.P2PSession;
 import org.l2k.trivia2.domain.SessionStatus;
 import org.l2k.trivia2.repository.NameRepository;
 import org.l2k.trivia2.repository.P2PSessionRepository;
-import org.l2k.trivia2.service.DateService;
-import org.l2k.trivia2.service.P2PSessionService;
-import org.l2k.trivia2.service.SessionExpirationArbiter;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
@@ -30,18 +27,18 @@ import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class P2PSessionServiceTest {
 
-	private P2PSessionService sessionRepository;
+	private P2PSessionService sessionService;
 	
 	@Mock private SessionExpirationArbiter expirationArbiter;
 	@Mock private NameRepository nameRepository;
-	@Mock private P2PSessionRepository sessionTable;
+	@Mock private P2PSessionRepository sessionRepository;
 	@Mock private DateService dateService;
 	
 	@BeforeEach
 	void setup() {
-		sessionRepository = new P2PSessionService(
+		sessionService = new P2PSessionService(
 			expirationArbiter,  
-			sessionTable, 
+			sessionRepository, 
 			nameRepository,
 			dateService
 		);
@@ -55,9 +52,9 @@ class P2PSessionServiceTest {
 		@Test
 		void clearsUnSyncedSessions() {
 			ArgumentCaptor<Predicate<P2PSession>> clearRecordsPredicateCaptor = ArgumentCaptor.forClass(Predicate.class);
-			when(sessionTable.clearRecords(clearRecordsPredicateCaptor.capture())).thenReturn(new ArrayList<>());
+			when(sessionRepository.clearRecords(clearRecordsPredicateCaptor.capture())).thenReturn(new ArrayList<>());
 			
-			sessionRepository.postSession(sessionId);
+			sessionService.postSession(sessionId);
 			
 			Predicate<P2PSession> clearRecordsPredicate = clearRecordsPredicateCaptor.getValue(); 
 			P2PSession verifyPredicateSession = new P2PSession.Builder().build();
@@ -67,12 +64,12 @@ class P2PSessionServiceTest {
 		
 		@Test
 		void putsClearedSessionNamesBackIntoNameRepository() {
-			when(sessionTable.clearRecords(any(Predicate.class))).thenReturn(new ArrayList<P2PSession>() {{
+			when(sessionRepository.clearRecords(any(Predicate.class))).thenReturn(new ArrayList<P2PSession>() {{
 				add(new P2PSession.Builder().setName("EXAMPLE_NAME_1").build());
 				add(new P2PSession.Builder().setName("EXAMPLE_NAME_2").build());
 			}});
 			
-			sessionRepository.postSession(sessionId);
+			sessionService.postSession(sessionId);
 			
 			verify(nameRepository).insertName("EXAMPLE_NAME_1");
 			verify(nameRepository).insertName("EXAMPLE_NAME_2");
@@ -81,7 +78,7 @@ class P2PSessionServiceTest {
 		@Test
 		void returnsNullIfNameRepositoryEmpty() {
 			when(nameRepository.takeName()).thenReturn(null);
-			P2PSession storedSession = sessionRepository.postSession(sessionId);
+			P2PSession storedSession = sessionService.postSession(sessionId);
 			assertNull(storedSession);
 		}
 		
@@ -95,13 +92,13 @@ class P2PSessionServiceTest {
 			
 			@Test
 			void returnsSessionUpdatedWithNameFromNameRepository() {
-				P2PSession returnedSession = sessionRepository.postSession(sessionId);
+				P2PSession returnedSession = sessionService.postSession(sessionId);
 				assertEquals("EXAMPLE_NAME", returnedSession.getName());
 			}
 			
 			@Test
 			void returnsSessionUpdatedWithStatusOfReadyToSync() {
-				P2PSession returnedSession = sessionRepository.postSession(sessionId);
+				P2PSession returnedSession = sessionService.postSession(sessionId);
 				assertEquals(SessionStatus.READY_TO_SYNC, returnedSession.getStatus());
 			}
 			
@@ -110,21 +107,21 @@ class P2PSessionServiceTest {
 				Date currentDate = new Date();
 				when(dateService.getCurrentDate()).thenReturn(currentDate);
 				
-				P2PSession returnedSession = sessionRepository.postSession(sessionId);
+				P2PSession returnedSession = sessionService.postSession(sessionId);
 				
 				assertEquals(currentDate, returnedSession.getLastUpdated());
 			}
 			
 			@Test
 			void returnsSessionWithValuesMatchingTheSubmittedSession() {
-				P2PSession returnedSession = sessionRepository.postSession(sessionId);
+				P2PSession returnedSession = sessionService.postSession(sessionId);
 				assertEquals("EXAMPLE_ID", returnedSession.getId());
 			}
 		
 			@Test
 			void storesSession() {
-				P2PSession returnedSession = sessionRepository.postSession(sessionId);
-				verify(sessionTable, times(1)).saveRecord(returnedSession);
+				P2PSession returnedSession = sessionService.postSession(sessionId);
+				verify(sessionRepository, times(1)).saveRecord(returnedSession);
 			}
 			
 			@Nested
@@ -134,16 +131,16 @@ class P2PSessionServiceTest {
 
 				@BeforeEach
 				void setup() {
-					P2PSession returnedSession = sessionRepository.postSession(sessionId);
+					P2PSession returnedSession = sessionService.postSession(sessionId);
 					repeatedSession = new P2PSession.Builder().setId(sessionId).build();
-					when(sessionTable.contains(sessionId)).thenReturn(true);
-					when(sessionTable.get(repeatedSession.getId())).thenReturn(returnedSession);
+					when(sessionRepository.contains(sessionId)).thenReturn(true);
+					when(sessionRepository.get(repeatedSession.getId())).thenReturn(returnedSession);
 					when(nameRepository.takeName()).thenReturn("DIFFERNT_EXAMPLE_NAME");					
 				}
 				
 				@Test
 				void savesSessionWithPreviouslyGivenNameIfTableAlreadyContainsSession() {
-					P2PSession sessionReturnedAfterRepeat = sessionRepository.postSession(sessionId);
+					P2PSession sessionReturnedAfterRepeat = sessionService.postSession(sessionId);
 					assertEquals("EXAMPLE_NAME", sessionReturnedAfterRepeat.getName());
 				}
 			}
@@ -155,8 +152,8 @@ class P2PSessionServiceTest {
 		
 		@Test
 		void returnsNullWhenProvidedSessionIdNotInTable() {
-			when(sessionTable.get(any(String.class))).thenReturn(null);
-			assertNull(sessionRepository.syncSession("EXAMPLE_SESSION_ID"));
+			when(sessionRepository.get(any(String.class))).thenReturn(null);
+			assertNull(sessionService.syncSession("EXAMPLE_SESSION_ID"));
 		}
 		
 		@Nested
@@ -171,7 +168,7 @@ class P2PSessionServiceTest {
 					.setName("EXAMPLE_SESSION_NAME")
 					.build();
 				
-				when(sessionTable.get(syncableSession.getId())).thenReturn(syncableSession);
+				when(sessionRepository.get(syncableSession.getId())).thenReturn(syncableSession);
 			}
 			
 			@Test
@@ -179,7 +176,7 @@ class P2PSessionServiceTest {
 				Date currentDate = new Date();
 				when(dateService.getCurrentDate()).thenReturn(currentDate);
 				
-				P2PSession syncedSession = sessionRepository.syncSession(syncableSession.getId());
+				P2PSession syncedSession = sessionService.syncSession(syncableSession.getId());
 				
 				assertEquals(syncableSession.getId(), syncedSession.getId());
 				assertEquals(SessionStatus.SYNCED, syncedSession.getStatus());
@@ -189,10 +186,27 @@ class P2PSessionServiceTest {
 			
 			@Test
 			void copiesSyncedSessionIntoSessionTable() {
-				P2PSession syncedSession = sessionRepository.syncSession(syncableSession.getId());
-				verify(sessionTable, times(1)).saveRecord(syncedSession);
+				P2PSession syncedSession = sessionService.syncSession(syncableSession.getId());
+				verify(sessionRepository, times(1)).saveRecord(syncedSession);
 			}
 			
+		}
+	}
+	
+	@Nested
+	class Get {
+		
+		@Mock P2PSession session;
+		
+		@Test
+		void delegatesRetrievalToSessionService() {
+			String sessionId = "EXAMPLE_SESSION_ID";
+			when(sessionRepository.get(sessionId)).thenReturn(session);
+			
+			P2PSession returnedSession = sessionService.get(sessionId);
+			
+			verify(sessionRepository, times(1)).get(sessionId);
+			assertEquals(session, returnedSession);
 		}
 	}
 }
