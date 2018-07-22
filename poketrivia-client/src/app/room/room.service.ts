@@ -39,4 +39,8 @@ export class RoomService {
     return this.store.retrieveAll();
   }
 
+  join(room: Room): Observable<boolean> {
+    throw new Error('METHOD NOT IMPLEMENTED');
+  }
+
 }

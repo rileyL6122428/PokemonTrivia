@@ -3,6 +3,7 @@ import { Room } from '../room/room.model';
 import { MatchmakingService } from './matchmaking.service';
 import { Router } from '@angular/router';
 import { matchmakingConfigToken, MatchmakingConfig } from './matchmaking.config';
+import { RoomHttp } from '../room/room.http';
 
 @Component({
   selector: 'pkt-matchmaking',

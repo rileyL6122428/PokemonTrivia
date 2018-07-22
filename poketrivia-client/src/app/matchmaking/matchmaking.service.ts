@@ -15,7 +15,7 @@ export class MatchmakingService {
   }
 
   joinRoom(room: Room): Observable<boolean> {
-    throw new Error('Method not implemented.');
+    return this.roomService.join(room);
   }
 
   captureButtonCoordinates(roomButtonCoords: { top: number, left: number }): void {
