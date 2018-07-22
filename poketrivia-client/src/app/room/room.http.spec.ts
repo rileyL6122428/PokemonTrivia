@@ -2,9 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { RoomHttp, UnmappedRoom } from './room.http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { RoomConfig, roomConfigToken } from './room.config';
-import { Session, SessionBuilder } from '../session/session.model';
 import { Room, RoomBuilder } from './room.model';
-import { CompilerConfig } from '../../../node_modules/@angular/compiler';
 
 const roomConfig: RoomConfig = {
   http: {
