@@ -2,12 +2,10 @@ import { TestBed, async } from '@angular/core/testing';
 import { RoomHttp, UnmappedRoom } from './room.http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { RoomConfig, roomConfigToken } from './room.config';
-import { Room, RoomBuilder } from './room.model';
 
 const roomConfig: RoomConfig = {
   http: {
-    GET_ALL: '/rooms',
-    JOIN_ROOM: (roomName: String) => `/join/${roomName}`
+    GET_ALL: '/rooms'
   }
 };
 

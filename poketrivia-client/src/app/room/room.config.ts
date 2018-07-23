@@ -3,7 +3,6 @@ import { InjectionToken } from '@angular/core';
 export interface RoomConfig {
   http: {
     GET_ALL: string;
-    JOIN_ROOM: (string) => string;
   };
 }
 
