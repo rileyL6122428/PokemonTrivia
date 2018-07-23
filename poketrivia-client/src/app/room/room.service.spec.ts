@@ -3,7 +3,7 @@ import { RoomService } from './room.service';
 import { RoomHttp, UnmappedRoom } from './room.http';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
-import { Room } from './room.model';
+import { Room, RoomBuilder } from './room.model';
 import { RoomAdapter } from './room.adapter';
 import { RoomStore } from './room.store';
 
@@ -20,11 +20,11 @@ describe('RoomService', () => {
         RoomService,
         {
           provide: RoomHttp,
-          useValue: jasmine.createSpyObj('roomHttp', ['getAll'])
+          useValue: jasmine.createSpyObj('roomHttp', ['getAll', 'joinRoom'])
         },
         {
           provide: RoomAdapter,
-          useValue: jasmine.createSpyObj('roomAdapter', ['mapRooms'])
+          useValue: jasmine.createSpyObj('roomAdapter', ['mapRooms', 'mapRoom'])
         },
         {
           provide: RoomStore,
