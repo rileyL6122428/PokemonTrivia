@@ -15,7 +15,8 @@ import { ErrorMessageComponent } from '../reusable-ui/error-message/error-messag
 import { MatchmakingConfig, matchmakingConfigToken } from './matchmaking.config';
 
 const matchmakingConfig: MatchmakingConfig = {
-  errorMessageDurationMS: 25
+  errorMessageDurationMS: 25,
+  joinRoomPath: (roomName: string) => `/matchmaking/${roomName}`
 };
 
 describe('MatchmakingComponent', () => {

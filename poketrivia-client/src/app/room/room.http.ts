@@ -22,13 +22,6 @@ export class RoomHttp {
       );
   }
 
-  joinRoom(room: Room): Observable<UnmappedRoom> {
-    return this
-      .http
-      .post(this.config.http.JOIN_ROOM(room.name), {})
-      .pipe(map(response => response as UnmappedRoom));
-  }
-
 }
 
 export interface UnmappedRoom {
