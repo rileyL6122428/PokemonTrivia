@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { Room } from '../room/room.model';
 import { RoomService } from '../room/room.service';
 import { Observable } from 'rxjs/Observable';
-import { MatchmakingHttp } from './matchmaking.http';
+import { of } from 'rxjs/Observable/of';
+import { MatchmakingHttp, JoinRoomResponse } from './matchmaking.http';
+import { map, tap, catchError } from 'rxjs/operators';
+import { UnmappedRoom } from '../room/room.http';
 
 @Injectable()
 export class MatchmakingService {
@@ -17,8 +20,22 @@ export class MatchmakingService {
   }
 
   joinRoom(room: Room): Observable<boolean> {
-    this.http.join(room);
-    return null;
+    return this
+      .http
+      .join(room)
+      .pipe(tap(
+        (response: JoinRoomResponse) => this.depositRoom(response.room)
+      ))
+      .pipe(map(
+        () => true
+      ))
+      .pipe(catchError(
+        () => of(false)
+      ));
+  }
+
+  private depositRoom(room: UnmappedRoom): void {
+    this.roomService.deposit(room);
   }
 
   captureButtonCoordinates(roomButtonCoords: { top: number, left: number }): void {

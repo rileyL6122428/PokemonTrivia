@@ -39,4 +39,9 @@ export class RoomService {
     return this.store.retrieveAll();
   }
 
+  deposit(unmappedRoom: UnmappedRoom): void {
+    const room = this.adapter.mapRoom(unmappedRoom);
+    this.store.deposit(room);
+  }
+
 }

@@ -12,6 +12,10 @@ import { ErrorMessageComponent } from './error-message/error-message.component';
     LoadingIndicatorComponent,
     ErrorMessageComponent
   ],
-  exports: [ RoomButtonComponent ]
+  exports: [
+    RoomButtonComponent,
+    LoadingIndicatorComponent,
+    ErrorMessageComponent
+  ]
 })
 export class ReusableUIModule { }

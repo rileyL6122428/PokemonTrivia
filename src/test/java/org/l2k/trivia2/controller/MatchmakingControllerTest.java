@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.l2k.trivia2.controller.responses.JoinRoomResponse;
 import org.l2k.trivia2.domain.P2PSession;
 import org.l2k.trivia2.domain.Room;
 import org.l2k.trivia2.service.P2PSessionService;
@@ -58,10 +59,10 @@ class MatchmakingControllerTest {
 			when(roomService.get(roomName)).thenReturn(room);
 			when(room.hasVacancies()).thenReturn(true);
 			
-			ResponseEntity<Room> response = matchmakingController.joinRoom(roomName, session);
+			ResponseEntity<JoinRoomResponse> response = matchmakingController.joinRoom(roomName, session);
 			
 			assertEquals(HttpStatus.OK, response.getStatusCode());
-			assertEquals(room, response.getBody());
+			assertEquals(room, response.getBody().getRoom());
 		}
 		
 		@Test
@@ -83,7 +84,7 @@ class MatchmakingControllerTest {
 			when(roomService.get(roomName)).thenReturn(room);
 			when(room.hasVacancies()).thenReturn(true);
 			
-			ResponseEntity<Room> response = matchmakingController.joinRoom(roomName, session);
+			ResponseEntity<JoinRoomResponse> response = matchmakingController.joinRoom(roomName, session);
 			
 			assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 		}
@@ -93,7 +94,7 @@ class MatchmakingControllerTest {
 			when(sessionService.get(sessionId)).thenReturn(user);
 			when(roomService.get(roomName)).thenReturn(null);
 			
-			ResponseEntity<Room> response = matchmakingController.joinRoom(roomName, session);
+			ResponseEntity<JoinRoomResponse> response = matchmakingController.joinRoom(roomName, session);
 			
 			assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 		}
@@ -104,7 +105,7 @@ class MatchmakingControllerTest {
 			when(roomService.get(roomName)).thenReturn(room);
 			when(room.hasVacancies()).thenReturn(false);
 			
-			ResponseEntity<Room> response = matchmakingController.joinRoom(roomName, session);
+			ResponseEntity<JoinRoomResponse> response = matchmakingController.joinRoom(roomName, session);
 			
 			assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 		}
