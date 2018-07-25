@@ -6,7 +6,7 @@ import { ReusableUIModule } from '../reusable-ui/reusable-ui.module';
 import { MatchmakingHttp } from './matchmaking.http';
 import { matchmakingConfigToken, MatchmakingConfig } from './matchmaking.config';
 
-const matchmakingConfig: MatchmakingConfig = {
+export const matchmakingConfig: MatchmakingConfig = {
   errorMessageDurationMS: 5000,
   joinRoomPath: (roomName: string) => `/join-room/${roomName}`
 };
