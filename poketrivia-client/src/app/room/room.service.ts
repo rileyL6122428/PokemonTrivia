@@ -44,4 +44,8 @@ export class RoomService {
     this.store.deposit(room);
   }
 
+  get(roomName: string): Room {
+    return this.store.retrieveByName(roomName);
+  }
+
 }

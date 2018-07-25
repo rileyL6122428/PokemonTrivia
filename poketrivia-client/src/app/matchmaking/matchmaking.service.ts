@@ -6,13 +6,15 @@ import { of } from 'rxjs/Observable/of';
 import { MatchmakingHttp, JoinRoomResponse } from './matchmaking.http';
 import { map, tap, catchError } from 'rxjs/operators';
 import { UnmappedRoom } from '../room/room.http';
+import { RoomMatchmakingTransitionService } from '../animations/room-matchmaking-transition.service';
 
 @Injectable()
 export class MatchmakingService {
 
   constructor(
     private roomService: RoomService,
-    private http: MatchmakingHttp
+    private http: MatchmakingHttp,
+    private roomUITransition: RoomMatchmakingTransitionService
   ) { }
 
   allRooms(): Array<Room> {
@@ -39,7 +41,7 @@ export class MatchmakingService {
   }
 
   captureButtonCoordinates(roomButtonCoords: { top: number, left: number }): void {
-
+    this.roomUITransition.selectedRoomButtonCoords = roomButtonCoords;
   }
 
 }
