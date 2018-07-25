@@ -9,7 +9,7 @@ import { matchmakingConfigToken, MatchmakingConfig } from './matchmaking.config'
 const matchmakingConfig: MatchmakingConfig = {
   errorMessageDurationMS: 5000,
   joinRoomPath: (roomName: string) => `/join-room/${roomName}`
-}
+};
 
 @NgModule({
   imports: [
