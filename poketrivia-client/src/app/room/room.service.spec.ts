@@ -28,7 +28,7 @@ describe('RoomService', () => {
         },
         {
           provide: RoomStore,
-          useValue: jasmine.createSpyObj('roomStore', ['depositList', 'retrieveAll'])
+          useValue: jasmine.createSpyObj('roomStore', ['deposit', 'depositList', 'retrieveAll'])
         }
       ]
     });
@@ -139,6 +139,27 @@ describe('RoomService', () => {
 
       expect(roomStoreMock.retrieveAll).toHaveBeenCalled();
       expect(rooms).toBe(storedRooms);
+    });
+  });
+
+  describe('#deposit', () => {
+
+    let unmappedRoom: UnmappedRoom;
+    let mappedRoom: Room;
+    beforeEach(() => {
+      unmappedRoom = { mascotName: 'EXAMPLE_NAME' };
+      mappedRoom = new RoomBuilder().setName('EXAMPLE_NAME').build();
+      roomAdapterMock.mapRoom.and.returnValue(mappedRoom);
+    });
+
+    it('maps unmapped room via RoomAdapter', () => {
+      roomService.deposit(unmappedRoom);
+      expect(roomAdapterMock.mapRoom).toHaveBeenCalledWith(unmappedRoom);
+    });
+
+    it('deposits mapped room produced from RoomAdapter in room store', () => {
+      roomService.deposit(unmappedRoom);
+      expect(roomStoreMock.deposit).toHaveBeenCalledWith(mappedRoom);
     });
   });
 });

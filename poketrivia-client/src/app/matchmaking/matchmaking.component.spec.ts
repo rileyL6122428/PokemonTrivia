@@ -110,6 +110,11 @@ describe('MatchmakingComponent', () => {
       expect(matchmakingComponent.selectedRoom).toBe(pikachuButton.room);
     });
 
+    it('sets manuallyInvertColors to true on selected room button', () => {
+      expect(pikachuButton.manuallyInvertColors).toBe(true);
+      expect(eeveeButton.manuallyInvertColors).toBe(false);
+    });
+
     it('locks the selected room until joinRoomRequest completes', () => {
       eeveeButton.emitClick();
       fixture.detectChanges();

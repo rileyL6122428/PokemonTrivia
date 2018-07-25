@@ -1,10 +1,11 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, async } from '@angular/core/testing';
 import { MatchmakingService } from './matchmaking.service';
 import { RoomService } from '../room/room.service';
 import { Room, RoomBuilder } from '../room/room.model';
-import { Observable } from '../../../node_modules/rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 import { MatchmakingHttp, JoinRoomResponse } from './matchmaking.http';
-import { Observer } from '../../../node_modules/rxjs/Observer';
+import { Observer } from 'rxjs/Observer';
+import { UnmappedRoom } from '../room/room.http';
 
 describe('MatchmakingService', () => {
 
@@ -18,7 +19,7 @@ describe('MatchmakingService', () => {
         MatchmakingService,
         {
           provide: RoomService,
-          useValue: jasmine.createSpyObj('roomService', ['allRooms'])
+          useValue: jasmine.createSpyObj('roomService', ['allRooms', 'deposit'])
         },
         {
           provide: MatchmakingHttp,
@@ -50,6 +51,7 @@ describe('MatchmakingService', () => {
   describe('#join', () => {
 
     let targetRoom: Room;
+    let serverResponse: JoinRoomResponse;
     let joinRoomObservable: Observable<JoinRoomResponse>;
     let joinRoomObserver: Observer<JoinRoomResponse>;
 
@@ -59,11 +61,38 @@ describe('MatchmakingService', () => {
         observer => joinRoomObserver = observer
       );
       matchmakingHttpMock.join.and.returnValue(joinRoomObservable);
+      serverResponse = { room: { mascotName: 'EXAMPLE_ROOM' } };
     });
 
     it('delegates join room request to matchmakingHttp', () => {
       matchmakingService.joinRoom(targetRoom);
       expect(matchmakingHttpMock.join).toHaveBeenCalledWith(targetRoom);
     });
+
+    it('delegates mapping of room in server response to roomService', async(() => {
+      matchmakingService.joinRoom(targetRoom).subscribe();
+      joinRoomObserver.next(serverResponse);
+      expect(roomServiceMock.deposit).toHaveBeenCalledWith(serverResponse.room);
+    }));
+
+    it('emits true when errors not encountered', async(() => {
+      matchmakingService
+        .joinRoom(targetRoom)
+        .subscribe((requestSuccessful) => {
+          expect(requestSuccessful).toBe(true);
+        });
+
+      joinRoomObserver.next(serverResponse);
+    }));
+
+    it('emits false when errors encountered', async(() => {
+      matchmakingService
+        .joinRoom(targetRoom)
+        .subscribe((requestSuccessful) => {
+          expect(requestSuccessful).toBe(false);
+        });
+
+      joinRoomObserver.error('EXAMPLE ERROR');
+    }));
   });
 });

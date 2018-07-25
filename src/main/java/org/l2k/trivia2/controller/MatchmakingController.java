@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 
 import org.l2k.trivia2.constants.ControllerConstants.PathVariables;
 import org.l2k.trivia2.constants.ControllerConstants.Paths;
+import org.l2k.trivia2.controller.responses.JoinRoomResponse;
 import org.l2k.trivia2.domain.P2PSession;
 import org.l2k.trivia2.domain.Room;
 import org.l2k.trivia2.service.P2PSessionService;
@@ -28,7 +29,7 @@ public class MatchmakingController {
 	}
 
 	@PostMapping(Paths.JOIN_ROOM)
-	public ResponseEntity<Room> joinRoom(
+	public ResponseEntity<JoinRoomResponse> joinRoom(
 			@PathVariable(PathVariables.ROOM_NAME) String roomName, 
 			HttpSession session
 	) {
@@ -46,7 +47,9 @@ public class MatchmakingController {
 			roomService.save(room);
 		}
 
-		return ResponseEntity.status(status).body(room);
+		return ResponseEntity
+				.status(status)
+				.body(new JoinRoomResponse(room));
 	}
 	
 }

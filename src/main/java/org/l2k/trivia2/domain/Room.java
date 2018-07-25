@@ -76,10 +76,10 @@ public class Room {
 		private Map<String, P2PSession> getUsers() {
 			Map<String, P2PSession> users = null;
 			if (this.users != null) { 
-				this.users = new HashMap<String, P2PSession>(this.users); 
+				users = this.users; 
 			}
 			if (room != null && room.getUsers() != null) { 
-				users = new HashMap<String, P2PSession>(room.getUsers()); 
+				users = room.getUsers(); 
 			}
 			return users;
 		}

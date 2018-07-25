@@ -3,6 +3,7 @@
     <pkt-room-button
       id="{{room.name}}-room-button"
       [room]="room"
+      [invertColors]="room === selectedRoom"
       (roomButtonClick)="selectRoom($event)">
     </pkt-room-button>
   </li>
