@@ -5,13 +5,15 @@ import { Room, RoomBuilder } from '../room/room.model';
 import { Observable } from 'rxjs/Observable';
 import { MatchmakingHttp, JoinRoomResponse } from './matchmaking.http';
 import { Observer } from 'rxjs/Observer';
-import { UnmappedRoom } from '../room/room.http';
+import { RoomUITransition, UICoordinates } from '../animations/room-ui.transition';
+import { when } from '../test-utils/test-utils';
 
 describe('MatchmakingService', () => {
 
   let matchmakingService: MatchmakingService;
-  let roomServiceMock: any;
-  let matchmakingHttpMock: any;
+  let roomServiceMock: RoomService;
+  let matchmakingHttpMock: MatchmakingHttp;
+  let roomUITransitionMock: RoomUITransition;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -24,6 +26,10 @@ describe('MatchmakingService', () => {
         {
           provide: MatchmakingHttp,
           useValue: jasmine.createSpyObj('matchmakingHttp', ['join'])
+        },
+        {
+          provide: RoomUITransition,
+          useValue: jasmine.createSpyObj('roomUITransition', [''])
         }
       ]
     });
@@ -31,6 +37,7 @@ describe('MatchmakingService', () => {
     matchmakingService = TestBed.get(MatchmakingService);
     roomServiceMock = TestBed.get(RoomService);
     matchmakingHttpMock = TestBed.get(MatchmakingHttp);
+    roomUITransitionMock = TestBed.get(RoomUITransition);
   });
 
   describe('#allRooms', () => {
@@ -39,7 +46,7 @@ describe('MatchmakingService', () => {
         new Room('Pikachu', null),
         new Room('Eevee', null)
       ];
-      roomServiceMock.allRooms.and.returnValue(rooms);
+      when(roomServiceMock.allRooms).returnValue(rooms);
 
       const returnedRooms = matchmakingService.allRooms();
 
@@ -60,7 +67,7 @@ describe('MatchmakingService', () => {
       joinRoomObservable = new Observable<JoinRoomResponse>(
         observer => joinRoomObserver = observer
       );
-      matchmakingHttpMock.join.and.returnValue(joinRoomObservable);
+      when(matchmakingHttpMock.join).returnValue(joinRoomObservable);
       serverResponse = { room: { mascotName: 'EXAMPLE_ROOM' } };
     });
 
@@ -94,5 +101,13 @@ describe('MatchmakingService', () => {
 
       joinRoomObserver.error('EXAMPLE ERROR');
     }));
+  });
+
+  describe('#captureButtonCoordinates', () => {
+    it('sets coordinates on roomButtonUITransition', () => {
+      const capturedCoords: UICoordinates = { top: 50, left: 100 };
+      matchmakingService.captureButtonCoordinates(capturedCoords);
+      expect(roomUITransitionMock.selectedRoomButtonCoords);
+    });
   });
 });

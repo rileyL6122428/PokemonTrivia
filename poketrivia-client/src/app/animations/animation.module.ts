@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RoomMatchmakingTransitionService } from './room-matchmaking-transition.service';
+import { RoomMatchmakingTransitionService } from './room-ui.transition';
 
 @NgModule({
   providers: [

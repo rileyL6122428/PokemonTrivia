@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RoomService } from './room.service';
 import { Room } from './room.model';
-import { Router, ActivatedRoute } from '@angular/router';
-import { RoomButtonCoordinates, RoomMatchmakingTransitionService } from '../animations/room-matchmaking-transition.service';
+import { ActivatedRoute } from '@angular/router';
+import { UICoordinates, RoomUITransition } from '../animations/room-ui.transition';
 
 @Component({
   selector: 'pkt-room',
@@ -12,13 +12,15 @@ import { RoomButtonCoordinates, RoomMatchmakingTransitionService } from '../anim
 export class RoomComponent implements OnInit {
 
   room: Room;
-  buttonCoords: RoomButtonCoordinates;
+  buttonCoords: UICoordinates;
 
   constructor(
     private roomService: RoomService,
-    private uiTransition: RoomMatchmakingTransitionService,
+    private uiTransition: RoomUITransition,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    console.log('hello world');
+  }
 
   ngOnInit() {
     this.room = this.roomService.get(this.roomName);
