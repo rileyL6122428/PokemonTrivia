@@ -3,8 +3,6 @@ import { Inject, Injectable } from '@angular/core';
 import { roomConfigToken, RoomConfig } from './room.config';
 import { map } from 'rxjs/operators/map';
 import { HttpClient } from '@angular/common/http';
-import { Room } from './room.model';
-import { Session } from '../session/session.model';
 
 @Injectable()
 export class RoomHttp {

@@ -6,13 +6,15 @@ import { of } from 'rxjs/Observable/of';
 import { MatchmakingHttp, JoinRoomResponse } from './matchmaking.http';
 import { map, tap, catchError } from 'rxjs/operators';
 import { UnmappedRoom } from '../room/room.http';
+import { RoomUITransition, UICoordinates } from '../animations/room-ui.transition';
 
 @Injectable()
 export class MatchmakingService {
 
   constructor(
     private roomService: RoomService,
-    private http: MatchmakingHttp
+    private http: MatchmakingHttp,
+    private roomUITransition: RoomUITransition
   ) { }
 
   allRooms(): Array<Room> {
@@ -38,8 +40,8 @@ export class MatchmakingService {
     this.roomService.deposit(room);
   }
 
-  captureButtonCoordinates(roomButtonCoords: { top: number, left: number }): void {
-
+  captureButtonCoordinates(roomButtonCoords: UICoordinates): void {
+    this.roomUITransition.selectedRoomButtonCoords = roomButtonCoords;
   }
 
 }

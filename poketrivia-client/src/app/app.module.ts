@@ -10,6 +10,7 @@ import { ErrorComponent } from './error/error.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppLoadModule } from './app-load/app-load.module';
 import { MatchmakingModule } from './matchmaking/matchmaking.module';
+import { PokeTriviaAnimationsModule } from './animations/animation.module';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { MatchmakingModule } from './matchmaking/matchmaking.module';
     HttpClientModule,
     AppRoutingModule,
     AppLoadModule,
-    MatchmakingModule
+    MatchmakingModule,
+    PokeTriviaAnimationsModule
   ],
   declarations: [
     AppComponent,
