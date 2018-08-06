@@ -8,13 +8,6 @@ export class PositionAnimationBase {
   protected animate(params: PositionAnimationParameters): void {
     const animation = this.splitFrames(params);
     this.runAnimation(animation, params);
-    // const interval = setInterval(() => {
-    //   this.position = animation.nextFrame();
-    //   if (animation.finished) {
-    //     this.position = { top: params.targetTop, left: params.targetLeft };
-    //     clearInterval(interval);
-    //   }
-    // }, params.frameSpeed);
   }
 
   private splitFrames(params: PositionAnimationParameters): Animation {
