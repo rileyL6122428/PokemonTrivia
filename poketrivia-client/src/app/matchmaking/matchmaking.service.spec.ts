@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { MatchmakingHttp, JoinRoomResponse } from './matchmaking.http';
 import { Observer } from 'rxjs/Observer';
 import { RoomUITransition, UICoordinates } from '../animations/room-ui.transition';
-import { when } from '../test-utils/test-utils';
+import { when } from '../test-utils/test-utils.spec';
 
 describe('MatchmakingService', () => {
 

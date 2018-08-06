@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { trigger, transition } from '@angular/animations';
 import { RoomService } from './room.service';
 import { Room } from './room.model';
 import { ActivatedRoute } from '@angular/router';
@@ -12,19 +13,16 @@ import { UICoordinates, RoomUITransition } from '../animations/room-ui.transitio
 export class RoomComponent implements OnInit {
 
   room: Room;
-  buttonCoords: UICoordinates;
 
   constructor(
     private roomService: RoomService,
     private uiTransition: RoomUITransition,
     private route: ActivatedRoute
-  ) {
-    console.log('hello world');
-  }
+  ) { }
 
   ngOnInit() {
     this.room = this.roomService.get(this.roomName);
-    this.buttonCoords = this.uiTransition.selectedRoomButtonCoords;
+    this.uiTransition.moveRoomButtonToTopLeft();
   }
 
   private get roomName(): string {
@@ -33,8 +31,8 @@ export class RoomComponent implements OnInit {
 
   get buttonCoordinates(): object {
     return {
-      top: `${this.buttonCoords.top}px`,
-      left: `${this.buttonCoords.left}px`
+      top: `${this.uiTransition.selectedRoomButtonCoords.top}px`,
+      left: `${this.uiTransition.selectedRoomButtonCoords.left}px`
     };
   }
 
