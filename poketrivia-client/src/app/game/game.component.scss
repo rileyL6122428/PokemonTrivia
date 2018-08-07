@@ -1,5 +1,17 @@
-pkt-professor-oak {
+pkt-professor-oak, pkt-speech-bubble {
+  position: absolute;
   display: block;
+}
+
+pkt-professor-oak {
+  top: 0;
+  left: 0;
   width: 275px;
   height: 400px;
+}
+
+pkt-speech-bubble {
+  top: 0;
+  left: 275px;
+  width: 400px;
 }
