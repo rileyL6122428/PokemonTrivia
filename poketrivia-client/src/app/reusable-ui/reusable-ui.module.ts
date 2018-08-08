@@ -5,6 +5,9 @@ import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator
 import { ErrorMessageComponent } from './error-message/error-message.component';
 import { ProfessorOakComponent } from './professor-oak/professor-oak.component';
 import { SpeechBubbleComponent } from './speech-bubble/speech-bubble.component';
+import { ScoreCardComponent } from './score-card/score-card.component';
+import { ScoresComponent } from './scores/scores.component';
+import { PointCounterComponent } from './point-counter/point-counter.component';
 
 @NgModule({
   imports: [ HtmlInterpolationModule ],
@@ -13,14 +16,19 @@ import { SpeechBubbleComponent } from './speech-bubble/speech-bubble.component';
     LoadingIndicatorComponent,
     ErrorMessageComponent,
     ProfessorOakComponent,
-    SpeechBubbleComponent
+    SpeechBubbleComponent,
+    ScoreCardComponent,
+    ScoresComponent,
+    PointCounterComponent
   ],
   exports: [
     RoomButtonComponent,
     LoadingIndicatorComponent,
     ErrorMessageComponent,
     ProfessorOakComponent,
-    SpeechBubbleComponent
+    SpeechBubbleComponent,
+    ScoreCardComponent,
+    ScoresComponent
   ]
 })
 export class ReusableUIModule { }

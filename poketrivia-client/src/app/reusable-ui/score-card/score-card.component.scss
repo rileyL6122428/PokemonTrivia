@@ -1,0 +1,15 @@
+.score-card-outline {
+  transform: scale(0.25) translateX(-150%) translateY(-100%);
+}
+
+.points {
+  position: absolute;
+  display: flex;
+  top: 45px;
+  left: 35px;
+  margin-left: 10px;
+}
+
+.points > li {
+  margin-right: 3px;
+}
