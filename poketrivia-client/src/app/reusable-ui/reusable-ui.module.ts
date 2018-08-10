@@ -8,6 +8,7 @@ import { SpeechBubbleComponent } from './speech-bubble/speech-bubble.component';
 import { ScoreCardComponent } from './score-card/score-card.component';
 import { ScoresComponent } from './scores/scores.component';
 import { PointCounterComponent } from './point-counter/point-counter.component';
+import { PokeBallComponent } from './poke-ball/poke-ball.component';
 
 @NgModule({
   imports: [ HtmlInterpolationModule ],
@@ -19,7 +20,8 @@ import { PointCounterComponent } from './point-counter/point-counter.component';
     SpeechBubbleComponent,
     ScoreCardComponent,
     ScoresComponent,
-    PointCounterComponent
+    PointCounterComponent,
+    PokeBallComponent
   ],
   exports: [
     RoomButtonComponent,
@@ -28,7 +30,8 @@ import { PointCounterComponent } from './point-counter/point-counter.component';
     ProfessorOakComponent,
     SpeechBubbleComponent,
     ScoreCardComponent,
-    ScoresComponent
+    ScoresComponent,
+    PokeBallComponent
   ]
 })
 export class ReusableUIModule { }
