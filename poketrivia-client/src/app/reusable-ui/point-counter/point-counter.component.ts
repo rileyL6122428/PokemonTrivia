@@ -1,15 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'pkt-point-counter',
   templateUrl: './point-counter.component.html',
   styleUrls: ['./point-counter.component.scss']
 })
-export class PointCounterComponent implements OnInit {
+export class PointCounterComponent {
 
-  constructor() { }
-
-  ngOnInit() {
-  }
+  @Input('contains-point') containsPoint: boolean;
 
 }

@@ -1,0 +1,20 @@
+@import 'colors';
+
+svg.contains-point {
+  ellipse, path {
+    fill: $icon-black;
+    stroke: white;
+  }
+}
+
+svg:not(.contains-point) {
+  ellipse {
+    fill: white;
+    stroke: $icon-black;
+    opacity: 0.65
+  }
+
+  path {
+    opacity: 0;
+  }
+}

@@ -2,11 +2,12 @@ html, body {
   height: 100%;
 }
 
-html, body, div, button, ul, li, p, section {
+html, body, div, button, ul, li, p, section, h1, h2, h3, h4, h5, h6 {
   display: block;
   margin: 0;
   padding: 0;
   font-size: 12px;
+  font-weight: normal;
 }
 
 li {
