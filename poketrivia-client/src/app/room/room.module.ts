@@ -7,11 +7,13 @@ import { roomConfigToken } from './room.config';
 import { RoomComponent } from './room.component';
 import { ReusableUIModule } from '../reusable-ui/reusable-ui.module';
 import { CommonModule } from '@angular/common';
+import { GameComponentsModule } from '../game/game-components.module';
 
 @NgModule({
   imports: [
     ReusableUIModule,
-    CommonModule
+    CommonModule,
+    GameComponentsModule
   ],
   providers: [
     RoomHttp,

@@ -1,0 +1,9 @@
+@import 'colors';
+
+svg {
+  height: inherit;
+  width: inherit;
+  > * {
+    fill: $icon-black;
+  }
+}

@@ -1,0 +1,41 @@
+@import 'colors';
+
+svg * {
+  fill: none;
+  stroke: $icon-black;
+}
+
+svg .button {
+  fill: white;
+}
+
+svg.rolling {
+  animation: pokeball-roll 3s infinite ease-in-out;
+}
+
+@keyframes pokeball-roll {
+  0%, 58%, 100% {
+    transform: translateX(0) rotateZ(0);
+  }
+
+  8% {
+    transform: translateX(10px) rotateZ(9deg);
+  }
+
+  18% {
+    transform: translateX(-45px) rotateZ(-42deg);
+  }
+
+  28% {
+    transform: translateX(40px) rotateZ(38deg);
+  }
+
+  38% {
+    transform: translateX(-28px) rotateZ(-25deg);
+  }
+
+  48% {
+    transform: translateX(10px) rotateZ(8deg);
+  }
+
+}
