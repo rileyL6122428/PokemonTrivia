@@ -38,7 +38,7 @@ export class OpenablePokeball {
   }
 
   animateOpen(): void {
-    this.animateOpeningHeightChange({
+    this.animateChangeInOpeningHeight({
       topHeightIncrement: -this.topCircleAnimationIncrement,
       finalTopHeight: this.topCircleMaxOpeningHeight,
       bottomHeightIncrement: this.bottomCircleAnimationIncrement,
@@ -52,7 +52,7 @@ export class OpenablePokeball {
   }
 
   animateClose(): void {
-    this.animateOpeningHeightChange({
+    this.animateChangeInOpeningHeight({
       topHeightIncrement: this.topCircleAnimationIncrement,
       finalTopHeight: this.circleBaselineOpeningHeight,
       bottomHeightIncrement: -this.bottomCircleAnimationIncrement,
@@ -65,7 +65,7 @@ export class OpenablePokeball {
     });
   }
 
-  animateOpeningHeightChange(params: {
+  animateChangeInOpeningHeight(params: {
     topHeightIncrement: number,
     finalTopHeight: number
     bottomHeightIncrement: number,
