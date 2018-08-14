@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.l2k.trivia2.constants.PokemonConstants;
+import org.l2k.trivia2.domain.Game;
 import org.l2k.trivia2.domain.P2PSession;
 import org.l2k.trivia2.domain.Pokemon;
 import org.l2k.trivia2.domain.Room;
@@ -54,6 +55,16 @@ public class DataStructureProviders {
 		return new HashMap<String, Room>() {{
 			for(Room room : roomsAsList()) {
 				put(room.getMascotName(), room);
+			}
+		}};
+	}
+	
+	@Bean("games")
+	public Map<String, Game> games() {
+		return new HashMap<String, Game>(){{
+			for (Pokemon pokemon : PokemonConstants.ROOM_MASCOTS) {
+				String mascotName = pokemon.getName();
+				put(mascotName, new Game(mascotName));
 			}
 		}};
 	}
