@@ -29,4 +29,8 @@ export class GameService {
       );
   }
 
+  get gameStorageUpdates(): Observable<GameStore> {
+    return this.store.updates;
+  }
+
 }
