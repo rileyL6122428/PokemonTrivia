@@ -5,7 +5,7 @@ import { GameHttpClient } from './game.http';
 import { GameStore } from './game.store';
 import { gameConfigToken, GameConfig } from './game.config';
 
-const gameConfig: GameConfig = {
+export const gameConfig: GameConfig = {
   HTTP: {
     GET_GAME: (roomName) => `/game/${roomName}`
   }
