@@ -5,8 +5,4 @@ import { Component, OnInit, Input } from '@angular/core';
   templateUrl: './speech-bubble.component.html',
   styleUrls: ['./speech-bubble.component.scss']
 })
-export class SpeechBubbleComponent {
-
-  @Input() text;
-
-}
+export class SpeechBubbleComponent { }

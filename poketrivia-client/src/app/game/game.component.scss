@@ -1,11 +1,14 @@
-pkt-professor-oak, pkt-speech-bubble, pkt-scores {
+pkt-game-narrator, pkt-scores {
   position: absolute;
   display: block;
 }
 
-pkt-professor-oak {
+pkt-game-narrator {
   top: 0;
   left: 0;
+}
+
+pkt-professor-oak {
   width: 275px;
   height: 400px;
 }

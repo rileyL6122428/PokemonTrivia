@@ -23,12 +23,10 @@ export class GameComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const that = this;
+
     this.gameService
       .gameStorageUpdates
       .subscribe((store: GameStore) => {
-        debugger
-        console.log(that);
         this.game = store.retrieveGame(this.roomName);
         this.professorOak.game = this.game;
       });
