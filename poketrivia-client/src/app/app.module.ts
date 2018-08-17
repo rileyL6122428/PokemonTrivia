@@ -11,6 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppLoadModule } from './app-load/app-load.module';
 import { MatchmakingModule } from './matchmaking/matchmaking.module';
 import { PokeTriviaAnimationsModule } from './animations/animation.module';
+import { GameServicesModule } from './game/game-services.module';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { PokeTriviaAnimationsModule } from './animations/animation.module';
     AppRoutingModule,
     AppLoadModule,
     MatchmakingModule,
-    PokeTriviaAnimationsModule
+    PokeTriviaAnimationsModule,
+    GameServicesModule
   ],
   declarations: [
     AppComponent,

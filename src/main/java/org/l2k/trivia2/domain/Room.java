@@ -1,6 +1,5 @@
 package org.l2k.trivia2.domain;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
