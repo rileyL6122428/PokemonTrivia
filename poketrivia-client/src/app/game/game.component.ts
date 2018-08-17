@@ -1,36 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { GameService } from './game.service';
 import { ActivatedRoute } from '@angular/router';
 import { GameStore } from './game.store';
 import { Game } from './game.model';
 import { ProfessorOak } from '../reusable-ui/professor-oak/professor-oak.model';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'pkt-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
 
   game: Game;
-  professorOak: ProfessorOak;
+  storeSubscription: Subscription;
 
   constructor(
     private gameService: GameService,
     private route: ActivatedRoute
-  ) {
-    this.professorOak = new ProfessorOak();
-  }
+  ) { }
 
   ngOnInit(): void {
+    this.listenForGameUpdates();
+    this.fetchGame();
+  }
 
-    this.gameService
+  ngOnDestroy(): void {
+    this.storeSubscription.unsubscribe();
+  }
+
+  private listenForGameUpdates(): void {
+    this.storeSubscription = this.gameService
       .gameStorageUpdates
       .subscribe((store: GameStore) => {
         this.game = store.retrieveGame(this.roomName);
-        this.professorOak.game = this.game;
       });
+  }
 
+  private fetchGame(): void {
     this.gameService
       .fetchGame(this.roomName)
       .subscribe((wasSuccessful: boolean) => {
