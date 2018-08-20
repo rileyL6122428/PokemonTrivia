@@ -1,6 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ScoresComponent } from './scores.component';
+import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'pkt-score-card',
+  template: ''
+})
+class ScoreCardComponent {
+  @Input() player;
+}
 
 describe('ScoresComponent', () => {
   let component: ScoresComponent;
@@ -8,7 +17,10 @@ describe('ScoresComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ScoresComponent ]
+      declarations: [
+        ScoresComponent,
+        ScoreCardComponent
+      ]
     })
     .compileComponents();
   }));
