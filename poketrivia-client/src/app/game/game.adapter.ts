@@ -6,7 +6,6 @@ import { Game, Player } from './game.model';
 export class GameAdapter {
 
   map(unmappedGame: UnmappedGame): Game {
-    debugger
     return new Game(
       unmappedGame.phase,
       unmappedGame.roomName,
@@ -17,11 +16,13 @@ export class GameAdapter {
   private mapPlayers(unmappedPlayers: { [name: string]: UnmappedPlayerScore }): Array<Player> {
     return Object
       .entries(unmappedPlayers)
-      .map((playerTuple: [ string, UnmappedPlayerScore ]) => new Player(
-        playerTuple[0],
-        playerTuple[1]
-      ))
+      .map(this.mapPlayer)
       .sort(this.byScoreDescending);
+  }
+
+  private mapPlayer(playerTuple: [string, UnmappedPlayerScore]): Player {
+    const [name, score] = playerTuple;
+    return new Player(name, score);
   }
 
   private byScoreDescending(playerA: Player, playerB: Player) {
