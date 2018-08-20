@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Player } from '../../game/game.model';
+import { Player, Point } from '../../game/game.model';
 
 @Component({
   selector: 'pkt-score-card',
@@ -9,7 +9,7 @@ import { Player } from '../../game/game.model';
 export class ScoreCardComponent {
 
   name: string;
-  points: Array<0 | 1>;
+  points: Array<Point>;
 
   @Input()
   set player(player: Player) {
