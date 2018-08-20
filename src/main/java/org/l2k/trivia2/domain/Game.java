@@ -21,17 +21,17 @@ public class Game {
 	}
 	
 	private Phase phase;
-	private Map<String, Player> playerNamesToPlayers;
+	private Map<String, Long> playerNamesToScores;
 	private String roomName;
 	
 	public Game(String roomName) {
 		this.roomName = roomName;
 		this.phase = Phase.NOT_STARTED;
-		this.playerNamesToPlayers = new HashMap<String, Player>();
+		this.playerNamesToScores = new HashMap<String, Long>();
 	}
 
-	public Map<String, Player> getPlayerNamesToPlayers() {
-		return playerNamesToPlayers;
+	public Map<String, Long> getPlayerNamesToScores() {
+		return playerNamesToScores;
 	}
 	
 	public Phase getPhase() {
@@ -40,6 +40,10 @@ public class Game {
 	
 	public String getRoomName() {
 		return roomName;
+	}
+
+	public void addUser(P2PSession p2PSession) {
+		this.playerNamesToScores.put(p2PSession.getName(), 0l);
 	}
 	
 }

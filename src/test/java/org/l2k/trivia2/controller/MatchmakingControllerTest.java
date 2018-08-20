@@ -12,8 +12,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.l2k.trivia2.controller.responses.JoinRoomResponse;
+import org.l2k.trivia2.domain.Game;
 import org.l2k.trivia2.domain.P2PSession;
 import org.l2k.trivia2.domain.Room;
+import org.l2k.trivia2.service.GameService;
 import org.l2k.trivia2.service.P2PSessionService;
 import org.l2k.trivia2.service.RoomService;
 import org.mockito.InOrder;
@@ -29,12 +31,14 @@ class MatchmakingControllerTest {
 	MatchmakingController matchmakingController;
 	@Mock RoomService roomService;
 	@Mock P2PSessionService sessionService;
+	@Mock GameService gameService;
 	
 	@BeforeEach
 	void setup() {
 		matchmakingController = new MatchmakingController(
 			roomService, 
-			sessionService
+			sessionService,
+			gameService
 		);
 	}
 	
@@ -45,12 +49,14 @@ class MatchmakingControllerTest {
 		@Mock HttpSession session;
 		@Mock P2PSession user; 
 		@Mock Room room;
+		@Mock Game game;
 		String sessionId = "EXAMPLE_SESSION_ID";
 		String roomName = "EXAMPLE_ROOM_NAME";
 		
 		@BeforeEach
 		void stubGetSession() {
 			when(session.getId()).thenReturn(sessionId);
+			when(gameService.getGame(roomName)).thenReturn(game);
 		}
 		
 		@Test

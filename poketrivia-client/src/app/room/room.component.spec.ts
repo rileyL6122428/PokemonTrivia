@@ -5,6 +5,13 @@ import { ReusableUIModule } from '../reusable-ui/reusable-ui.module';
 import { RoomService } from './room.service';
 import { RoomUITransition } from '../animations/room-ui.transition';
 import { ActivatedRoute } from '../../../node_modules/@angular/router';
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'pkt-game',
+  template: ''
+})
+export class GameComponent { }
 
 describe('RoomComponent', () => {
   let component: RoomComponent;
@@ -16,7 +23,7 @@ describe('RoomComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ ReusableUIModule ],
-      declarations: [ RoomComponent ],
+      declarations: [ RoomComponent, GameComponent ],
       providers: [
         {
           provide: RoomService,

@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { trigger, transition } from '@angular/animations';
-import { RoomService } from './room.service';
-import { Room } from './room.model';
 import { ActivatedRoute } from '@angular/router';
-import { UICoordinates, RoomUITransition } from '../animations/room-ui.transition';
+import { RoomUITransition } from '../animations/room-ui.transition';
+import { Room } from './room.model';
+import { RoomService } from './room.service';
 
 @Component({
   selector: 'pkt-room',

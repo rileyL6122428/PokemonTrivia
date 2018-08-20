@@ -1,6 +1,6 @@
-<pkt-score-card></pkt-score-card>
-<pkt-score-card></pkt-score-card>
-<pkt-score-card></pkt-score-card>
-<pkt-score-card></pkt-score-card>
-<pkt-score-card></pkt-score-card>
-<pkt-score-card></pkt-score-card>
+<ul>
+  <li *ngFor="let player of players">
+    <pkt-score-card [player]="player">
+    </pkt-score-card>
+  </li>
+</ul>

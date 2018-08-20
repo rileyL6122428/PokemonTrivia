@@ -26,5 +26,9 @@ export class GameHttpClient {
 export interface UnmappedGame {
   phase: string & GamePhase;
   roomName: string;
-  playerNamesToPlayer: [string];
+  playerNamesToScores: { [name: string]: UnmappedPlayerScore };
 }
+
+export type UnmappedPlayerScore = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+
+export type UnmappedGamePhase = 'NOT_STARTED' | 'STARTED';

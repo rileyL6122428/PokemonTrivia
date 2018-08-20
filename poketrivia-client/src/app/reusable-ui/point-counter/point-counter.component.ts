@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Point } from '../../game/game.model';
 
 @Component({
   selector: 'pkt-point-counter',
@@ -7,6 +8,10 @@ import { Component, Input } from '@angular/core';
 })
 export class PointCounterComponent {
 
-  @Input('contains-point') containsPoint: boolean;
+  @Input() point: Point;
+
+  get containsPoint(): boolean {
+    return !!this.point;
+  }
 
 }

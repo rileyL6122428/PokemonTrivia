@@ -1,12 +1,9 @@
-<h6>BLUE</h6>
+<h6>{{name}}</h6>
 
 <ul class="points">
-  <li><pkt-point-counter [contains-point]="true"></pkt-point-counter></li>
-  <li><pkt-point-counter [contains-point]="true"></pkt-point-counter></li>
-  <li><pkt-point-counter [contains-point]="true"></pkt-point-counter></li>
-  <li><pkt-point-counter [contains-point]="true"></pkt-point-counter></li>
-  <li><pkt-point-counter [contains-point]="false"></pkt-point-counter></li>
-  <li><pkt-point-counter [contains-point]="false"></pkt-point-counter></li>
+  <li *ngFor="let point of points">
+    <pkt-point-counter [point]="point"></pkt-point-counter>
+  </li>
 </ul>
 
 <svg class="score-card-outline" _ngcontent-c25="" xml:space="preserve" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg"

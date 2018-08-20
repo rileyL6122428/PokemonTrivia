@@ -19,5 +19,9 @@ public class GameRepository {
 	public Game getGame(String roomName) {
 		return roomNamesToGames.get(roomName);
 	}
+
+	public void save(Game game) {
+		roomNamesToGames.put(game.getRoomName(), game);
+	}
 	
 }
