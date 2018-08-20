@@ -10,4 +10,8 @@ export class PointCounterComponent {
 
   @Input() point: Point;
 
+  get containsPoint(): boolean {
+    return !!this.point;
+  }
+
 }
