@@ -1,3 +1,5 @@
+import { UnmappedPlayerScore } from './game.http';
+
 export type GamePhase = 'NOT_STARTED' | 'STARTED';
 
 export class Game {
@@ -15,4 +17,5 @@ export class Player {
   ) {}
 }
 
-export type PlayerScore = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+export type PlayerScore = UnmappedPlayerScore;
+export type Point = 0 | 1;
