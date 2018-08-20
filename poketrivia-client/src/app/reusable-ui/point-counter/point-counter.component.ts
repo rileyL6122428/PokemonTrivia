@@ -7,6 +7,6 @@ import { Component, Input } from '@angular/core';
 })
 export class PointCounterComponent {
 
-  @Input('contains-point') containsPoint: boolean;
+  @Input() point: 0 | 1;
 
 }

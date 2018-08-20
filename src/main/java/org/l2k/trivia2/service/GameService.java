@@ -18,5 +18,9 @@ public class GameService {
 	public Game getGame(String roomName) {
 		return repository.getGame(roomName);
 	}
+
+	public void save(Game game) {
+		repository.save(game);
+	}
 	
 }

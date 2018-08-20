@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Player } from '../../game/game.model';
 
 @Component({
   selector: 'pkt-scores',
@@ -6,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./scores.component.scss']
 })
 export class ScoresComponent {
+
+  @Input() players: Array<Player>;
 
 }

@@ -9,9 +9,13 @@ import { ScoreCardComponent } from './score-card/score-card.component';
 import { ScoresComponent } from './scores/scores.component';
 import { PointCounterComponent } from './point-counter/point-counter.component';
 import { PokeBallComponent } from './poke-ball/poke-ball.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
-  imports: [ HtmlInterpolationModule ],
+  imports: [
+    HtmlInterpolationModule,
+    CommonModule
+  ],
   declarations: [
     RoomButtonComponent,
     LoadingIndicatorComponent,
