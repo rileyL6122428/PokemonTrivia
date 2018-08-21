@@ -4,6 +4,7 @@ import { GameService } from './game.service';
 import { GameHttpClient } from './game.http';
 import { GameStore } from './game.store';
 import { gameConfigToken, GameConfig } from './game.config';
+import { GameStompClient } from './game.stomp';
 
 export const gameConfig: GameConfig = {
   HTTP: {
@@ -17,6 +18,7 @@ export const gameConfig: GameConfig = {
     GameHttpClient,
     GameStore,
     GameService,
+    GameStompClient,
     {
       provide: gameConfigToken,
       useValue: gameConfig

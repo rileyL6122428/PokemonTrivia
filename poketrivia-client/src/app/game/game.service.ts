@@ -8,12 +8,15 @@ import { GameStore } from './game.store';
 import { Game } from './game.model';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs/Observable/of';
+import { GameStompClient } from './game.stomp';
+import { Subscription } from 'rxjs/Subscription';
 
 @Injectable()
 export class GameService {
 
   constructor(
     private http: GameHttpClient,
+    private stomp: GameStompClient,
     private adapter: GameAdapter,
     private store: GameStore
   ) { }
@@ -29,8 +32,25 @@ export class GameService {
       );
   }
 
-  get gameStorageUpdates(): Observable<GameStore> {
-    return this.store.updates;
+  storeGameUpdates(roomName: string): Observable<GameStore> {
+    return this.stomp
+      .gameUpdates(roomName)
+      .pipe(
+        map((game: UnmappedGame) => this.adapter.map(game)),
+        tap((game: Game) => this.store.deposit(game)),
+        map(() => this.store)
+      );
   }
 
+  streamGame(roomName: string, storeListener: (GameStore) => void): Subscription {
+    storeListener(this.store);
+
+    this.fetchGame(roomName)
+      .subscribe((successful) => {
+        if (successful) { storeListener(this.store); }
+      });
+
+    return this.storeGameUpdates(roomName)
+      .subscribe((store) => storeListener(store));
+  }
 }
