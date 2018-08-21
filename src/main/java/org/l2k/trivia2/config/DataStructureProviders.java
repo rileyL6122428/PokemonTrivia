@@ -12,14 +12,10 @@ import org.l2k.trivia2.domain.GameListener;
 import org.l2k.trivia2.domain.P2PSession;
 import org.l2k.trivia2.domain.Pokemon;
 import org.l2k.trivia2.domain.Room;
-import org.l2k.trivia2.service.GameService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 @Configuration
-@Component
 public class DataStructureProviders {
 	
 	@Bean("EXPIRATION_SYNC_THRESHOLD")
