@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class GameComponent implements OnInit, OnDestroy {
 
   game: Game;
-  storeSubscription: Subscription;
+  updatesSubscription: Subscription;
 
   constructor(
     private gameService: GameService,
@@ -22,29 +22,34 @@ export class GameComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.listenForGameUpdates();
-    this.fetchGame();
+    // this.listenForGameUpdates();
+    // this.fetchGame();
+    this.updatesSubscription = this.gameService
+      .streamGame(this.roomName, (gameStore: GameStore) => {
+        this.game = gameStore.retrieveGame(this.roomName);
+      });
   }
 
   ngOnDestroy(): void {
-    this.storeSubscription.unsubscribe();
+    // this.storeSubscription.unsubscribe();
+    this.updatesSubscription.unsubscribe();
   }
 
-  private listenForGameUpdates(): void {
-    this.storeSubscription = this.gameService
-      .gameStorageUpdates
-      .subscribe((store: GameStore) => {
-        this.game = store.retrieveGame(this.roomName);
-      });
-  }
+  // private listenForGameUpdates(): void {
+  //   this.storeSubscription = this.gameService
+  //     .gameStorageUpdates
+  //     .subscribe((store: GameStore) => {
+  //       this.game = store.retrieveGame(this.roomName);
+  //     });
+  // }
 
-  private fetchGame(): void {
-    this.gameService
-      .fetchGame(this.roomName)
-      .subscribe((wasSuccessful: boolean) => {
-        console.log(`fetched game: ${wasSuccessful}`);
-      });
-  }
+  // private fetchGame(): void {
+  //   this.gameService
+  //     .fetchGame(this.roomName)
+  //     .subscribe((wasSuccessful: boolean) => {
+  //       console.log(`fetched game: ${wasSuccessful}`);
+  //     });
+  // }
 
   private get roomName(): string {
     return this.route.snapshot.params['roomName'];
