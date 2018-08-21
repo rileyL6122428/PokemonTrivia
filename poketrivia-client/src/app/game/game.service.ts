@@ -53,9 +53,4 @@ export class GameService {
     return this.storeGameUpdates(roomName)
       .subscribe((store) => storeListener(store));
   }
-
-  // get gameStorageUpdates(): Observable<GameStore> {
-  //   return this.store.updates;
-  // }
-
 }
