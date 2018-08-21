@@ -15,14 +15,14 @@ public class GameDispatcher implements GameListener {
 	public GameDispatcher(SimpMessagingTemplate messagingTemplate) {
 		this.messagingTemplate = messagingTemplate;
 	}
-	
-	private void dispatchUpdate(Game game) {
-		messagingTemplate.convertAndSend("/topic/game/" + game.getRoomName(), game);
-	}
 
 	@Override
 	public void onUpdate(Game game) {
 		dispatchUpdate(game);
+	}
+	
+	private void dispatchUpdate(Game game) {
+		messagingTemplate.convertAndSend("/topic/game/" + game.getRoomName(), game);
 	}
 	
 }
