@@ -16,7 +16,7 @@ export class ProfessorOak {
     .set(
       'STARTED',
       `
-        Let's go!
+        Let's go! Let's become the very best there ever was!
       `
     );
 

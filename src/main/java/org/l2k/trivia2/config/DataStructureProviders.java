@@ -1,6 +1,5 @@
 package org.l2k.trivia2.config;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,13 +8,18 @@ import java.util.stream.Collectors;
 
 import org.l2k.trivia2.constants.PokemonConstants;
 import org.l2k.trivia2.domain.Game;
+import org.l2k.trivia2.domain.GameListener;
 import org.l2k.trivia2.domain.P2PSession;
 import org.l2k.trivia2.domain.Pokemon;
 import org.l2k.trivia2.domain.Room;
+import org.l2k.trivia2.service.GameService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 @Configuration
+@Component
 public class DataStructureProviders {
 	
 	@Bean("EXPIRATION_SYNC_THRESHOLD")
@@ -59,12 +63,19 @@ public class DataStructureProviders {
 		}};
 	}
 	
+//	@Autowired List<GameListener> gameListeners;
+//	@Autowired GameService gameService;
 	@Bean("games")
-	public Map<String, Game> games() {
+	public Map<String, Game> games(List<GameListener> listeners) {
 		return new HashMap<String, Game>(){{
 			for (Pokemon pokemon : PokemonConstants.ROOM_MASCOTS) {
-				String mascotName = pokemon.getName();
-				put(mascotName, new Game(mascotName));
+				
+				Game game = new Game.Builder()
+						.setRoomName(pokemon.getName())
+						.setListeners(listeners)
+						.build();
+				
+				put(game.getRoomName(), game);
 			}
 		}};
 	}
