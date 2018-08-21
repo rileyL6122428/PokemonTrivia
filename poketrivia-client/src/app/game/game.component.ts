@@ -29,25 +29,8 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // this.storeSubscription.unsubscribe();
     this.updatesSubscription.unsubscribe();
   }
-
-  // private listenForGameUpdates(): void {
-  //   this.storeSubscription = this.gameService
-  //     .gameStorageUpdates
-  //     .subscribe((store: GameStore) => {
-  //       this.game = store.retrieveGame(this.roomName);
-  //     });
-  // }
-
-  // private fetchGame(): void {
-  //   this.gameService
-  //     .fetchGame(this.roomName)
-  //     .subscribe((wasSuccessful: boolean) => {
-  //       console.log(`fetched game: ${wasSuccessful}`);
-  //     });
-  // }
 
   private get roomName(): string {
     return this.route.snapshot.params['roomName'];
