@@ -63,8 +63,6 @@ public class DataStructureProviders {
 		}};
 	}
 	
-//	@Autowired List<GameListener> gameListeners;
-//	@Autowired GameService gameService;
 	@Bean("games")
 	public Map<String, Game> games(List<GameListener> listeners) {
 		return new HashMap<String, Game>(){{
