@@ -22,8 +22,6 @@ export class GameComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    // this.listenForGameUpdates();
-    // this.fetchGame();
     this.updatesSubscription = this.gameService
       .streamGame(this.roomName, (gameStore: GameStore) => {
         this.game = gameStore.retrieveGame(this.roomName);
