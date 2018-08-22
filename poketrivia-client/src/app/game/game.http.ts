@@ -27,8 +27,14 @@ export interface UnmappedGame {
   phase: string & GamePhase;
   roomName: string;
   playerNamesToScores: { [name: string]: UnmappedPlayerScore };
+  currentQuestion: UnmappedQuestion;
+}
+
+export interface UnmappedQuestion {
+  description: string;
+  shuffledAnswers: string[];
 }
 
 export type UnmappedPlayerScore = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
-export type UnmappedGamePhase = 'NOT_STARTED' | 'STARTED';
+export type UnmappedGamePhase = 'NOT_STARTED' | 'STARTED' | 'ASKING_QUESTION';

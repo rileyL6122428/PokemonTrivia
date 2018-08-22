@@ -1,0 +1,5 @@
+<ul *ngIf="game?.askingQuestion">
+  <li *ngFor="let pokemon of game?.currentQuestionAnswers">
+    {{ pokemon.name }}
+  </li>
+</ul>
