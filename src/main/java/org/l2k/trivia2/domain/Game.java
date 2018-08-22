@@ -5,11 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.l2k.trivia2.constants.PokemonConstants;
+import org.l2k.trivia2.scheduler.DelayedEvent;
+import org.l2k.trivia2.scheduler.Sequence;
+import org.l2k.trivia2.scheduler.SequenceBuilder;
+
 public class Game {
 	
 	enum Phase {
 		NOT_STARTED("NOT_STARTED"),
-		STARTED("STARTED");
+		STARTED("STARTED"),
+		ASKING_QUESTION("ASKING_QUESTION");
 	 
 	    private String stringRep;
 	 
@@ -26,6 +32,7 @@ public class Game {
 	private Map<String, Long> playerNamesToScores;
 	private String roomName;
 	private List<GameListener> listeners;
+	private Question currentQuestion;
 	
 	public Game(String roomName, List<GameListener> listeners) {
 		this.roomName = roomName;
@@ -57,9 +64,35 @@ public class Game {
 		return playerNamesToScores.size();
 	}
 	
+	public Question getCurrentQuestion() {
+		return currentQuestion;
+	}
+	
 	private void startGame() {
-		phase = Phase.STARTED;
-		notifyListeners();
+		new SequenceBuilder()
+			.addEvent(new DelayedEvent(
+				() -> { 
+					phase = Phase.STARTED;
+					notifyListeners();
+				}, 
+				2000
+			))
+			.addEvent(new DelayedEvent(
+				() -> { 
+					currentQuestion = new Question.Builder()
+						.setDescription("Which of the following pokemon is a grass type?")
+						.setAnswer(PokemonConstants.BULBASAUR)
+						.setIncorrectAnswerA(PokemonConstants.CHARMANDER)
+						.setIncorrectAnswerB(PokemonConstants.SQUIRTLE)
+						.build();
+					
+					phase = Phase.ASKING_QUESTION;
+					notifyListeners();
+				}, 
+				2000
+			))
+			.build()
+			.execute();
 	}
 	
 	private void notifyListeners() {
