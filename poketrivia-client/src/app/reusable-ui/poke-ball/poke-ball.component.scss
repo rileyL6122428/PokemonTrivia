@@ -13,6 +13,10 @@ svg.rolling {
   animation: pokeball-roll 3s infinite ease-in-out;
 }
 
+svg .bottom-circle {
+  fill: white;
+}
+
 @keyframes pokeball-roll {
   0%, 58%, 100% {
     transform: translateX(0) rotateZ(0);
