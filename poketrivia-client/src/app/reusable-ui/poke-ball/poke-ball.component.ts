@@ -18,7 +18,6 @@ export class PokeBallComponent {
   }
 
   toggleOpenClose(): void {
-    debugger
     if (this.openable) {
       this.pokeball.toggleOpenClose();
     }
