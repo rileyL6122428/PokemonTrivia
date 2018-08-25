@@ -1,0 +1,19 @@
+.pokemon-image {
+  height: 100px;
+  width: 100px;
+}
+
+ul {
+  display: flex;
+  width: 442px;
+  justify-content: space-around;
+}
+
+pkt-poke-ball {
+  display: block;
+  transform: scale(0.5);
+
+  &:hover {
+    cursor: pointer;
+  }
+}
