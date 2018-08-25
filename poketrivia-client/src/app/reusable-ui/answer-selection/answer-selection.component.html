@@ -8,7 +8,9 @@
 
      <pkt-poke-ball
       [openable]="!pokemonChosen"
-      (click)="answer = pokemon">
+      [shouldClose]="closeOpenedPokeballs"
+      (click)="answer = pokemon"
+      [rolling]="selectedPokemon === pokemon && rollSelectedPokeball">
      </pkt-poke-ball>
   </li>
 </ul>

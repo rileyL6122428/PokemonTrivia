@@ -18,13 +18,15 @@ ul#answer-selection {
     margin-top: 0;
     border: 1px solid white;
     border-radius: 65px;
+    opacity: 1;
     transition:
       border $selection-color-transition linear,
       background-color $selection-color-transition linear,
       height $selection-dimension-transition ease-in-out $selection-color-transition,
       width $selection-dimension-transition ease-in-out $selection-color-transition,
       padding $selection-dimension-transition ease-in-out $selection-color-transition,
-      margin-top $selection-margin-transition ease-in-out #{$selection-dimension-transition + $selection-color-transition + 0.25s};
+      margin-top $selection-margin-transition ease-in-out #{$selection-dimension-transition + $selection-color-transition + 0.25s},
+      opacity 1ms linear 3249ms;
 
     * {
       transition: fill 1s linear;
@@ -37,6 +39,7 @@ ul#answer-selection {
       margin-top: 177px;
       border: 1px solid $icon-black;
       background-color: $icon-black;
+      opacity: 0;
     }
     &.capturing * {
       fill: white;

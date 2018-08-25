@@ -12,6 +12,8 @@ export class AnswerSelectionComponent {
 
   @Input() game: Game;
   selectedPokemon: Pokemon;
+  closeOpenedPokeballs: boolean;
+  rollSelectedPokeball: boolean;
 
   get pokemonChosen(): boolean {
     return !!this.selectedPokemon;
@@ -20,6 +22,8 @@ export class AnswerSelectionComponent {
   set answer(pokemon: Pokemon) {
     if (!this.selectedPokemon) {
       this.selectedPokemon = pokemon;
+      setTimeout(() => this.closeOpenedPokeballs = true, 2600);
+      setTimeout(() => this.rollSelectedPokeball = true, 3250);
     }
   }
 

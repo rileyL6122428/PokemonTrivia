@@ -13,6 +13,14 @@ svg.rolling {
   animation: pokeball-roll 3s infinite ease-in-out;
 }
 
+svg.open .top-circle {
+  fill: none;
+}
+
+svg .top-circle {
+  fill: white;
+}
+
 svg .bottom-circle {
   fill: white;
 }

@@ -17,10 +17,21 @@ export class PokeBallComponent {
     this.pokeball = new OpenablePokeball();
   }
 
+  @Input()
+  set shouldClose(shouldClose: boolean) {
+    if (shouldClose && this.isOpen) {
+      this.pokeball.close();
+    }
+  }
+
   toggleOpenClose(): void {
     if (this.openable) {
       this.pokeball.toggleOpenClose();
     }
+  }
+
+  get isOpen(): boolean {
+    return this.pokeball.isOpen;
   }
 
   private get topCircleD(): string {

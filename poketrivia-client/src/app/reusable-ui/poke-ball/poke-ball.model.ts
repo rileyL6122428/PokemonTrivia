@@ -37,6 +37,12 @@ export class OpenablePokeball {
     }
   }
 
+  close(): void {
+    if (!this.animatingOpenOrClose) {
+      this.animateClose();
+    }
+  }
+
   animateOpen(): void {
     this.animateChangeInOpeningHeight({
       topHeightIncrement: -this.topCircleAnimationIncrement,
@@ -94,7 +100,7 @@ export class OpenablePokeball {
     }, this.animationFrameRate);
   }
 
-  private get isOpen(): boolean {
+  get isOpen(): boolean {
     return this._topOpeningHeight === this.topCircleMaxOpeningHeight;
   }
 
