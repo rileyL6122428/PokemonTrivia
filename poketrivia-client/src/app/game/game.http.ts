@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators/map';
 import { HttpClient } from '@angular/common/http';
 import { GamePhase } from './game.model';
 import { gameConfigToken, GameConfig } from './game.config';
+import { Pokemon } from '../pokemon/pokemon.model';
 
 @Injectable()
 export class GameHttpClient {
@@ -18,6 +19,15 @@ export class GameHttpClient {
       .get(this.config.HTTP.GET_GAME(roomName))
       .pipe(
         map(response => response as UnmappedGame)
+      );
+  }
+
+  submitAnswer(roomName: string, pokemon: Pokemon): Observable<any> {
+    debugger
+    return this.http
+      .post(
+        this.config.HTTP.SUBMIT_ANSWER(roomName),
+        pokemon.name
       );
   }
 

@@ -8,7 +8,8 @@ import { GameStompClient } from './game.stomp';
 
 export const gameConfig: GameConfig = {
   HTTP: {
-    GET_GAME: (roomName) => `/game/${roomName}`
+    GET_GAME: (roomName) => `/game/${roomName}`,
+    SUBMIT_ANSWER: (roomName) => `/game/${roomName}/submit`
   }
 };
 
