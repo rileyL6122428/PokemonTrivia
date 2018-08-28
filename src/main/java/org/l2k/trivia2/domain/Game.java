@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.l2k.trivia2.constants.PokemonConstants;
 import org.l2k.trivia2.scheduler.DelayedEvent;
-import org.l2k.trivia2.scheduler.Sequence;
 import org.l2k.trivia2.scheduler.SequenceBuilder;
 
 public class Game {
@@ -15,7 +14,8 @@ public class Game {
 	enum Phase {
 		NOT_STARTED("NOT_STARTED"),
 		STARTED("STARTED"),
-		ASKING_QUESTION("ASKING_QUESTION");
+		ASKING_QUESTION("ASKING_QUESTION"),
+		REVEALING_ANSWER("REVEALING_ANSWER");
 	 
 	    private String stringRep;
 	 
@@ -68,6 +68,16 @@ public class Game {
 		return currentQuestion;
 	}
 	
+	public void submitAnswer(P2PSession player, Pokemon answer) {
+		if (phase == Phase.ASKING_QUESTION && isInRoom(player)) {
+			currentQuestion.submitAnswer(player.getName(), answer);
+		}
+	}
+	
+	private boolean isInRoom(P2PSession player) {
+		return player != null && playerNamesToScores.containsKey(player.getName());
+	}
+	
 	private void startGame() {
 		new SequenceBuilder()
 			.addEvent(new DelayedEvent(
@@ -89,10 +99,26 @@ public class Game {
 					phase = Phase.ASKING_QUESTION;
 					notifyListeners();
 				}, 
-				2000
+				5000
 			))
+			.addEvent(new DelayedEvent(
+					() -> { 
+						currentQuestion
+							.playersWithCorrectAnswers()
+							.forEach(this::incrementScore);
+						
+						phase = Phase.REVEALING_ANSWER;
+						notifyListeners();
+					}, 
+					10000
+				))
 			.build()
 			.execute();
+	}
+	
+	private void incrementScore(String playerName) {
+		Long score = playerNamesToScores.get(playerName);
+		playerNamesToScores.put(playerName, score + 1);
 	}
 	
 	private void notifyListeners() {

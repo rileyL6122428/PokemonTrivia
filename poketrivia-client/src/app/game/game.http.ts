@@ -23,7 +23,6 @@ export class GameHttpClient {
   }
 
   submitAnswer(roomName: string, pokemon: Pokemon): Observable<any> {
-    debugger
     return this.http
       .post(
         this.config.HTTP.SUBMIT_ANSWER(roomName),
@@ -47,4 +46,8 @@ export interface UnmappedQuestion {
 
 export type UnmappedPlayerScore = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
-export type UnmappedGamePhase = 'NOT_STARTED' | 'STARTED' | 'ASKING_QUESTION';
+export type UnmappedGamePhase =
+  'NOT_STARTED' |
+  'STARTED' |
+  'ASKING_QUESTION' |
+  'REVEALING_ANSWER';

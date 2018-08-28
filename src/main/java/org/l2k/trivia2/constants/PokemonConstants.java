@@ -1,7 +1,9 @@
 package org.l2k.trivia2.constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.l2k.trivia2.domain.Pokemon;
 
@@ -43,6 +45,12 @@ public class PokemonConstants {
 		add(CHARMANDER);
 		add(BULBASAUR);
 		add(SQUIRTLE);
+	}};
+	
+	public static final Map<String, Pokemon> POKEMON_BY_NAME = new HashMap<String, Pokemon>(){{
+		for (Pokemon pokemon : ALL_POKEMON) {
+			this.put(pokemon.getName(), pokemon);
+		}
 	}};
 	
 	public static final List<Pokemon> ROOM_MASCOTS = new ArrayList<Pokemon>() {{

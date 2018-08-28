@@ -28,6 +28,18 @@ public class Pokemon {
 		return defaultSVG;
 	}
 	
+	@Override
+	public boolean equals(Object object) {
+		if (object == null || !(object instanceof Pokemon)) { return false; }
+		Pokemon otherPokemon = (Pokemon) object;
+		return name.equalsIgnoreCase(otherPokemon.getName());
+	}
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+	
 	static public class Builder {
 		
 		private String name;

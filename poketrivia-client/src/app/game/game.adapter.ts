@@ -37,10 +37,16 @@ export class GameAdapter {
   }
 
   private mapQuestion(game: UnmappedGame): Question {
-    return game.phase === 'ASKING_QUESTION' ? new Question(
-      game.currentQuestion.description,
-      this.mapAnswers(game.currentQuestion)
-    ) : null;
+    let question: Question;
+
+    if (game.phase === 'ASKING_QUESTION' || game.phase === 'REVEALING_ANSWER') {
+      question = new Question(
+        game.currentQuestion.description,
+        this.mapAnswers(game.currentQuestion)
+      );
+    }
+
+    return question;
   }
 
   private mapAnswers(question: UnmappedQuestion): Pokemon[] {

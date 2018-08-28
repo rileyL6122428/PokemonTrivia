@@ -1,13 +1,12 @@
 package org.l2k.trivia2.service;
 
+import static org.l2k.trivia2.constants.PokemonConstants.POKEMON_BY_NAME;
 import org.l2k.trivia2.domain.Game;
-import org.l2k.trivia2.domain.GameListener;
+import org.l2k.trivia2.domain.P2PSession;
+import org.l2k.trivia2.domain.Pokemon;
 import org.l2k.trivia2.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-
-import net.bytebuddy.agent.builder.AgentBuilder.InitializationStrategy.Dispatcher;
 
 @Service
 public class GameService {
@@ -28,6 +27,15 @@ public class GameService {
 
 	public void save(Game game) {
 		repository.save(game);
+	}
+	
+	public void submitAnswer(String roomName, P2PSession player, String answerName) {
+		Game game = getGame(roomName);
+		Pokemon answer = POKEMON_BY_NAME.get(answerName);
+		
+		if (game != null) {
+			game.submitAnswer(player, answer);
+		}
 	}
 	
 }

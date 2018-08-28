@@ -24,28 +24,13 @@ export class ProfessorOak {
       (question) => `
         QUESTION: ${question}
       `
+    )
+    .set(
+      'REVEALING_ANSWER',
+      () => `
+        How'd you do?
+      `
     );
-  // private dialogueByPhase: Map<GamePhase, string> = new Map<GamePhase, string>()
-  //   .set(
-  //     'NOT_STARTED',
-  //     `
-  //       Your very own Pokémon trivia legend is about to unfold!
-  //       A world of questions and answers with Pokémon awaits!
-  //       We'll start soon!
-  //     `
-  //   )
-  //   .set(
-  //     'STARTED',
-  //     `
-  //       Let's go! Let's become the very best there ever was!
-  //     `
-  //   )
-  //   .set(
-  //     'ASKING_QUESTION',
-  //     `
-  //       Let's go! Let's become the very best there ever was!
-  //     `
-  //   );
 
   get dialogue(): string {
     return (this._game) ?

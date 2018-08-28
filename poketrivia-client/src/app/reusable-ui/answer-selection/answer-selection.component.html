@@ -1,4 +1,4 @@
-<ul id="answer-selection" *ngIf="game?.askingQuestion">
+<ul id="answer-selection">
   <li *ngFor="let pokemon of game?.currentQuestionAnswers">
     <div
       [innerHTML]="pokemon.triviaAnswerIcon | safe"

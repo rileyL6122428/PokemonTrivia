@@ -13,8 +13,8 @@ export class Game {
     return this.currentQuestion ? this.currentQuestion.description : '';
   }
 
-  get askingQuestion(): boolean {
-    return this.phase === 'ASKING_QUESTION';
+  get inQuestionPhase(): boolean {
+    return this.phase === 'ASKING_QUESTION' || this.phase === 'REVEALING_ANSWER';
   }
 
   get currentQuestionAnswers(): Pokemon[] {
