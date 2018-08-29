@@ -9,6 +9,7 @@ import { OpenablePokeball } from './poke-ball.model';
 export class PokeBallComponent {
 
   @Input('rolling') animateRoll: boolean;
+  @Input() captured: boolean;
   @Input() openable: boolean;
 
   pokeball: OpenablePokeball;

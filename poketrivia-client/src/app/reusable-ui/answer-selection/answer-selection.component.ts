@@ -14,7 +14,7 @@ export class AnswerSelectionComponent {
   @Output() selection: EventEmitter<Pokemon>;
   selectedPokemon: Pokemon;
   closeOpenedPokeballs: boolean;
-  rollSelectedPokeball: boolean;
+  private _rollSelectedPokeball: boolean;
 
   constructor() {
     this.selection = new EventEmitter<Pokemon>();
@@ -24,13 +24,21 @@ export class AnswerSelectionComponent {
     return !!this.selectedPokemon;
   }
 
+  get correctAnswerChosen(): boolean {
+    return this.game.phase === 'REVEALING_ANSWER';
+  }
+
   set answer(pokemon: Pokemon) {
     if (!this.selectedPokemon) {
       this.selection.emit(pokemon);
       this.selectedPokemon = pokemon;
       setTimeout(() => this.closeOpenedPokeballs = true, 2600);
-      setTimeout(() => this.rollSelectedPokeball = true, 3250);
+      setTimeout(() => this._rollSelectedPokeball = true, 3250);
     }
+  }
+
+  get rollSelectedPokeball(): boolean {
+    return this._rollSelectedPokeball && this.game.phase === 'ASKING_QUESTION';
   }
 
 }

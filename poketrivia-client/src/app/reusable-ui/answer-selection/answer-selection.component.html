@@ -9,6 +9,7 @@
      <pkt-poke-ball
       [openable]="!pokemonChosen"
       [shouldClose]="closeOpenedPokeballs"
+      [captured]="selectedPokemon === pokemon && correctAnswerChosen"
       (click)="answer = pokemon"
       [rolling]="selectedPokemon === pokemon && rollSelectedPokeball">
      </pkt-poke-ball>

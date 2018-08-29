@@ -6,6 +6,7 @@ svg * {
 }
 
 svg .button {
+  transition: fill 1s ease-in-out;
   fill: white;
 }
 
@@ -23,6 +24,10 @@ svg .top-circle {
 
 svg .bottom-circle {
   fill: white;
+}
+
+svg .button.captured {
+  fill: $icon-black
 }
 
 @keyframes pokeball-roll {
