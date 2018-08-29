@@ -10,21 +10,18 @@ import java.util.stream.Collectors;
 public class Question {
 	
 	private String description;
-	private Pokemon answer;
-	private Pokemon incorrectAnswerA;
-	private Pokemon incorrectAnswerB;
+	private Pokemon correctAnswer;
+	private List<Pokemon> answers;
 	private Map<String, Pokemon> playerAnswers;
 	
 	public Question(
 		String description,
-		Pokemon answer,
-		Pokemon incorrectAnswerA,
-		Pokemon incorrectAnswerB
+		Pokemon correctAnswer,
+		List<Pokemon> answers
 	) {
 		this.description = description;
-		this.answer = answer;
-		this.incorrectAnswerA = incorrectAnswerA;
-		this.incorrectAnswerB = incorrectAnswerB;
+		this.correctAnswer = correctAnswer;
+		this.answers = answers;
 		this.playerAnswers = new HashMap<String, Pokemon>();
 	}
 	
@@ -33,14 +30,10 @@ public class Question {
 	}
 	
 	public List<String> getShuffledAnswers() {
-		List<String> answers = new ArrayList<String>() {{
-			add(answer.getName());
-			add(incorrectAnswerA.getName());
-			add(incorrectAnswerB.getName());
-		}};
-		
-		Collections.shuffle(answers);
-		return answers;
+		return answers
+				.stream()
+				.map(Pokemon::getName)
+				.collect(Collectors.toList());
 	}
 	
 	public void submitAnswer(String playerName, Pokemon answer) {
@@ -56,7 +49,7 @@ public class Question {
 				.stream()
 				.filter((String playerName) -> {
 					Pokemon playerAnswer = playerAnswers.get(playerName);
-					return playerAnswer != null && playerAnswer.equals(answer); 
+					return playerAnswer != null && playerAnswer.equals(correctAnswer); 
 				})
 				.collect(Collectors.toList());
 	}
@@ -64,32 +57,33 @@ public class Question {
 	public static class Builder {
 		
 		private String description;
-		private Pokemon answer;
-		private Pokemon incorrectAnswerA;
-		private Pokemon incorrectAnswerB;
+		private Pokemon correctAnswer;
+		private List<Pokemon> answers;
+		
+		public Builder() {
+			this.answers = new ArrayList<Pokemon>();
+		}
 		
 		public Builder setDescription(String description) {
 			this.description = description; return this;
 		}
 		
-		public Builder setAnswer(Pokemon answer) {
-			this.answer = answer; return this;
+		public Builder setCorrectAnswer(Pokemon correctAnswer) {
+			this.correctAnswer = correctAnswer; return this;
 		}
 		
-		public Builder setIncorrectAnswerA(Pokemon answer) {
-			incorrectAnswerA = answer; return this;
-		}
-		
-		public Builder setIncorrectAnswerB(Pokemon answer) {
-			incorrectAnswerB = answer; return this;
+		public Builder addIncorrectAnswer(Pokemon incorrectAnswer) {
+			answers.add(incorrectAnswer); return this;
 		}
 		
 		public Question build() {
+			answers.add(correctAnswer);
+			Collections.shuffle(answers);
+			
 			return new Question(
 				description,
-				answer,
-				incorrectAnswerA,
-				incorrectAnswerB
+				correctAnswer,
+				answers
 			);
 					
 		}

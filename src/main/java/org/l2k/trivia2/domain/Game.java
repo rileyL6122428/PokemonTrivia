@@ -91,9 +91,9 @@ public class Game {
 				() -> { 
 					currentQuestion = new Question.Builder()
 						.setDescription("Which of the following pokemon is a grass type?")
-						.setAnswer(PokemonConstants.BULBASAUR)
-						.setIncorrectAnswerA(PokemonConstants.CHARMANDER)
-						.setIncorrectAnswerB(PokemonConstants.SQUIRTLE)
+						.setCorrectAnswer(PokemonConstants.BULBASAUR)
+						.addIncorrectAnswer(PokemonConstants.CHARMANDER)
+						.addIncorrectAnswer(PokemonConstants.SQUIRTLE)
 						.build();
 					
 					phase = Phase.ASKING_QUESTION;
