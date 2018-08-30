@@ -6,7 +6,8 @@ export class Game {
     readonly phase: GamePhase,
     readonly roomName: string,
     readonly players: Array<Player>,
-    readonly currentQuestion: Question
+    readonly currentQuestion: Question,
+    readonly correctAnswer: Pokemon
   ) { }
 
   get questionDescription(): string {

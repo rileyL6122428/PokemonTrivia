@@ -25,7 +25,8 @@ export class AnswerSelectionComponent {
   }
 
   get correctAnswerChosen(): boolean {
-    return this.game.phase === 'REVEALING_ANSWER';
+    return this.game.phase === 'REVEALING_ANSWER'
+    && this.game.correctAnswer === this.selectedPokemon;
   }
 
   set answer(pokemon: Pokemon) {

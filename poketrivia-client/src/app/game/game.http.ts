@@ -37,6 +37,7 @@ export interface UnmappedGame {
   roomName: string;
   playerNamesToScores: { [name: string]: UnmappedPlayerScore };
   currentQuestion: UnmappedQuestion;
+  correctAnswer: string;
 }
 
 export interface UnmappedQuestion {

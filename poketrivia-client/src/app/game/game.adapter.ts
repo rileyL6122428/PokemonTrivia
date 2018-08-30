@@ -16,7 +16,8 @@ export class GameAdapter {
       unmappedGame.phase,
       unmappedGame.roomName,
       this.mapPlayers(unmappedGame.playerNamesToScores),
-      this.mapQuestion(unmappedGame)
+      this.mapQuestion(unmappedGame),
+      this.mapCorrectAnswer(unmappedGame)
     );
   }
 
@@ -53,6 +54,10 @@ export class GameAdapter {
     return question.shuffledAnswers.map(
       pokemonName =>  this.pokemonStore.getByName(pokemonName)
     );
+  }
+
+  private mapCorrectAnswer(game: UnmappedGame): Pokemon {
+    return this.pokemonStore.getByName(game.correctAnswer);
   }
 }
 
