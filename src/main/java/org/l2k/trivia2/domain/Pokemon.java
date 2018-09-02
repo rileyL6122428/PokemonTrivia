@@ -30,9 +30,9 @@ public class Pokemon {
 	
 	@Override
 	public boolean equals(Object object) {
-		if (object == null || !(object instanceof Pokemon)) { return false; }
-		Pokemon otherPokemon = (Pokemon) object;
-		return name.equalsIgnoreCase(otherPokemon.getName());
+		return object != null && 
+				object instanceof Pokemon &&
+				name.equalsIgnoreCase(((Pokemon)object).getName());
 	}
 	
 	@Override
