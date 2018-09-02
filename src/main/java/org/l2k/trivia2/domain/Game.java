@@ -74,6 +74,10 @@ public class Game {
 		}
 	}
 	
+	public String getCorrectAnswer() {
+		return phase == Phase.REVEALING_ANSWER ? currentQuestion.getCorrectAnswerName() : null;
+	}
+	
 	private boolean isInRoom(P2PSession player) {
 		return player != null && playerNamesToScores.containsKey(player.getName());
 	}

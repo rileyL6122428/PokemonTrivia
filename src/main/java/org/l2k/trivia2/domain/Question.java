@@ -29,6 +29,10 @@ public class Question {
 		return description;
 	}
 	
+	String getCorrectAnswerName() {
+		return correctAnswer.getName();  
+	}
+	
 	public List<String> getShuffledAnswers() {
 		return answers
 				.stream()
