@@ -33,6 +33,8 @@ export class AnswerSelectionComponent {
     if (!this.selectedPokemon) {
       this.selection.emit(pokemon);
       this.selectedPokemon = pokemon;
+      // TODO UNIFY animations listed here and animations listed in
+      // answer-selection.component.animations.scss
       setTimeout(() => this.closeOpenedPokeballs = true, 2600);
       setTimeout(() => this._rollSelectedPokeball = true, 3250);
     }
