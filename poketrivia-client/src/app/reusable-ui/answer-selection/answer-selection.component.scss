@@ -1,15 +1,11 @@
 @import 'colors';
-
-$selection-color-transition: 1s;
-$selection-dimension-transition: 0.5s;
-$selection-margin-transition: 0.6s;
+@import './answer-selection.component.animations.scss';
 
 ul#answer-selection {
 
   display: flex;
   width: 442px;
   justify-content: space-around;
-
   .pokemon-image {
     height: 100px;
     width: 100px;
@@ -19,31 +15,7 @@ ul#answer-selection {
     border: 1px solid white;
     border-radius: 65px;
     opacity: 1;
-    transition:
-      border $selection-color-transition linear,
-      background-color $selection-color-transition linear,
-      height $selection-dimension-transition ease-in-out $selection-color-transition,
-      width $selection-dimension-transition ease-in-out $selection-color-transition,
-      padding $selection-dimension-transition ease-in-out $selection-color-transition,
-      margin-top $selection-margin-transition ease-in-out #{$selection-dimension-transition + $selection-color-transition + 0.25s},
-      opacity 1ms linear 3249ms;
-
-    * {
-      transition: fill 1s linear;
-    }
-
-    &.capturing {
-      height: 25px;
-      width: 25px;
-      padding: 5px;
-      margin-top: 177px;
-      border: 1px solid $icon-black;
-      background-color: $icon-black;
-      opacity: 0;
-    }
-    &.capturing * {
-      fill: white;
-    }
+    @include animate-pokemon-capture();
   }
 
   li {
