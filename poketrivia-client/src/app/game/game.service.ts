@@ -10,6 +10,7 @@ import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs/Observable/of';
 import { GameStompClient } from './game.stomp';
 import { Subscription } from 'rxjs/Subscription';
+import { Pokemon } from '../pokemon/pokemon.model';
 
 @Injectable()
 export class GameService {
@@ -52,5 +53,9 @@ export class GameService {
 
     return this.storeGameUpdates(roomName)
       .subscribe((store) => storeListener(store));
+  }
+
+  submitAnswer(roomName: string, pokemon: Pokemon): Observable<any> {
+    return this.http.submitAnswer(roomName, pokemon);
   }
 }

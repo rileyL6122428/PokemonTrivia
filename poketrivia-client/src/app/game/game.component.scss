@@ -1,4 +1,4 @@
-pkt-game-narrator, pkt-scores {
+pkt-game-narrator, pkt-scores, pkt-answer-selection {
   position: absolute;
   display: block;
 }
@@ -11,6 +11,11 @@ pkt-game-narrator {
 pkt-scores {
   left: 760px;
   width: 300px
+}
+
+pkt-answer-selection {
+  top: 200px;
+  left: 265px;
 }
 
 pkt-poke-ball {

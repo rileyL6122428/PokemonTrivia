@@ -5,6 +5,7 @@ import { GameStore } from './game.store';
 import { Game } from './game.model';
 import { ProfessorOak } from '../reusable-ui/professor-oak/professor-oak.model';
 import { Subscription } from 'rxjs/Subscription';
+import { Pokemon } from '../pokemon/pokemon.model';
 
 @Component({
   selector: 'pkt-game',
@@ -30,6 +31,12 @@ export class GameComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.updatesSubscription.unsubscribe();
+  }
+
+  submitAnswer(pokemon: Pokemon): void {
+    this.gameService
+      .submitAnswer(this.roomName, pokemon)
+      .subscribe();
   }
 
   private get roomName(): string {

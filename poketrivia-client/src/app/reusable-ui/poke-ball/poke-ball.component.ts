@@ -9,6 +9,7 @@ import { OpenablePokeball } from './poke-ball.model';
 export class PokeBallComponent {
 
   @Input('rolling') animateRoll: boolean;
+  @Input() captured: boolean;
   @Input() openable: boolean;
 
   pokeball: OpenablePokeball;
@@ -17,10 +18,21 @@ export class PokeBallComponent {
     this.pokeball = new OpenablePokeball();
   }
 
+  @Input()
+  set shouldClose(shouldClose: boolean) {
+    if (shouldClose && this.isOpen) {
+      this.pokeball.close();
+    }
+  }
+
   toggleOpenClose(): void {
     if (this.openable) {
       this.pokeball.toggleOpenClose();
     }
+  }
+
+  get isOpen(): boolean {
+    return this.pokeball.isOpen;
   }
 
   private get topCircleD(): string {

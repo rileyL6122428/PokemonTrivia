@@ -76,6 +76,6 @@ public class DataStructureProviders {
 	
 	@Bean("pokemon")
 	public List<Pokemon> pokemon() {
-		return PokemonConstants.ROOM_MASCOTS;
+		return PokemonConstants.ALL_POKEMON;
 	}
 }

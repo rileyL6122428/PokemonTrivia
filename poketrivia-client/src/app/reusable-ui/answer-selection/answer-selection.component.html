@@ -1,0 +1,17 @@
+<ul id="answer-selection">
+  <li *ngFor="let pokemon of game?.currentQuestionAnswers">
+    <div
+      [innerHTML]="pokemon.triviaAnswerIcon | safe"
+      class="pokemon-image"
+      [class.capturing]="selectedPokemon === pokemon">
+    </div>
+
+     <pkt-poke-ball
+      [openable]="!pokemonChosen"
+      [shouldClose]="closeOpenedPokeballs"
+      [captured]="selectedPokemon === pokemon && correctAnswerChosen"
+      (click)="answer = pokemon"
+      [rolling]="selectedPokemon === pokemon && rollSelectedPokeball">
+     </pkt-poke-ball>
+  </li>
+</ul>

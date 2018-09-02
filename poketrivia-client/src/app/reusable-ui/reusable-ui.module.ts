@@ -10,6 +10,7 @@ import { ScoresComponent } from './scores/scores.component';
 import { PointCounterComponent } from './point-counter/point-counter.component';
 import { PokeBallComponent } from './poke-ball/poke-ball.component';
 import { CommonModule } from '@angular/common';
+import { AnswerSelectionComponent } from './answer-selection/answer-selection.component';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { CommonModule } from '@angular/common';
     ScoreCardComponent,
     ScoresComponent,
     PointCounterComponent,
-    PokeBallComponent
+    PokeBallComponent,
+    AnswerSelectionComponent
   ],
   exports: [
     RoomButtonComponent,
@@ -35,7 +37,8 @@ import { CommonModule } from '@angular/common';
     SpeechBubbleComponent,
     ScoreCardComponent,
     ScoresComponent,
-    PokeBallComponent
+    PokeBallComponent,
+    AnswerSelectionComponent
   ]
 })
 export class ReusableUIModule { }
