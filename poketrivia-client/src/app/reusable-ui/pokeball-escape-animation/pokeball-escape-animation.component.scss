@@ -1,11 +1,20 @@
 @import 'colors';
 
+$fade-transition: opacity 1ms linear 1.15s;
+
+$wave-width: 100px;
+$wave-height: 120px;
+$wave-translation-duration: .99s;
+
 $wave-path-movement-d-step-1: "M 5 60 C 5 0 95 0 95 60 M 95 60 C 95 59.975 5 59.975 5 60";
 $wave-path-movement-d-step-2: "M 5 60 C 5 0 95 0 95 60 M 95 60 C 95 57.975 5 57.975 5 60";
 $wave-path-movement-d-step-3: "M 5 60 C 5 20 95 20 95 60 M 95 60 C 95 41.975 5 41.975 5 60";
 $wave-path-movement-d-step-4: "M 5 60 C 5 20 95 20 95 60 M 95 60 C 95 39.975 5 39.975 5 60";
 
-$fade-transition: opacity 1ms linear 1.15s;
+$wave-path-stroke-width-step-1: 6px;
+$wave-path-stroke-width-step-2: 6px;
+$wave-path-stroke-width-step-3: 6px;
+$wave-path-stroke-width-step-4: 4px;
 
 $wave-rotations: (
   'top-left': 315deg,
@@ -13,12 +22,6 @@ $wave-rotations: (
   'bottom-right': 135deg,
   'top-right': 45deg
 );
-
-@mixin wave-transform($side, $translation: 0) {
-  transform:
-    rotateZ(map-get($wave-rotations, $side))
-    translateY($translation);
-}
 
 .escape-animation-box {
   opacity: 1;
@@ -32,9 +35,15 @@ $wave-rotations: (
 .wave {
   display: block;
   position: absolute;
-  width: 100px;
-  height: 120px;
+  width: $wave-width;
+  height: $wave-height;
   background-color: $invisible;
+}
+
+@mixin wave-transform($side, $translation: 0) {
+  transform:
+    rotateZ(map-get($wave-rotations, $side))
+    translateY($translation);
 }
 
 @each $wave-direction in 'top-left', 'top-right', 'bottom-left', 'bottom-right' {
@@ -43,12 +52,11 @@ $wave-rotations: (
     @include wave-transform($wave-direction);
   }
 
-
   .moving .#{$wave-direction}-wave {
     @include wave-transform($wave-direction, -100px);
 
     animation:
-      #{$wave-direction}-wave-movement .99s 1 ease-in-out;
+      #{$wave-direction}-wave-movement $wave-translation-duration 1 ease-in-out;
   }
 
   @keyframes #{$wave-direction}-wave-movement {
@@ -65,7 +73,7 @@ $wave-rotations: (
 .wave path {
   fill: $icon-black;
   stroke: $icon-black;
-  stroke-width: 6px;
+  stroke-width: $wave-path-stroke-width-step-1;
   d: path($wave-path-movement-d-step-1);
   stroke-linecap: round;
 }
@@ -74,7 +82,7 @@ $wave-rotations: (
   d: path($wave-path-movement-d-step-4);
   fill: rgba(34, 34, 34, .70);
   stroke: rgba(34, 34, 34, .88);
-  stroke-width: 4px;
+  stroke-width: $wave-path-stroke-width-step-4;
   animation: wave-path-movement .8s 1 ease-in-out;
 }
 
@@ -82,23 +90,25 @@ $wave-rotations: (
   0% {
     d: path($wave-path-movement-d-step-1);
     fill: $icon-black;
+    stroke-width: $wave-path-stroke-width-step-1;
   }
 
   15% {
     d: path($wave-path-movement-d-step-2);
     fill: $icon-black;
-    stroke-width: 6px;
+    stroke-width: $wave-path-stroke-width-step-2;
   }
 
   85% {
     d: path($wave-path-movement-d-step-3);
     stroke: $icon-black;
+    stroke-width: $wave-path-stroke-width-step-3;
   }
 
   100% {
     d: path($wave-path-movement-d-step-4);
     fill: rgba(34, 34, 34, .70);
     stroke: rgba(34, 34, 34, .88);
-    stroke-width: 4px;
+    stroke-width: $wave-path-stroke-width-step-4;
   }
 }
