@@ -1,0 +1,104 @@
+@import 'colors';
+
+$wave-path-movement-d-step-1: "M 5 60 C 5 0 95 0 95 60 M 95 60 C 95 59.975 5 59.975 5 60";
+$wave-path-movement-d-step-2: "M 5 60 C 5 0 95 0 95 60 M 95 60 C 95 57.975 5 57.975 5 60";
+$wave-path-movement-d-step-3: "M 5 60 C 5 20 95 20 95 60 M 95 60 C 95 41.975 5 41.975 5 60";
+$wave-path-movement-d-step-4: "M 5 60 C 5 20 95 20 95 60 M 95 60 C 95 39.975 5 39.975 5 60";
+
+$fade-transition: opacity 1ms linear 1.15s;
+
+$wave-rotations: (
+  'top-left': 315deg,
+  'bottom-left': 225deg,
+  'bottom-right': 135deg,
+  'top-right': 45deg
+);
+
+@mixin wave-transform($side, $translation: 0) {
+  transform:
+    rotateZ(map-get($wave-rotations, $side))
+    translateY($translation);
+}
+
+.escape-animation-box {
+  opacity: 1;
+  transition: $fade-transition;
+}
+
+.escape-animation-box.moving {
+  opacity: 0;
+}
+
+.wave {
+  display: block;
+  position: absolute;
+  width: 100px;
+  height: 120px;
+  background-color: $invisible;
+}
+
+@each $wave-direction in 'top-left', 'top-right', 'bottom-left', 'bottom-right' {
+
+  .#{$wave-direction}-wave {
+    @include wave-transform($wave-direction);
+  }
+
+
+  .moving .#{$wave-direction}-wave {
+    @include wave-transform($wave-direction, -100px);
+
+    animation:
+      #{$wave-direction}-wave-movement .99s 1 ease-in-out;
+  }
+
+  @keyframes #{$wave-direction}-wave-movement {
+    0% {
+      @include wave-transform($wave-direction);
+    }
+
+    100% {
+      @include wave-transform($wave-direction, -100px);
+    }
+  }
+}
+
+.wave path {
+  fill: $icon-black;
+  stroke: $icon-black;
+  stroke-width: 6px;
+  d: path($wave-path-movement-d-step-1);
+  stroke-linecap: round;
+}
+
+.moving .wave path {
+  d: path($wave-path-movement-d-step-4);
+  fill: rgba(34, 34, 34, .70);
+  stroke: rgba(34, 34, 34, .88);
+  stroke-width: 4px;
+  animation: wave-path-movement .8s 1 ease-in-out;
+}
+
+@keyframes wave-path-movement {
+  0% {
+    d: path($wave-path-movement-d-step-1);
+    fill: $icon-black;
+  }
+
+  15% {
+    d: path($wave-path-movement-d-step-2);
+    fill: $icon-black;
+    stroke-width: 6px;
+  }
+
+  85% {
+    d: path($wave-path-movement-d-step-3);
+    stroke: $icon-black;
+  }
+
+  100% {
+    d: path($wave-path-movement-d-step-4);
+    fill: rgba(34, 34, 34, .70);
+    stroke: rgba(34, 34, 34, .88);
+    stroke-width: 4px;
+  }
+}
