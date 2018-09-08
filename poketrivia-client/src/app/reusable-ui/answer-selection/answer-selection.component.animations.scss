@@ -10,13 +10,13 @@ $selection-margin-transition: 0.6s;
 
 @mixin animate-pokemon-capture() {
   transition:
-  border $selection-color-transition linear,
-  background-color $selection-color-transition linear,
-  height $selection-dimension-transition ease-in-out $selection-color-transition,
-  width $selection-dimension-transition ease-in-out $selection-color-transition,
-  padding $selection-dimension-transition ease-in-out $selection-color-transition,
-  margin-top $selection-margin-transition ease-in-out #{$selection-dimension-transition + $selection-color-transition + 0.25s},
-  opacity 1ms linear 3249ms;
+    border $selection-color-transition linear,
+    background-color $selection-color-transition linear,
+    height $selection-dimension-transition ease-in-out $selection-color-transition,
+    width $selection-dimension-transition ease-in-out $selection-color-transition,
+    padding $selection-dimension-transition ease-in-out $selection-color-transition,
+    margin-top $selection-margin-transition ease-in-out #{$selection-dimension-transition + $selection-color-transition + 0.25s},
+    opacity 1ms linear 3249ms;
 
   * {
     transition: fill $selection-color-transition linear;
