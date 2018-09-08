@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'pkt-pokeball-escape-animation',
@@ -7,10 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PokeballEscapeAnimationComponent implements OnInit {
 
+  @Input()
   animate: boolean;
 
   ngOnInit() {
-    setTimeout(() => this.animate = true, 1500);
+    // setTimeout(() => this.animate = true, 1500);
   }
 
 }

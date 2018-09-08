@@ -16,6 +16,7 @@ ul#answer-selection {
     border-radius: 65px;
     opacity: 1;
     @include animate-pokemon-capture();
+    @include animate-pokemon-escape();
   }
 
   li {
@@ -29,9 +30,27 @@ ul#answer-selection {
     position: absolute;
     left: 10.5px;
     top: 135px;
-
+    transition: opacity 1ms linear .5s;
     &:hover {
       cursor: pointer;
     }
+
+    &.hide {
+      opacity: 0;
+    }
+  }
+
+  pkt-pokeball-escape-animation {
+    display: block;
+    position: absolute;
+    top: 161px;
+    left: 36.7px;
+    transform: scale(.58);
+    animation: fadein .5s linear;
+  }
+
+  @keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
   }
 }
