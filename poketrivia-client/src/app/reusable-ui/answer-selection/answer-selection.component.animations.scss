@@ -3,6 +3,14 @@
 
 @import 'colors';
 
+@mixin uncaptured-pokemon-colors {
+  border: 1px solid white;
+  background-color: white;
+  * {
+    fill: $icon-black;
+  }
+}
+
 @mixin uncaptured-pokemon {
   height: 100px;
   width: 100px;
@@ -19,25 +27,26 @@
   }
 }
 
-@mixin captured-pokemon($opacity: 0) {
-  height: 25px;
-  width: 25px;
-  padding: 5px;
-  margin-top: 177px;
+@mixin captured-pokemon-colors {
   border: 1px solid $icon-black;
   background-color: $icon-black;
-  opacity: $opacity;
-
   * {
     fill: white;
   }
 }
 
+@mixin captured-pokemon($opacity: 0) {
+  height: 25px;
+  width: 25px;
+  padding: 5px;
+  margin-top: 177px;
+  @include captured-pokemon-colors();
+  opacity: $opacity;
+}
 
 $selection-color-transition: 1s;
 $selection-dimension-transition: 0.5s;
 $selection-margin-transition: 0.6s;
-
 
 @mixin animate-pokemon-capture() {
   transition:
@@ -56,6 +65,24 @@ $selection-margin-transition: 0.6s;
 
   &.capturing {
     @include captured-pokemon($opacity: 0);
+  }
+
+  @keyframes pokemon-capture {
+    0% {
+      @include uncaptured-pokemon();
+    }
+
+    50% {
+      @include captured-pokemon-colors();
+    }
+
+    75% {
+
+    }
+
+    100% {
+
+    }
   }
 }
 
