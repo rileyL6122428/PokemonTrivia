@@ -7,14 +7,7 @@ ul#answer-selection {
   width: 442px;
   justify-content: space-around;
   .pokemon-image {
-    height: 100px;
-    width: 100px;
-    padding: 15px;
-    margin: auto;
-    margin-top: 0;
-    border: 1px solid white;
-    border-radius: 65px;
-    opacity: 1;
+    @include uncaptured-pokemon();
     @include animate-pokemon-capture();
     @include animate-pokemon-escape();
   }
