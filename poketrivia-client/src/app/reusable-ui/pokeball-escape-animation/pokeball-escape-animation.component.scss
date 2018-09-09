@@ -80,8 +80,8 @@ $wave-rotations: (
 
 .moving .wave path {
   d: path($wave-path-movement-d-step-4);
-  fill: rgba(34, 34, 34, .70);
-  stroke: rgba(34, 34, 34, .88);
+  fill: $faded-escape-wave-fill;
+  stroke: $faded-escape-wave-stroke;
   stroke-width: $wave-path-stroke-width-step-4;
   animation: wave-path-movement .8s 1 ease-in-out;
 }
@@ -107,8 +107,8 @@ $wave-rotations: (
 
   100% {
     d: path($wave-path-movement-d-step-4);
-    fill: rgba(34, 34, 34, .70);
-    stroke: rgba(34, 34, 34, .88);
+    fill: $faded-escape-wave-fill;
+    stroke: $faded-escape-wave-stroke;
     stroke-width: $wave-path-stroke-width-step-4;
   }
 }
