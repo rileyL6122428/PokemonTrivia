@@ -1,4 +1,4 @@
-import { Component, Input, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
+import { Component, Input, ViewEncapsulation, Output, EventEmitter, OnChanges } from '@angular/core';
 import { Game } from '../../game/game.model';
 import { Pokemon } from '../../pokemon/pokemon.model';
 
@@ -8,16 +8,24 @@ import { Pokemon } from '../../pokemon/pokemon.model';
   styleUrls: ['./answer-selection.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class AnswerSelectionComponent {
+export class AnswerSelectionComponent implements OnChanges {
 
   @Input() game: Game;
   @Output() selection: EventEmitter<Pokemon>;
   selectedPokemon: Pokemon;
   closeOpenedPokeballs: boolean;
   private _rollSelectedPokeball: boolean;
+  private selectedPokemonEscaped: boolean;
 
   constructor() {
     this.selection = new EventEmitter<Pokemon>();
+  }
+
+  ngOnChanges(): void {
+    if (this.incorrectAnswerChosen) {
+      // TODO extract this animation flag to stylesheet
+      setTimeout(() => this.selectedPokemonEscaped = true, 600);
+    }
   }
 
   get pokemonChosen(): boolean {
@@ -25,8 +33,13 @@ export class AnswerSelectionComponent {
   }
 
   get correctAnswerChosen(): boolean {
-    return this.game.phase === 'REVEALING_ANSWER'
-    && this.game.correctAnswer === this.selectedPokemon;
+    return this.game.phase === 'REVEALING_ANSWER' &&
+    this.game.correctAnswer === this.selectedPokemon;
+  }
+
+  get incorrectAnswerChosen(): boolean {
+    return this.game.phase === 'REVEALING_ANSWER' &&
+    this.game.correctAnswer !== this.selectedPokemon;
   }
 
   set answer(pokemon: Pokemon) {

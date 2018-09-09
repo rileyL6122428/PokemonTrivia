@@ -3,34 +3,114 @@
 
 @import 'colors';
 
-$selection-color-transition: 1s;
-$selection-dimension-transition: 0.5s;
-$selection-margin-transition: 0.6s;
+@mixin uncaptured-pokemon-dimensions {
+  height: 100px;
+  width: 100px;
+  padding: 15px;
+  border-radius: 65px;
+}
+
+@mixin uncaptured-pokemon-margins {
+  margin: auto;
+  margin-top: 0;
+}
+
+@mixin uncaptured-pokemon-colors {
+  border: 1px solid white;
+  background-color: white;
+  * {
+    transition: fill 1s linear;
+    fill: $icon-black;
+  }
+}
+
+@mixin uncaptured-pokemon {
+  @include uncaptured-pokemon-dimensions();
+  @include uncaptured-pokemon-margins();
+  @include uncaptured-pokemon-colors();
+  opacity: 1;
+}
+
+@mixin captured-pokemon-dimensions {
+  height: 25px;
+  width: 25px;
+  padding: 5px;
+}
+
+@mixin captured-pokemon-margins {
+  margin-top: 177px;
+}
+
+@mixin captured-pokemon-colors {
+  border: 1px solid $icon-black;
+  background-color: $icon-black;
+  * {
+    fill: white;
+  }
+}
+
+@mixin captured-pokemon($opacity: 0) {
+  @include captured-pokemon-dimensions();
+  @include captured-pokemon-margins();
+  @include captured-pokemon-colors();
+  opacity: $opacity;
+}
 
 @mixin animate-pokemon-capture() {
-  transition:
-      border $selection-color-transition linear,
-      background-color $selection-color-transition linear,
-      height $selection-dimension-transition ease-in-out $selection-color-transition,
-      width $selection-dimension-transition ease-in-out $selection-color-transition,
-      padding $selection-dimension-transition ease-in-out $selection-color-transition,
-      margin-top $selection-margin-transition ease-in-out #{$selection-dimension-transition + $selection-color-transition + 0.25s},
-      opacity 1ms linear 3249ms;
 
-    * {
-      transition: fill $selection-color-transition linear;
+  &.capturing {
+    @include captured-pokemon($opacity: 0);
+    animation: pokemon-capture 3.5s ease-in-out;
+  }
+
+  @keyframes pokemon-capture {
+    0% {
+      @include uncaptured-pokemon();
+      opacity: 1;
     }
 
-    &.capturing {
-      height: 25px;
-      width: 25px;
-      padding: 5px;
-      margin-top: 177px;
-      border: 1px solid $icon-black;
-      background-color: $icon-black;
+    29% {
+      @include uncaptured-pokemon-dimensions();
+      @include uncaptured-pokemon-margins();
+      @include captured-pokemon-colors();
+    }
+
+    43% {
+      @include captured-pokemon-dimensions();
+    }
+
+    50% {
+      @include uncaptured-pokemon-margins();
+    }
+
+    67% {
+      @include captured-pokemon-margins();
+    }
+
+    90% {
+      opacity: 1;
+    }
+
+    91% {
       opacity: 0;
     }
-    &.capturing * {
-      fill: white;
+  }
+}
+
+@mixin animate-pokemon-escape() {
+
+    &.capturing.escaping {
+      @include uncaptured-pokemon();
+      animation: pokemon-escape 1.5s ease-in-out;
+    }
+
+    @keyframes pokemon-escape {
+      0% {
+        @include captured-pokemon($opacity: 1);
+      }
+
+      100% {
+        @include uncaptured-pokemon();
+      }
     }
 }
