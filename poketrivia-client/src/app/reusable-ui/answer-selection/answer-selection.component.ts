@@ -23,6 +23,7 @@ export class AnswerSelectionComponent implements OnChanges {
 
   ngOnChanges(): void {
     if (this.incorrectAnswerChosen) {
+      // TODO extract this animation flag to stylesheet
       setTimeout(() => this.selectedPokemonEscaped = true, 600);
     }
   }
