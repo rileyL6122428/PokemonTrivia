@@ -7,6 +7,7 @@
   height: 100px;
   width: 100px;
   padding: 15px;
+  border-radius: 65px;
 }
 
 @mixin uncaptured-pokemon-margins {
@@ -27,7 +28,6 @@
   @include uncaptured-pokemon-dimensions();
   @include uncaptured-pokemon-margins();
   @include uncaptured-pokemon-colors();
-  border-radius: 65px;
   opacity: 1;
 }
 
