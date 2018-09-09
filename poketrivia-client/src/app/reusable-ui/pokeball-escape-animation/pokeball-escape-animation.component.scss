@@ -53,7 +53,7 @@ $wave-rotations: (
   }
 
   .moving .#{$wave-direction}-wave {
-    @include wave-transform($wave-direction, -100px);
+    @include wave-transform($wave-direction, $translation: -100px);
 
     animation:
       #{$wave-direction}-wave-movement $wave-translation-duration 1 ease-in-out;
@@ -65,7 +65,7 @@ $wave-rotations: (
     }
 
     100% {
-      @include wave-transform($wave-direction, -100px);
+      @include wave-transform($wave-direction, $translation: -100px);
     }
   }
 }
