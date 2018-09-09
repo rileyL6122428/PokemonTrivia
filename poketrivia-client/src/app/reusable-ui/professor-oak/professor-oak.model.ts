@@ -4,7 +4,7 @@ export class ProfessorOak {
 
   private _game: Game;
 
-  private dialogueByPhase: Map<GamePhase, (string) => string> = new Map<GamePhase, (string) => string>()
+  private dialogueByPhase: Map<GamePhase, () => string> = new Map<GamePhase, () => string>()
     .set(
       'NOT_STARTED',
       () => `
@@ -21,21 +21,20 @@ export class ProfessorOak {
     )
     .set(
       'ASKING_QUESTION',
-      (question) => `
-        QUESTION: ${question}
+      () => `
+        QUESTION: ${this._game.questionDescription}
       `
     )
     .set(
       'REVEALING_ANSWER',
       () => `
-        How'd you do?
+        ANSWER: ${this._game.correctAnswer.name}!
       `
     );
 
   get dialogue(): string {
     return (this._game) ?
-      this.dialogueByPhase.get(this._game.phase)(this._game.questionDescription)
-      : '';
+      this.dialogueByPhase.get(this._game.phase)() : '';
   }
 
   set game(game: Game) {
