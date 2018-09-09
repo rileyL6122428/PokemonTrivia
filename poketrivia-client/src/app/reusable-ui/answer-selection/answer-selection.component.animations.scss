@@ -18,6 +18,7 @@
   border: 1px solid white;
   background-color: white;
   * {
+    transition: fill 1s linear;
     fill: $icon-black;
   }
 }
@@ -57,11 +58,6 @@
 
 @mixin animate-pokemon-capture() {
 
-  * {
-    transition: fill $selection-color-transition linear;
-    fill: $icon-black;
-  }
-
   &.capturing {
     @include captured-pokemon($opacity: 0);
     animation: pokemon-capture 3.5s ease-in-out;
@@ -100,8 +96,6 @@
     }
   }
 }
-
-$escape-transistion: .5s;
 
 @mixin animate-pokemon-escape() {
 
