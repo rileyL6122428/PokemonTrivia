@@ -23,6 +23,7 @@ ul#answer-selection {
     position: absolute;
     left: 10.5px;
     top: 135px;
+    // TODO Unify this transition with transition flag in TS class
     transition: opacity 1ms linear .5s;
     &:hover {
       cursor: pointer;
