@@ -32,7 +32,7 @@ export class ProfessorOak {
       `
     )
     .set(
-      'READY_FOR_NEXT_QUESTION',
+      'STAGING_NEXT_QUESTION',
       () => `
         Alright! Here comes the next question!
       `

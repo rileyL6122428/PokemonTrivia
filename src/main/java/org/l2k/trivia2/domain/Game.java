@@ -17,7 +17,7 @@ public class Game {
 		STARTED("STARTED"),
 		ASKING_QUESTION("ASKING_QUESTION"),
 		REVEALING_ANSWER("REVEALING_ANSWER"),
-		READY_FOR_NEXT_QUESTION("READY_FOR_NEXT_QUESTION");
+		STAGING_NEXT_QUESTION("STAGING_NEXT_QUESTION");
 	 
 	    private String stringRep;
 	 
@@ -179,7 +179,7 @@ public class Game {
 	}
 	
 	private void announceIncomingQuestion() {
-		phase = Phase.READY_FOR_NEXT_QUESTION;
+		phase = Phase.STAGING_NEXT_QUESTION;
 		notifyListeners();
 	}
 	
