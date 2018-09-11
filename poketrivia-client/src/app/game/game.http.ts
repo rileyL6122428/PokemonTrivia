@@ -51,4 +51,5 @@ export type UnmappedGamePhase =
   'NOT_STARTED' |
   'STARTED' |
   'ASKING_QUESTION' |
-  'REVEALING_ANSWER';
+  'REVEALING_ANSWER' |
+  'STAGING_NEXT_QUESTION';

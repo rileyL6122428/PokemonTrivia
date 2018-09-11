@@ -3,15 +3,15 @@ package org.l2k.trivia2.scheduler;
 public class DelayedEvent {
 	
 	private final Runnable runnable;
-	private final int delay;
+	private final int duration;
 	
-	public DelayedEvent(Runnable runnable, int delay) {
+	public DelayedEvent(Runnable runnable, int duration) {
 		this.runnable = runnable;
-		this.delay = delay;
+		this.duration = duration;
 	}
 	
-	public int getDelay() {
-		return delay;
+	public int getDuration() {
+		return duration;
 	}
 	
 	public Runnable getRunnable() {
