@@ -1,13 +1,15 @@
-h6 {
+@import 'colors';
 
+h6 {
   width: fit-content;
   padding: 8px;
   border-radius: 3px;
   font-size: 18px;
+  color: $icon-black
 }
 
 h6.contains-username {
-  background-color: rgb(38, 38, 38);
+  background-color: $icon-black;
   color: white;
 }
 
