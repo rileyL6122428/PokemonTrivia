@@ -10,6 +10,7 @@ export class ScoreCardComponent {
 
   name: string;
   points: Array<Point>;
+  @Input() isUserScoreCard: boolean;
 
   @Input()
   set player(player: Player) {

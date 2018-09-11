@@ -1,4 +1,6 @@
-<h6>{{name}}</h6>
+<h6 [class.contains-username]="isUserScoreCard">
+  {{name}}
+</h6>
 
 <ul class="points">
   <li *ngFor="let point of points">

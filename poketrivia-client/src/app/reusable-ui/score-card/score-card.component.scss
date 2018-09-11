@@ -1,6 +1,16 @@
+@import 'colors';
+
 h6 {
-  padding-top: 8px;
+  width: fit-content;
+  padding: 8px;
+  border-radius: 3px;
   font-size: 18px;
+  color: $icon-black
+}
+
+h6.contains-username {
+  background-color: $icon-black;
+  color: white;
 }
 
 .score-card-outline {
