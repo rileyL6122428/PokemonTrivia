@@ -7,18 +7,20 @@ import java.util.TimerTask;
 public class Sequence {
 	private Timer timer;
 	private List<DelayedEvent> events;
+	private int initialDelay;
 	
-	public Sequence(Timer timer, List<DelayedEvent> events) {
+	public Sequence(Timer timer, List<DelayedEvent> events, int initialDelay) {
 		this.timer = timer;
 		this.events = events;
+		this.initialDelay = initialDelay;
 	}
 	
 	public void execute() {
-		int aggregateDelay = 0;
+		int aggregateDelay = initialDelay;
 		
 		for(DelayedEvent event: events) {
-			aggregateDelay += event.getDelay();
 			scheduleTask(event.getRunnable(), aggregateDelay);
+			aggregateDelay += event.getDuration();
 		}
 	}
 	

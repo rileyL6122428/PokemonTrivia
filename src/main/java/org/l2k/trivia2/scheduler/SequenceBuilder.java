@@ -7,6 +7,7 @@ import java.util.Timer;
 public class SequenceBuilder {
 	
 	private List<DelayedEvent> delayedEvents = new ArrayList<DelayedEvent>();
+	private int initialDelay;
 	
 	public SequenceBuilder addEvent(DelayedEvent delayedEvent) {
 		delayedEvents.add(delayedEvent); return this;
@@ -26,8 +27,12 @@ public class SequenceBuilder {
 		return this;
 	}
 	
+	public SequenceBuilder setInitialDelay(int milliseconds) {
+		this.initialDelay = milliseconds; return this;
+	}
+	
 	public Sequence build() {
-		return new Sequence(new Timer(), delayedEvents);
+		return new Sequence(new Timer(), delayedEvents, initialDelay);
 	}
 	
 }

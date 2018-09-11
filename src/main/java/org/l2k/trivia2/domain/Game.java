@@ -2,6 +2,7 @@ package org.l2k.trivia2.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,8 @@ public class Game {
 		NOT_STARTED("NOT_STARTED"),
 		STARTED("STARTED"),
 		ASKING_QUESTION("ASKING_QUESTION"),
-		REVEALING_ANSWER("REVEALING_ANSWER");
+		REVEALING_ANSWER("REVEALING_ANSWER"),
+		READY_FOR_NEXT_QUESTION("READY_FOR_NEXT_QUESTION");
 	 
 	    private String stringRep;
 	 
@@ -33,12 +35,56 @@ public class Game {
 	private String roomName;
 	private List<GameListener> listeners;
 	private Question currentQuestion;
+	private LinkedList<Question> questions;
 	
 	public Game(String roomName, List<GameListener> listeners) {
 		this.roomName = roomName;
 		this.phase = Phase.NOT_STARTED;
 		this.playerNamesToScores = new HashMap<String, Long>();
 		this.listeners = listeners;
+		this.questions = new LinkedList<Question>() {{
+			add(new Question.Builder()
+				.setDescription("Which of the following pokemon is a grass type?")
+				.setCorrectAnswer(PokemonConstants.BULBASAUR)
+				.addIncorrectAnswer(PokemonConstants.CHARMANDER)
+				.addIncorrectAnswer(PokemonConstants.SQUIRTLE)
+			.build());
+			
+			add(new Question.Builder()
+				.setDescription("Which of the following pokemon is a fire type?")
+				.setCorrectAnswer(PokemonConstants.CHARMANDER)
+				.addIncorrectAnswer(PokemonConstants.BULBASAUR)
+				.addIncorrectAnswer(PokemonConstants.SQUIRTLE)
+			.build());
+			
+			add(new Question.Builder()
+				.setDescription("Which of the following pokemon is a water type?")
+				.setCorrectAnswer(PokemonConstants.SQUIRTLE)
+				.addIncorrectAnswer(PokemonConstants.BULBASAUR)
+				.addIncorrectAnswer(PokemonConstants.CHARMANDER)
+			.build());
+			
+			add(new Question.Builder()
+				.setDescription("Which of the following pokemon has an evolution at level 32?")
+				.setCorrectAnswer(PokemonConstants.BULBASAUR)
+				.addIncorrectAnswer(PokemonConstants.CHARMANDER)
+				.addIncorrectAnswer(PokemonConstants.SQUIRTLE)
+			.build());
+			
+			add(new Question.Builder()
+				.setDescription("In Gen 1, which of the following pokemon learns the attack, 'Bite'?")
+				.setCorrectAnswer(PokemonConstants.SQUIRTLE)
+				.addIncorrectAnswer(PokemonConstants.CHARMANDER)
+				.addIncorrectAnswer(PokemonConstants.BULBASAUR)
+			.build());
+			
+			add(new Question.Builder()
+				.setDescription("In Gen 1, which of the following pokemon cannot learn the attack, 'Swords Dance'?")
+				.setCorrectAnswer(PokemonConstants.SQUIRTLE)
+				.addIncorrectAnswer(PokemonConstants.CHARMANDER)
+				.addIncorrectAnswer(PokemonConstants.BULBASAUR)
+			.build());
+		}};
 	}
 
 	public Map<String, Long> getPlayerNamesToScores() {
@@ -56,7 +102,7 @@ public class Game {
 	public void addUser(P2PSession p2PSession) {
 		this.playerNamesToScores.put(p2PSession.getName(), 0l);
 		if (playerTotal() > 1) {
-			startGame();
+			scheduleGame();
 		}
 	}
 	
@@ -82,42 +128,59 @@ public class Game {
 		return player != null && playerNamesToScores.containsKey(player.getName());
 	}
 	
-	private void startGame() {
+	private void scheduleGame() {
 		new SequenceBuilder()
-			.addEvent(new DelayedEvent(
-				() -> { 
-					phase = Phase.STARTED;
-					notifyListeners();
-				}, 
-				2000
-			))
-			.addEvent(new DelayedEvent(
-				() -> { 
-					currentQuestion = new Question.Builder()
-						.setDescription("Which of the following pokemon is a grass type?")
-						.setCorrectAnswer(PokemonConstants.BULBASAUR)
-						.addIncorrectAnswer(PokemonConstants.CHARMANDER)
-						.addIncorrectAnswer(PokemonConstants.SQUIRTLE)
-						.build();
-					
-					phase = Phase.ASKING_QUESTION;
-					notifyListeners();
-				}, 
-				5000
-			))
-			.addEvent(new DelayedEvent(
-					() -> { 
-						currentQuestion
-							.playersWithCorrectAnswers()
-							.forEach(this::incrementScore);
-						
-						phase = Phase.REVEALING_ANSWER;
-						notifyListeners();
-					}, 
-					10000
-				))
-			.build()
-			.execute();
+			.setInitialDelay(2000)
+			.addEvent(new DelayedEvent(this::startGame, 3000))
+			.addEvent(new DelayedEvent(this::askQuestion, 8000))
+			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
+			
+			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
+			.addEvent(new DelayedEvent(this::askQuestion, 8000))
+			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
+			
+			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
+			.addEvent(new DelayedEvent(this::askQuestion, 8000))
+			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
+			
+			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
+			.addEvent(new DelayedEvent(this::askQuestion, 8000))
+			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
+			
+			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
+			.addEvent(new DelayedEvent(this::askQuestion, 8000))
+			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
+			
+			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
+			.addEvent(new DelayedEvent(this::askQuestion, 8000))
+			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
+		.build()
+		.execute();
+	}
+	
+	private void startGame() {
+		phase = Phase.STARTED;
+		notifyListeners();
+	}
+	
+	private void askQuestion() {
+		currentQuestion = questions.removeFirst();
+		phase = Phase.ASKING_QUESTION;
+		notifyListeners();
+	}
+	
+	private void revealAnswer() {
+		currentQuestion
+			.playersWithCorrectAnswers()
+			.forEach(this::incrementScore);
+	
+		phase = Phase.REVEALING_ANSWER;
+		notifyListeners();
+	}
+	
+	private void announceIncomingQuestion() {
+		phase = Phase.READY_FOR_NEXT_QUESTION;
+		notifyListeners();
 	}
 	
 	private void incrementScore(String playerName) {

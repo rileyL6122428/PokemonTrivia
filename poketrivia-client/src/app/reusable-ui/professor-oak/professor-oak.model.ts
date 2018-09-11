@@ -30,6 +30,12 @@ export class ProfessorOak {
       () => `
         ANSWER: ${this._game.correctAnswer.name}!
       `
+    )
+    .set(
+      'READY_FOR_NEXT_QUESTION',
+      () => `
+        Alright! Here comes the next question!
+      `
     );
 
   get dialogue(): string {
