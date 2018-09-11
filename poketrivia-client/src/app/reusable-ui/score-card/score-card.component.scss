@@ -1,6 +1,14 @@
 h6 {
-  padding-top: 8px;
+
+  width: fit-content;
+  padding: 8px;
+  border-radius: 3px;
   font-size: 18px;
+}
+
+h6.contains-username {
+  background-color: rgb(38, 38, 38);
+  color: white;
 }
 
 .score-card-outline {

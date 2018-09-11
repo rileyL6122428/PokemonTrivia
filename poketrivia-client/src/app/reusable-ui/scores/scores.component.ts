@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Player } from '../../game/game.model';
+import { SessionService } from '../../session/session.service';
 
 @Component({
   selector: 'pkt-scores',
@@ -9,5 +10,13 @@ import { Player } from '../../game/game.model';
 export class ScoresComponent {
 
   @Input() players: Array<Player>;
+
+  constructor(
+    private sessionService: SessionService
+  ) { }
+
+  get username(): string {
+    return this.sessionService.username;
+  }
 
 }

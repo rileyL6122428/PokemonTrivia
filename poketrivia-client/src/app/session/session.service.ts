@@ -27,4 +27,8 @@ export class SessionService {
       .pipe(catchError(() => of(false)));
   }
 
+  get username(): string {
+    return this.session ? this.session.name : 'USERNAME_UNAVAILABLE';
+  }
+
 }
