@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.l2k.trivia2.constants.PokemonConstants;
 import org.l2k.trivia2.scheduler.DelayedEvent;
@@ -17,7 +18,8 @@ public class Game {
 		STARTED("STARTED"),
 		ASKING_QUESTION("ASKING_QUESTION"),
 		REVEALING_ANSWER("REVEALING_ANSWER"),
-		STAGING_NEXT_QUESTION("STAGING_NEXT_QUESTION");
+		STAGING_NEXT_QUESTION("STAGING_NEXT_QUESTION"),
+		ANNOUNCING_WINNERS("ANNOUNCING_WINNERS");
 	 
 	    private String stringRep;
 	 
@@ -31,7 +33,7 @@ public class Game {
 	}
 	
 	private Phase phase;
-	private Map<String, Long> playerNamesToScores;
+	private Map<String, Integer> playerNamesToScores;
 	private String roomName;
 	private List<GameListener> listeners;
 	private Question currentQuestion;
@@ -40,7 +42,7 @@ public class Game {
 	public Game(String roomName, List<GameListener> listeners) {
 		this.roomName = roomName;
 		this.phase = Phase.NOT_STARTED;
-		this.playerNamesToScores = new HashMap<String, Long>();
+		this.playerNamesToScores = new HashMap<String, Integer>();
 		this.listeners = listeners;
 		this.questions = new LinkedList<Question>() {{
 			add(new Question.Builder()
@@ -87,7 +89,7 @@ public class Game {
 		}};
 	}
 
-	public Map<String, Long> getPlayerNamesToScores() {
+	public Map<String, Integer> getPlayerNamesToScores() {
 		return playerNamesToScores;
 	}
 	
@@ -100,7 +102,7 @@ public class Game {
 	}
 
 	public void addUser(P2PSession p2PSession) {
-		this.playerNamesToScores.put(p2PSession.getName(), 0l);
+		this.playerNamesToScores.put(p2PSession.getName(), 0);
 		if (playerTotal() > 1) {
 			scheduleGame();
 		}
@@ -154,6 +156,8 @@ public class Game {
 			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
 			.addEvent(new DelayedEvent(this::askQuestion, 8000))
 			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
+			
+			.addEvent(new DelayedEvent(this::announceWinners, 8000))
 		.build()
 		.execute();
 	}
@@ -184,8 +188,35 @@ public class Game {
 	}
 	
 	private void incrementScore(String playerName) {
-		Long score = playerNamesToScores.get(playerName);
+		int score = playerNamesToScores.get(playerName);
 		playerNamesToScores.put(playerName, score + 1);
+	}
+	
+	private void announceWinners() {
+		phase = Phase.ANNOUNCING_WINNERS;
+		notifyListeners();
+	}
+	
+	public List<String> getWinners() {
+		if (phase == Phase.ANNOUNCING_WINNERS) {
+			int maxScore = getMaxScore();
+			return playerNamesToScores
+				.entrySet()
+				.stream()
+				.filter(entry -> entry.getValue() == maxScore)
+				.map(entry -> entry.getKey())
+				.collect(Collectors.toList());
+		} else {
+			return null;
+		}
+	}
+	
+	private int getMaxScore() {
+		return playerNamesToScores
+				.values()
+				.stream()
+				.max((scoreA, scoreB) -> scoreA - scoreB)
+				.get();
 	}
 	
 	private void notifyListeners() {
