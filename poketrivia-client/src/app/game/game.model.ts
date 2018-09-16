@@ -51,7 +51,7 @@ export class Game {
   private computeMaxScore(): number {
     let maxScore = 0;
     this.players.forEach((player) => {
-      if (player.score > this._maxScore) {
+      if (player.score > maxScore) {
         maxScore = player.score;
       }
     });
