@@ -2,6 +2,11 @@ import { UnmappedPlayerScore, UnmappedGamePhase } from './game.http';
 import { Pokemon } from '../pokemon/pokemon.model';
 
 export class Game {
+
+  private _leaders: Array<Player>;
+  private _leaderNames: string;
+  private _maxScore: number;
+
   constructor(
     readonly phase: GamePhase,
     readonly roomName: string,
@@ -9,6 +14,7 @@ export class Game {
     readonly currentQuestion: Question,
     readonly correctAnswer: Pokemon
   ) { }
+
 
   get questionDescription(): string {
     return this.currentQuestion ? this.currentQuestion.description : '';
@@ -20,6 +26,28 @@ export class Game {
 
   get currentQuestionAnswers(): Pokemon[] {
     return this.currentQuestion.answers;
+  }
+
+  get leaders(): Array<Player> {
+    return this._leaders ||
+      (this._leaders = this.players.filter(player => player.score === this.maxScore));
+  }
+
+  get leaderNames(): string {
+    return this._leaderNames ||
+    (this._leaderNames = this.leaders.map(leader => leader.name).join(', '));
+  }
+
+  private get maxScore(): number {
+    if (this._maxScore === undefined) {
+      this._maxScore = 0;
+      this.players.forEach((player) => {
+        if (player.score > this._maxScore) {
+          this._maxScore = player.score;
+        }
+      });
+    }
+    return this._maxScore;
   }
 }
 

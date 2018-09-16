@@ -197,28 +197,6 @@ public class Game {
 		notifyListeners();
 	}
 	
-	public List<String> getWinners() {
-		if (phase == Phase.ANNOUNCING_WINNERS) {
-			int maxScore = getMaxScore();
-			return playerNamesToScores
-				.entrySet()
-				.stream()
-				.filter(entry -> entry.getValue() == maxScore)
-				.map(entry -> entry.getKey())
-				.collect(Collectors.toList());
-		} else {
-			return null;
-		}
-	}
-	
-	private int getMaxScore() {
-		return playerNamesToScores
-				.values()
-				.stream()
-				.max((scoreA, scoreB) -> scoreA - scoreB)
-				.get();
-	}
-	
 	private void notifyListeners() {
 		listeners.forEach(listener -> listener.onUpdate(this));
 	}
