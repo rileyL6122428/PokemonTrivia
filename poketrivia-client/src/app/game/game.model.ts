@@ -15,7 +15,6 @@ export class Game {
     readonly correctAnswer: Pokemon
   ) { }
 
-
   get questionDescription(): string {
     return this.currentQuestion ? this.currentQuestion.description : '';
   }
