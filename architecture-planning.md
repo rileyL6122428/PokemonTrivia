@@ -1,6 +1,6 @@
 # Suggestions
 
-	* Indicator of playing character
+	* Indicator of playing character *DONE*
 	* win
 	* repeat game
 	* Uniterrupted roll animation
