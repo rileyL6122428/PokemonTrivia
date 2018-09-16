@@ -29,25 +29,34 @@ export class Game {
   }
 
   get leaders(): Array<Player> {
-    return this._leaders ||
-      (this._leaders = this.players.filter(player => player.score === this.maxScore));
+    return this._leaders || (this._leaders = this.computeLeaders());
+  }
+
+  private computeLeaders(): Array<Player> {
+    return this.players.filter(player => player.score === this.maxScore);
   }
 
   get leaderNames(): string {
-    return this._leaderNames ||
-    (this._leaderNames = this.leaders.map(leader => leader.name).join(', '));
+    return this._leaderNames || (this._leaderNames = this.computeLeadersNames());
+  }
+
+  private computeLeadersNames(): string {
+    return this.leaders.map(leader => leader.name).join(', ');
   }
 
   private get maxScore(): number {
-    if (this._maxScore === undefined) {
-      this._maxScore = 0;
-      this.players.forEach((player) => {
-        if (player.score > this._maxScore) {
-          this._maxScore = player.score;
-        }
-      });
-    }
-    return this._maxScore;
+    return (this._maxScore === undefined) ?
+      this._maxScore : this._maxScore = this.computeMaxScore();
+  }
+
+  private computeMaxScore(): number {
+    let maxScore = 0;
+    this.players.forEach((player) => {
+      if (player.score > this._maxScore) {
+        maxScore = player.score;
+      }
+    });
+    return maxScore;
   }
 }
 
