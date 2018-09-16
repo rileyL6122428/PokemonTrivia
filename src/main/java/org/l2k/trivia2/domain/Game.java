@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.l2k.trivia2.constants.PokemonConstants;
 import org.l2k.trivia2.scheduler.DelayedEvent;
