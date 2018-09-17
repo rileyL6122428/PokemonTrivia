@@ -90,25 +90,25 @@ public class Game {
 			.addEvent(new DelayedEvent(this::askQuestion, 8000))
 			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
 			
-//			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
-//			.addEvent(new DelayedEvent(this::askQuestion, 8000))
-//			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
-//			
-//			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
-//			.addEvent(new DelayedEvent(this::askQuestion, 8000))
-//			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
-//			
-//			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
-//			.addEvent(new DelayedEvent(this::askQuestion, 8000))
-//			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
-//			
-//			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
-//			.addEvent(new DelayedEvent(this::askQuestion, 8000))
-//			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
-//			
-//			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
-//			.addEvent(new DelayedEvent(this::askQuestion, 8000))
-//			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
+			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
+			.addEvent(new DelayedEvent(this::askQuestion, 8000))
+			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
+			
+			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
+			.addEvent(new DelayedEvent(this::askQuestion, 8000))
+			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
+			
+			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
+			.addEvent(new DelayedEvent(this::askQuestion, 8000))
+			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
+			
+			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
+			.addEvent(new DelayedEvent(this::askQuestion, 8000))
+			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
+			
+			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
+			.addEvent(new DelayedEvent(this::askQuestion, 8000))
+			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
 			
 			.addEvent(new DelayedEvent(this::announceWinners, 8000))
 			
