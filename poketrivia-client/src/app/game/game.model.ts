@@ -44,7 +44,7 @@ export class Game {
   }
 
   private get maxScore(): number {
-    return (this._maxScore === undefined) ?
+    return (this._maxScore !== undefined) ?
       this._maxScore : this._maxScore = this.computeMaxScore();
   }
 

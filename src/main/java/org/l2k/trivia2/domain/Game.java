@@ -6,9 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.l2k.trivia2.constants.PokemonConstants;
 import org.l2k.trivia2.scheduler.DelayedEvent;
 import org.l2k.trivia2.scheduler.SequenceBuilder;
+import org.l2k.trivia2.service.QuestionService;
 
 public class Game {
 	
@@ -37,55 +37,15 @@ public class Game {
 	private List<GameListener> listeners;
 	private Question currentQuestion;
 	private LinkedList<Question> questions;
+	private QuestionService questionService;
 	
-	public Game(String roomName, List<GameListener> listeners) {
+	public Game(String roomName, List<GameListener> listeners, QuestionService questionService) {
 		this.roomName = roomName;
 		this.phase = Phase.NOT_STARTED;
 		this.playerNamesToScores = new HashMap<String, Integer>();
 		this.listeners = listeners;
-		this.questions = new LinkedList<Question>() {{
-			add(new Question.Builder()
-				.setDescription("Which of the following pokemon is a grass type?")
-				.setCorrectAnswer(PokemonConstants.BULBASAUR)
-				.addIncorrectAnswer(PokemonConstants.CHARMANDER)
-				.addIncorrectAnswer(PokemonConstants.SQUIRTLE)
-			.build());
-			
-			add(new Question.Builder()
-				.setDescription("Which of the following pokemon is a fire type?")
-				.setCorrectAnswer(PokemonConstants.CHARMANDER)
-				.addIncorrectAnswer(PokemonConstants.BULBASAUR)
-				.addIncorrectAnswer(PokemonConstants.SQUIRTLE)
-			.build());
-			
-			add(new Question.Builder()
-				.setDescription("Which of the following pokemon is a water type?")
-				.setCorrectAnswer(PokemonConstants.SQUIRTLE)
-				.addIncorrectAnswer(PokemonConstants.BULBASAUR)
-				.addIncorrectAnswer(PokemonConstants.CHARMANDER)
-			.build());
-			
-			add(new Question.Builder()
-				.setDescription("Which of the following pokemon has an evolution at level 32?")
-				.setCorrectAnswer(PokemonConstants.BULBASAUR)
-				.addIncorrectAnswer(PokemonConstants.CHARMANDER)
-				.addIncorrectAnswer(PokemonConstants.SQUIRTLE)
-			.build());
-			
-			add(new Question.Builder()
-				.setDescription("In Gen 1, which of the following pokemon learns the attack, 'Bite'?")
-				.setCorrectAnswer(PokemonConstants.SQUIRTLE)
-				.addIncorrectAnswer(PokemonConstants.CHARMANDER)
-				.addIncorrectAnswer(PokemonConstants.BULBASAUR)
-			.build());
-			
-			add(new Question.Builder()
-				.setDescription("In Gen 1, which of the following pokemon cannot learn the attack, 'Swords Dance'?")
-				.setCorrectAnswer(PokemonConstants.SQUIRTLE)
-				.addIncorrectAnswer(PokemonConstants.CHARMANDER)
-				.addIncorrectAnswer(PokemonConstants.BULBASAUR)
-			.build());
-		}};
+		this.questionService = questionService;
+		this.questions = questionService.getQuestions();
 	}
 
 	public Map<String, Integer> getPlayerNamesToScores() {
@@ -102,13 +62,7 @@ public class Game {
 
 	public void addUser(P2PSession p2PSession) {
 		this.playerNamesToScores.put(p2PSession.getName(), 0);
-		if (playerTotal() > 1) {
-			scheduleGame();
-		}
-	}
-	
-	private int playerTotal() {
-		return playerNamesToScores.size();
+		attemptGameStart();
 	}
 	
 	public Question getCurrentQuestion() {
@@ -157,6 +111,10 @@ public class Game {
 			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
 			
 			.addEvent(new DelayedEvent(this::announceWinners, 8000))
+			
+			.addEvent(new DelayedEvent(this::queueNextGame, 8000))
+			
+			.addEvent(new DelayedEvent(this::attemptGameStart, 8000))
 		.build()
 		.execute();
 	}
@@ -196,6 +154,33 @@ public class Game {
 		notifyListeners();
 	}
 	
+	private void queueNextGame() {
+		phase = Phase.NOT_STARTED;
+		resetScores();
+		questions = questionService.getQuestions();
+		notifyListeners();
+	}
+	
+	private void resetScores() {
+		for (String playerName : playerNamesToScores.keySet()) {
+			playerNamesToScores.put(playerName, 0);
+		}
+	}
+	
+	private void attemptGameStart() {
+		if (canStartGame()) {
+			scheduleGame();
+		}
+	}
+	
+	private boolean canStartGame() {
+		return playerTotal() > 1 && phase == Phase.NOT_STARTED;
+	}
+	
+	private int playerTotal() {
+		return playerNamesToScores.size();
+	}
+	
 	private void notifyListeners() {
 		listeners.forEach(listener -> listener.onUpdate(this));
 	}
@@ -204,6 +189,7 @@ public class Game {
 		
 		private String roomName;
 		private List<GameListener> listeners;
+		private QuestionService questionService;
 		
 		public Builder() {
 			listeners = new ArrayList<GameListener>();
@@ -221,8 +207,12 @@ public class Game {
 			this.listeners = listeners; return this;
 		}
 		
+		public Builder setQuestionService(QuestionService questionService) {
+			this.questionService = questionService; return this;
+		}
+		
 		public Game build() {
-			return new Game(roomName, listeners);
+			return new Game(roomName, listeners, questionService);
 		}
 		
 	}
