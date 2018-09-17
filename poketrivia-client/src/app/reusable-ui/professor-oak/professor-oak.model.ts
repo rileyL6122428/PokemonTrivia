@@ -40,7 +40,7 @@ export class ProfessorOak {
     .set(
       'ANNOUNCING_WINNERS',
       () => `
-          And the winners are ... ${this._game.leaderNames}! Congrats!
+        And the winners are ... ${this._game.leaderNames}! Congrats!
       `
     );
 
