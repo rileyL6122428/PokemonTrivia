@@ -12,8 +12,6 @@ import org.l2k.trivia2.domain.GameListener;
 import org.l2k.trivia2.domain.P2PSession;
 import org.l2k.trivia2.domain.Pokemon;
 import org.l2k.trivia2.domain.Room;
-import org.l2k.trivia2.service.QuestionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -61,9 +59,6 @@ public class DataStructureProviders {
 		}};
 	}
 	
-	@Autowired
-	private QuestionService questionService;
-	
 	@Bean("games")
 	public Map<String, Game> games(List<GameListener> listeners) {
 		return new HashMap<String, Game>(){{
@@ -72,7 +67,6 @@ public class DataStructureProviders {
 				Game game = new Game.Builder()
 						.setRoomName(pokemon.getName())
 						.setListeners(listeners)
-						.setQuestionService(questionService)
 						.build();
 				
 				put(game.getRoomName(), game);
