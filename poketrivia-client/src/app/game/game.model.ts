@@ -32,17 +32,14 @@ export class Game {
   }
 
   private computeLeaders(): Array<Player> {
-    debugger
     return this.players.filter(player => player.score === this.maxScore);
   }
 
   get leaderNames(): string {
-    debugger;
     return this._leaderNames || (this._leaderNames = this.computeLeadersNames());
   }
 
   private computeLeadersNames(): string {
-    debugger
     return this.leaders.map(leader => leader.name).join(', ');
   }
 
@@ -52,7 +49,6 @@ export class Game {
   }
 
   private computeMaxScore(): number {
-    debugger
     let maxScore = 0;
     this.players.forEach((player) => {
       if (player.score > maxScore) {
