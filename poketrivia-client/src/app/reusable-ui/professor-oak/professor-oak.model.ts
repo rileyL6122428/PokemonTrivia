@@ -39,12 +39,9 @@ export class ProfessorOak {
     )
     .set(
       'ANNOUNCING_WINNERS',
-      () => {
-        debugger;
-        return`
+      () => `
           And the winners are ... ${this._game.leaderNames}! Congrats!
-        `;
-      }
+      `
     );
 
   get dialogue(): string {
