@@ -23,6 +23,10 @@ export class Game {
     return this.phase === 'ASKING_QUESTION' || this.phase === 'REVEALING_ANSWER';
   }
 
+  get isAskingQuestion(): boolean {
+    return this.phase === 'ASKING_QUESTION';
+  }
+
   get currentQuestionAnswers(): Pokemon[] {
     return this.currentQuestion.answers;
   }

@@ -1,9 +1,14 @@
 <pkt-game-narrator [game]="game"></pkt-game-narrator>
 <pkt-scores [players]="game?.players"></pkt-scores>
 
+<!-- *ngIf="game?.isAskingQuestion" -->
+<pkt-progress-pie
+  *ngIf="false"
+  [proportionCompleted]="proportionCompleted">
+</pkt-progress-pie>
+
 <pkt-answer-selection
   *ngIf="game?.inQuestionPhase"
   [game]="game"
   (selection)="submitAnswer($event)">
 </pkt-answer-selection>
-<pkt-progress-pie></pkt-progress-pie>

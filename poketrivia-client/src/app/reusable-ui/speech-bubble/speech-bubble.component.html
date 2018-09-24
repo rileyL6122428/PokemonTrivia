@@ -1,1 +1,7 @@
-<p><ng-content></ng-content></p>
+<p [class.showing-speech-progress]="showSpeechTimer">
+  <ng-content></ng-content>
+  <pkt-progress-pie
+    *ngIf="showSpeechTimer"
+    [proportionCompleted]="0.6">
+  </pkt-progress-pie>
+</p>

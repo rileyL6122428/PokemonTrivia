@@ -1,32 +1,90 @@
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, Input, OnChanges } from '@angular/core';
 
 @Component({
   selector: 'pkt-progress-pie',
   templateUrl: './progress-pie.component.html',
   styleUrls: ['./progress-pie.component.scss']
 })
-export class ProgressPieComponent implements OnInit {
+export class ProgressPieComponent implements OnChanges {
 
   @ViewChild('progressPieCanvas') canvasRef: ElementRef;
 
-  ngOnInit(): void {
-    // this.ctx.strokeStyle('red');
-    // this.ctx.strokeText('TESTING', 100, 100);
+  private _proportionCompleted: number;
+
+  private remainingFillColor = 'white';
+  private backgroundFillColor = 'black';
+
+  @Input()
+  set proportionCompleted(proportionCompleted: number) {
+    if (proportionCompleted > 1) {
+      this._proportionCompleted = 1;
+    } else if (proportionCompleted < 0) {
+      this._proportionCompleted = 0;
+    } else {
+      this._proportionCompleted = proportionCompleted;
+    }
+  }
+
+  ngOnChanges(): void {
+    this.clear();
+    this.drawPieFill();
+    this.drawPieProgress();
+    this.drawPieOutline();
+  }
+
+  private clear(): void {
+    this.ctx.fillStyle = this.remainingFillColor;
     this.ctx.beginPath();
-    this.ctx.arc(this.centerX, this.centerY, this.radius, - Math.PI / 2, 3 * Math.PI / 2);
+    this.ctx.arc(
+      this.centerX,
+      this.centerY,
+      this.radius + 5,
+      this.beginArcAngle,
+      this.endArcAngle
+    );
+    this.ctx.fill();
+  }
+
+  private drawPieFill(): void {
+    this.ctx.fillStyle = this.backgroundFillColor;
+    this.ctx.beginPath();
+    this.ctx.arc(
+      this.centerX,
+      this.centerY,
+      this.radius,
+      this.beginArcAngle,
+      this.endArcAngle
+    );
+    this.ctx.fill();
+  }
+
+  private drawPieOutline(): void {
+    this.ctx.fillStyle = this.backgroundFillColor;
+    this.ctx.beginPath();
+    this.ctx.arc(
+      this.centerX,
+      this.centerY,
+      this.radius,
+      this.beginArcAngle,
+      this.endArcAngle
+    );
     this.ctx.stroke();
+  }
 
-    const angle = 0;
-    const xArcProgressPoint = this.centerX + Math.cos(angle) * this.radius;
-    const yArcProgressPoint = this.centerY + Math.sin(angle) * this.radius;
-    const absStartAngle = -0.5 * Math.PI;
-    const absEndAngle = 1.5 * Math.PI;
-
+  private drawPieProgress(): void {
+    this.ctx.fillStyle = this.remainingFillColor;
     this.ctx.beginPath();
     this.ctx.moveTo(this.centerX, this.centerY - this.radius);
     this.ctx.lineTo(this.centerX, this.centerY);
-    this.ctx.lineTo(xArcProgressPoint, yArcProgressPoint);
-    this.ctx.arc(this.centerX, this.centerY, this.radius, angle, absEndAngle, false);
+    this.ctx.lineTo(this.progressPointOnArcX, this.progressPointOnArcY);
+    this.ctx.arc(
+      this.centerX,
+      this.centerY,
+      this.radius,
+      this.progressAngle,
+      this.endArcAngle,
+      true
+    );
     this.ctx.fill();
   }
 
@@ -35,15 +93,35 @@ export class ProgressPieComponent implements OnInit {
   }
 
   private get centerX(): number {
-    return 100;
+    return 105;
   }
 
   private get centerY(): number {
-    return 100;
+    return 105;
   }
 
   private get radius(): number {
     return 100;
+  }
+
+  private get progressAngle(): number {
+    return (this.endArcAngle - this.beginArcAngle) * this._proportionCompleted + this.endArcAngle;
+  }
+
+  private get progressPointOnArcX(): number {
+    return this.centerX + Math.cos(this.progressAngle) * this.radius;
+  }
+
+  private get progressPointOnArcY(): number {
+    return this.centerY + Math.sin(this.progressAngle) * this.radius;
+  }
+
+  private get beginArcAngle(): number {
+    return - Math.PI / 2;
+  }
+
+  private get endArcAngle(): number {
+    return 3 * Math.PI / 2;
   }
 
 }

@@ -2,9 +2,19 @@
 
 p {
   padding: 5px;
+  padding-bottom: 65px;
 
   background-color: $icon-black;
   color: white;
   border-radius: 5px;
   font-size: 18px;
+}
+
+pkt-progress-pie {
+  display: block;
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  right: 10px;
+  bottom: 10px;
 }

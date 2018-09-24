@@ -16,6 +16,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   game: Game;
   updatesSubscription: Subscription;
+  proportionCompleted = 0.4;
 
   constructor(
     private gameService: GameService,
