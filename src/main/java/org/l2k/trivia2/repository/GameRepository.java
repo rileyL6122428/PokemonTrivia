@@ -2,7 +2,7 @@ package org.l2k.trivia2.repository;
 
 import java.util.Map;
 
-import org.l2k.trivia2.domain.Game;
+import org.l2k.trivia2.domain.game.Game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

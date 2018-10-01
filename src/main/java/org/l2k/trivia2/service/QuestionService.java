@@ -3,7 +3,7 @@ package org.l2k.trivia2.service;
 import java.util.LinkedList;
 
 import org.l2k.trivia2.constants.PokemonConstants;
-import org.l2k.trivia2.domain.Question;
+import org.l2k.trivia2.domain.game.Question;
 import org.springframework.stereotype.Service;
 
 @Service

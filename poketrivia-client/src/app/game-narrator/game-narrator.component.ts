@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { ProfessorOak } from '../reusable-ui/professor-oak/professor-oak.model';
 import { Game } from '../game/game.model';
+import { DialogueTimer } from './dialogue-timer.model';
+
 
 @Component({
   selector: 'pkt-game-narrator',
@@ -10,6 +12,7 @@ import { Game } from '../game/game.model';
 export class GameNarratorComponent {
 
   private professorOak: ProfessorOak;
+  private dialogueTimer: DialogueTimer;
 
   constructor() {
     this.professorOak = new ProfessorOak();

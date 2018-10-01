@@ -1,7 +1,7 @@
 package org.l2k.trivia2.service;
 
-import org.l2k.trivia2.domain.Game;
-import org.l2k.trivia2.domain.GameListener;
+import org.l2k.trivia2.domain.game.Game;
+import org.l2k.trivia2.domain.game.GameListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;

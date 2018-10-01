@@ -2,8 +2,8 @@ package org.l2k.trivia2.controller;
 
 import javax.servlet.http.HttpSession;
 
-import org.l2k.trivia2.domain.Game;
 import org.l2k.trivia2.domain.P2PSession;
+import org.l2k.trivia2.domain.game.Game;
 import org.l2k.trivia2.service.GameService;
 import org.l2k.trivia2.service.P2PSessionService;
 import org.springframework.beans.factory.annotation.Autowired;

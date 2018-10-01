@@ -1,9 +1,10 @@
 package org.l2k.trivia2.service;
 
 import static org.l2k.trivia2.constants.PokemonConstants.POKEMON_BY_NAME;
-import org.l2k.trivia2.domain.Game;
+
 import org.l2k.trivia2.domain.P2PSession;
 import org.l2k.trivia2.domain.Pokemon;
+import org.l2k.trivia2.domain.game.Game;
 import org.l2k.trivia2.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

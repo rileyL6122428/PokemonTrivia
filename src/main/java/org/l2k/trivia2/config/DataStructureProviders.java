@@ -7,11 +7,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.l2k.trivia2.constants.PokemonConstants;
-import org.l2k.trivia2.domain.Game;
-import org.l2k.trivia2.domain.GameListener;
 import org.l2k.trivia2.domain.P2PSession;
 import org.l2k.trivia2.domain.Pokemon;
 import org.l2k.trivia2.domain.Room;
+import org.l2k.trivia2.domain.game.Game;
+import org.l2k.trivia2.domain.game.GameListener;
 import org.l2k.trivia2.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package org.l2k.trivia2.domain;
+package org.l2k.trivia2.domain.game;
 
 public interface GameListener {
 	

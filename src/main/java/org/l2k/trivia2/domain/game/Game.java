@@ -1,4 +1,4 @@
-package org.l2k.trivia2.domain;
+package org.l2k.trivia2.domain.game;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,29 +6,35 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.l2k.trivia2.domain.P2PSession;
+import org.l2k.trivia2.domain.Pokemon;
 import org.l2k.trivia2.scheduler.DelayedEvent;
 import org.l2k.trivia2.scheduler.SequenceBuilder;
 import org.l2k.trivia2.service.QuestionService;
 
 public class Game {
 	
-	enum Phase {
-		NOT_STARTED("NOT_STARTED"),
-		STARTED("STARTED"),
-		ASKING_QUESTION("ASKING_QUESTION"),
-		REVEALING_ANSWER("REVEALING_ANSWER"),
-		STAGING_NEXT_QUESTION("STAGING_NEXT_QUESTION"),
-		ANNOUNCING_WINNERS("ANNOUNCING_WINNERS");
-	 
-	    private String stringRep;
-	 
-	    private Phase(String toString) {
-	        this.stringRep = toString;
-	    }
-	    
-	    public String getAsString() {
-	    		return this.stringRep; 
-	    }
+//	enum Phase {
+//		NOT_STARTED("NOT_STARTED"),
+//		STARTED("STARTED"),
+//		ASKING_QUESTION("ASKING_QUESTION"),
+//		REVEALING_ANSWER("REVEALING_ANSWER"),
+//		STAGING_NEXT_QUESTION("STAGING_NEXT_QUESTION"),
+//		ANNOUNCING_WINNERS("ANNOUNCING_WINNERS");
+//	 
+//	    private String stringRep;
+//	 
+//	    private Phase(String toString) {
+//	        this.stringRep = toString;
+//	    }
+//	    
+//	    public String getAsString() {
+//	    		return this.stringRep; 
+//	    }
+//	}
+	
+	static class PhaseSetting {
+		private int durationMilliseconds;
 	}
 	
 	private Phase phase;
@@ -38,14 +44,21 @@ public class Game {
 	private Question currentQuestion;
 	private LinkedList<Question> questions;
 	private QuestionService questionService;
+	private PhaseSettings phaseSettings;
 	
-	public Game(String roomName, List<GameListener> listeners, QuestionService questionService) {
+	
+	public Game(
+			String roomName, 
+			List<GameListener> listeners, 
+			QuestionService questionService
+	) {
 		this.roomName = roomName;
 		this.phase = Phase.NOT_STARTED;
 		this.playerNamesToScores = new HashMap<String, Integer>();
 		this.listeners = listeners;
 		this.questionService = questionService;
 		this.questions = questionService.getQuestions();
+		this.phaseSettings = new PhaseSettings();
 	}
 
 	public Map<String, Integer> getPlayerNamesToScores() {
@@ -54,6 +67,10 @@ public class Game {
 	
 	public Phase getPhase() {
 		return phase;
+	}
+	
+	public int getPhaseDurationMilliseconds() {
+		return phaseSettings.getDuration(phase);
 	}
 	
 	public String getRoomName() {
@@ -85,36 +102,19 @@ public class Game {
 	
 	private void scheduleGame() {
 		new SequenceBuilder()
-			.setInitialDelay(2000)
-			.addEvent(new DelayedEvent(this::startGame, 3000))
-			.addEvent(new DelayedEvent(this::askQuestion, 8000))
-			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
+			.addEvent(new DelayedEvent(this::startGame, phaseSettings.getDuration(Phase.STARTED)))
+			.addEvent(new DelayedEvent(this::askQuestion, phaseSettings.getDuration(Phase.ASKING_QUESTION)))
+			.addEvent(new DelayedEvent(this::revealAnswer, phaseSettings.getDuration(Phase.REVEALING_ANSWER)))
 			
-			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
-			.addEvent(new DelayedEvent(this::askQuestion, 8000))
-			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
+			.addRecurringEvents(5,
+					new DelayedEvent(this::announceIncomingQuestion, phaseSettings.getDuration(Phase.STAGING_NEXT_QUESTION)),
+					new DelayedEvent(this::askQuestion, phaseSettings.getDuration(Phase.ASKING_QUESTION)),
+					new DelayedEvent(this::revealAnswer, phaseSettings.getDuration(Phase.REVEALING_ANSWER))
+			)
 			
-			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
-			.addEvent(new DelayedEvent(this::askQuestion, 8000))
-			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
-			
-			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
-			.addEvent(new DelayedEvent(this::askQuestion, 8000))
-			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
-			
-			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
-			.addEvent(new DelayedEvent(this::askQuestion, 8000))
-			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
-			
-			.addEvent(new DelayedEvent(this::announceIncomingQuestion, 2500))
-			.addEvent(new DelayedEvent(this::askQuestion, 8000))
-			.addEvent(new DelayedEvent(this::revealAnswer, 6000))
-			
-			.addEvent(new DelayedEvent(this::announceWinners, 8000))
-			
-			.addEvent(new DelayedEvent(this::queueNextGame, 8000))
-			
-			.addEvent(new DelayedEvent(this::attemptGameStart, 8000))
+			.addEvent(new DelayedEvent(this::announceWinners, phaseSettings.getDuration(Phase.ANNOUNCING_WINNERS)))
+			.addEvent(new DelayedEvent(this::queueNextGame, phaseSettings.getDuration(Phase.NOT_STARTED)))
+			.addEvent(new DelayedEvent(this::attemptGameStart, phaseSettings.getDuration(Phase.NOT_STARTED)))
 		.build()
 		.execute();
 	}
@@ -211,8 +211,13 @@ public class Game {
 			this.questionService = questionService; return this;
 		}
 		
+		
 		public Game build() {
-			return new Game(roomName, listeners, questionService);
+			return new Game(
+				roomName, 
+				listeners, 
+				questionService
+			);
 		}
 		
 	}
